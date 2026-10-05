@@ -236,7 +236,9 @@ public abstract class MultiblockPreviewWidgetFixMixin {
         button.overlay(cosmiccore$centeredItem(candidates.getFirst().getItemStackForm()));
     }
 
-    @Inject(method = "lambda$createPredicateMenus$27", at = @At("RETURN"), require = 1)
+    @Inject(method = "lambda$createPredicateMenus$28(Lcom/gregtechceu/gtceu/api/multiblock/MultiPredicate;Lcom/gregtechceu/gtceu/api/multiblock/predicates/BasePredicate;)Lbrachy/modularui/api/widget/IWidget;",
+            at = @At("RETURN"),
+            require = 1)
     private void cosmiccore$centerPredicateMenuEntry(MultiPredicate predicate, BasePredicate basePredicate,
                                                      CallbackInfoReturnable<IWidget> cir) {
         if (!(cir.getReturnValue() instanceof ToggleButton toggle) || basePredicate.getCandidates().isEmpty()) return;
@@ -244,7 +246,9 @@ public abstract class MultiblockPreviewWidgetFixMixin {
         toggle.overlay(cosmiccore$centeredItem(basePredicate.getCandidates().getFirst().getItemStackForm()));
     }
 
-    @Inject(method = "lambda$createInnerPredicateMenu$33", at = @At("RETURN"), require = 1)
+    @Inject(method = "lambda$createInnerPredicateMenu$34(Lcom/gregtechceu/gtceu/api/multiblock/MultiPredicate;Lcom/gregtechceu/gtceu/api/multiblock/predicates/BasePredicate;Lcom/gregtechceu/gtceu/api/multiblock/util/BlockInfo;)Lbrachy/modularui/api/widget/IWidget;",
+            at = @At("RETURN"),
+            require = 1)
     private void cosmiccore$centerNestedPredicateMenuEntry(MultiPredicate predicate, BasePredicate basePredicate,
                                                            BlockInfo candidate,
                                                            CallbackInfoReturnable<IWidget> cir) {

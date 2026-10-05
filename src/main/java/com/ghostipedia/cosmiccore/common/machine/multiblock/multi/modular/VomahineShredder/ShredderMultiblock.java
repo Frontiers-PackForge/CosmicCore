@@ -4,7 +4,8 @@ import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine;
-import com.gregtechceu.gtceu.api.registry.registrate.MultiblockMachineBuilder;
+import com.gregtechceu.gtceu.api.registry.registrate.builder.MultiblockMachineBuilder;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 
 import java.util.Locale;
 import java.util.function.BiFunction;
@@ -58,7 +59,8 @@ public class ShredderMultiblock {
     //
     // // Shredder Modules
     //
-    // public static final MultiblockMachineDefinition[] SHREDDER_MODULE = registerTieredMultis("shredder_module",
+    // public static final MachineEntry<MultiblockMachineDefinition>[] SHREDDER_MODULE =
+    // registerTieredMultis("shredder_module",
     // WorkableElectricMultiblockMachine::new, (tier, builder) -> builder
     // .rotationState(RotationState.ALL)
     // .langValue("Shredder Module MK %s".formatted(toRomanNumeral(tier - 5)))
@@ -108,11 +110,11 @@ public class ShredderMultiblock {
     // .register(),
     // ZPM, UV, UHV);
 
-    public static MultiblockMachineDefinition[] registerTieredMultis(String name,
-                                                                     BiFunction<BlockEntityCreationInfo, Integer, MultiblockControllerMachine> factory,
-                                                                     BiFunction<Integer, MultiblockMachineBuilder, MultiblockMachineDefinition> builder,
-                                                                     int... tiers) {
-        MultiblockMachineDefinition[] definitions = new MultiblockMachineDefinition[GTValues.TIER_COUNT];
+    public static MachineEntry<MultiblockMachineDefinition>[] registerTieredMultis(String name,
+                                                                                   BiFunction<BlockEntityCreationInfo, Integer, MultiblockControllerMachine> factory,
+                                                                                   BiFunction<Integer, MultiblockMachineBuilder<?>, MachineEntry<MultiblockMachineDefinition>> builder,
+                                                                                   int... tiers) {
+        MachineEntry<MultiblockMachineDefinition>[] definitions = new MachineEntry[GTValues.TIER_COUNT];
         for (int tier : tiers) {
             var register = REGISTRATE
                     .multiblock(GTValues.VN[tier].toLowerCase(Locale.ROOT) + "_" + name,

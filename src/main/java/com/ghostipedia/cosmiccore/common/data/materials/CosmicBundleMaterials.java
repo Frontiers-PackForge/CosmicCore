@@ -130,7 +130,7 @@ public class CosmicBundleMaterials {
 
     private static void appendRegisteredOutput(Material bundleOre, ResourceLocation mineralId) {
         Material mineral = GTRegistries.MATERIALS.get(mineralId);
-        if (mineral == null || mineral.isNull()) return;
+        if (mineral == null) return;
 
         List<Material> outputs = new ArrayList<>(OUTPUTS.getOrDefault(bundleOre, List.of()));
         if (outputs.contains(mineral)) return;

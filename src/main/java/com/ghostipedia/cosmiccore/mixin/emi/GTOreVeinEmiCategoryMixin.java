@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(value = GTOreVeinEmiCategory.class, remap = false)
 public class GTOreVeinEmiCategoryMixin {
 
-    @Redirect(method = "registerDisplays",
+    @Redirect(method = "lambda$registerDisplays$0",
               remap = false,
               at = @At(value = "INVOKE",
                        target = "Ldev/emi/emi/api/EmiRegistry;addRecipe(Ldev/emi/emi/api/recipe/EmiRecipe;)V"))

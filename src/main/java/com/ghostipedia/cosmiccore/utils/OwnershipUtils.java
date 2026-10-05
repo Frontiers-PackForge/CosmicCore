@@ -7,9 +7,21 @@ import com.gregtechceu.gtceu.common.machine.owner.PlayerOwner;
 import net.minecraft.network.chat.Component;
 import net.neoforged.neoforge.common.UsernameCache;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
+import java.util.UUID;
 
 public class OwnershipUtils {
+
+    public static @Nullable UUID getTeamUUID(@Nullable MachineOwner owner) {
+        if (owner == null) return null;
+        if (owner instanceof FTBOwner ftbOwner) {
+            var team = ftbOwner.getTeam();
+            if (team != null) return team.getTeamId();
+        }
+        return owner.getPlayerUUID();
+    }
 
     public static String getName(MachineOwner owner) {
         if (owner instanceof PlayerOwner playerOwner) {

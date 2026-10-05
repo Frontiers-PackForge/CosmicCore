@@ -1,7 +1,7 @@
 package com.ghostipedia.cosmiccore.common.data.datagen;
 
 import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeLogic;
-import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
+import com.gregtechceu.gtceu.api.registry.registrate.builder.MachineBuilder;
 import com.gregtechceu.gtceu.client.model.machine.overlays.WorkableOverlays;
 
 import net.minecraft.resources.ResourceLocation;

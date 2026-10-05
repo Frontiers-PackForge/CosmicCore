@@ -14,6 +14,7 @@ import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
 import net.minecraft.network.chat.Component;
@@ -28,7 +29,7 @@ import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createWor
 
 public class StellarStarBallast {
 
-    public final static MultiblockMachineDefinition STAR_BALLAST = REGISTRATE.multiblock("star_ballast",
+    public final static MachineEntry<MultiblockMachineDefinition> STAR_BALLAST = REGISTRATE.multiblock("star_ballast",
             IrisMultiblockMachine::new)
             .rotationState(RotationState.Y_AXIS)
             .recipeType(CosmicRecipeTypes.VOMAHINE_CORE_DRILL)

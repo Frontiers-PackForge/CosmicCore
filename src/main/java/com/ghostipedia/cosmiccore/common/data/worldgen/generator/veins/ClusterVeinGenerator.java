@@ -309,8 +309,8 @@ public class ClusterVeinGenerator extends VeinGenerator {
     }
 
     @Override
-    public MapCodec<? extends VeinGenerator> codec() {
-        return CODEC;
+    public VeinGeneratorType<?> type() {
+        return com.ghostipedia.cosmiccore.common.data.worldgen.generator.CosmicVeinGenerators.CLUSTER.get();
     }
 
     public ClusterVeinGenerator oreBlock(Material mat, int weight) {

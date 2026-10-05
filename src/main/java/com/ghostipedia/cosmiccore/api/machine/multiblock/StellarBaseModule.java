@@ -377,8 +377,8 @@ public class StellarBaseModule extends WorkableMultiblockMachine
 
     @Override
     @Nullable
-    protected GTRecipe getRealRecipe(GTRecipe recipe) {
-        GTRecipe modified = super.getRealRecipe(recipe);
+    public GTRecipe fullModifyRecipe(GTRecipe recipe) {
+        GTRecipe modified = super.fullModifyRecipe(recipe);
         if (modified == null) {
             return null;
         }

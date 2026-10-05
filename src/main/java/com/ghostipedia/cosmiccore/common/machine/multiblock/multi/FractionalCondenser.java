@@ -12,6 +12,7 @@ import com.gregtechceu.gtceu.api.multiblock.OriginOffset;
 import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
 import net.minecraft.network.chat.Component;
@@ -32,7 +33,7 @@ import static com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection.UP;
 
 public class FractionalCondenser {
 
-    public static final MultiblockMachineDefinition FRACTIONAL_CONDENSER = REGISTRATE
+    public static final MachineEntry<MultiblockMachineDefinition> FRACTIONAL_CONDENSER = REGISTRATE
             .multiblock("fractional_condenser", WorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.ALL)
             .appearanceBlock(REFRACTORY_STRUCTURAL_CASING)

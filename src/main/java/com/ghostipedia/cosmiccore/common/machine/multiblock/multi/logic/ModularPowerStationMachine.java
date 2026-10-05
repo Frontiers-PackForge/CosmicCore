@@ -106,12 +106,12 @@ public class ModularPowerStationMachine extends WorkableElectricMultiblockMachin
     }
 
     @Override
-    protected @Nullable GTRecipe getRealRecipe(GTRecipe recipe) {
+    public @Nullable GTRecipe fullModifyRecipe(GTRecipe recipe) {
         if (!isAssemblyReady() ||
                 !getDriveType().acceptsRecipeType(getActiveRecipeType()) ||
                 recipe.recipeType != getRecipeTypes()[getActiveRecipeType()])
             return null;
-        return super.getRealRecipe(recipe);
+        return super.fullModifyRecipe(recipe);
     }
 
     @Override

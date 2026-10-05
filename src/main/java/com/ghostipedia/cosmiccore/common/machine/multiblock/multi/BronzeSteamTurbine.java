@@ -12,6 +12,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.BlockInfo;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.RotorHolderPartMachine;
@@ -24,7 +25,7 @@ import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
 
 public final class BronzeSteamTurbine {
 
-    public static final MultiblockMachineDefinition DEFINITION = REGISTRATE
+    public static final MachineEntry<MultiblockMachineDefinition> DEFINITION = REGISTRATE
             .multiblock("bronze_steam_turbine", BronzeSteamTurbineMachine::new)
             .langValue("Bronze Steam Turbine")
             .rotationState(RotationState.ALL)

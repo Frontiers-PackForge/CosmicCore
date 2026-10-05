@@ -25,7 +25,7 @@ public final class LeylineDeploymentBlueprints {
     private LeylineDeploymentBlueprints() {}
 
     private static MultiblockMachineDefinition deploymentMachine() {
-        return CosmicMachines.POWER_TOWER;
+        return CosmicMachines.POWER_TOWER.get();
     }
 
     public static ResourceLocation selectedId() {

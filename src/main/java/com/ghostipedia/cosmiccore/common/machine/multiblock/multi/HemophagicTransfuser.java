@@ -10,6 +10,7 @@ import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 
@@ -29,7 +30,7 @@ import static com.gregtechceu.gtceu.api.multiblock.Predicates.controller;
 
 public final class HemophagicTransfuser {
 
-    public static final MultiblockMachineDefinition HEMOPHAGIC_TRANSFUSER = REGISTRATE
+    public static final MachineEntry<MultiblockMachineDefinition> HEMOPHAGIC_TRANSFUSER = REGISTRATE
             .multiblock("hemophagic_transfuser", HemophagicTransfuserMachine::new)
             .langValue("§aHemophagic Transfuser")
             .rotationState(RotationState.NON_Y_AXIS)

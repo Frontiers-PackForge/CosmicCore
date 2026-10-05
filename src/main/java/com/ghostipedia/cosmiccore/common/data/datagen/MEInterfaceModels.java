@@ -22,10 +22,10 @@ public class MEInterfaceModels extends GTBlockstateProvider {
     @Override
     protected void registerStatesAndModels() {
         for (var definition : new MachineDefinition[] {
-                GTAEMachines.ITEM_IMPORT_BUS_ME, GTAEMachines.FLUID_IMPORT_HATCH_ME,
-                GTAEMachines.ITEM_EXPORT_BUS_ME, GTAEMachines.FLUID_EXPORT_HATCH_ME,
-                GTAEMachines.STOCKING_IMPORT_BUS_ME, GTAEMachines.STOCKING_IMPORT_HATCH_ME,
-                GTAEMachines.ME_PATTERN_BUFFER, GTAEMachines.ME_PATTERN_BUFFER_PROXY }) {
+                GTAEMachines.ITEM_IMPORT_BUS_ME.get(), GTAEMachines.FLUID_IMPORT_HATCH_ME.get(),
+                GTAEMachines.ITEM_EXPORT_BUS_ME.get(), GTAEMachines.FLUID_EXPORT_HATCH_ME.get(),
+                GTAEMachines.STOCKING_IMPORT_BUS_ME.get(), GTAEMachines.STOCKING_IMPORT_HATCH_ME.get(),
+                GTAEMachines.ME_PATTERN_BUFFER.get(), GTAEMachines.ME_PATTERN_BUFFER_PROXY.get() }) {
             var context = new DataGenContext<Block, Block>(definition::getBlock, definition.getName(),
                     definition.getId());
             String overlay = definition.getName()

@@ -50,7 +50,7 @@ public final class MEComputationUplinkPartMachine extends MultiblockPartMachine
     public MEComputationUplinkPartMachine(BlockEntityCreationInfo info) {
         super(info);
         nodeState = new ManagedGridNodeState(GridHelper.createManagedNode(this, NODE_LISTENER)
-                .setVisualRepresentation(getDefinition().getItem())
+                .setVisualRepresentation(getDefinition().asItem())
                 .setIdlePowerUsage(0)
                 .setInWorldNode(true)
                 .setExposedOnSides(EnumSet.of(getFrontFacing()))

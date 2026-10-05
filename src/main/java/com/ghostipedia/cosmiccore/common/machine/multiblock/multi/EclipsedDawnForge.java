@@ -12,6 +12,7 @@ import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 
 import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.IMPORT_EMBER;
@@ -26,7 +27,7 @@ import static com.rekindled.embers.RegistryManager.DAWNSTONE_ANVIL;
 
 public class EclipsedDawnForge {
 
-    public final static MultiblockMachineDefinition ECLIPSED_DAWNFORGE = REGISTRATE
+    public final static MachineEntry<MultiblockMachineDefinition> ECLIPSED_DAWNFORGE = REGISTRATE
             .multiblock("dawnforge_eclipsed", WorkableElectricMultiblockMachine::new)
             .langValue("Dawnforge [Eclipsed]")
             .rotationState(RotationState.NON_Y_AXIS)

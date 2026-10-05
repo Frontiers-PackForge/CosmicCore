@@ -9,6 +9,7 @@ import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 
 import net.minecraft.network.chat.Component;
 
@@ -16,7 +17,7 @@ import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGIS
 
 public final class ModularPowerStation {
 
-    public static final MultiblockMachineDefinition MODULAR_POWER_STATION = REGISTRATE
+    public static final MachineEntry<MultiblockMachineDefinition> MODULAR_POWER_STATION = REGISTRATE
             .multiblock("modular_power_station", ModularPowerStationMachine::new)
             .langValue("Modular Power Station")
             .rotationState(RotationState.NON_Y_AXIS)

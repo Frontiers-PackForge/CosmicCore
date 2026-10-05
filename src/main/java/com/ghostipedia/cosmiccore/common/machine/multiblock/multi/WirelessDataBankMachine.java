@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi;
 
 import com.ghostipedia.cosmiccore.common.wireless.WirelessDataStore;
+import com.ghostipedia.cosmiccore.utils.OwnershipUtils;
 
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
@@ -16,7 +17,6 @@ import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
 import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeLogic;
 import com.gregtechceu.gtceu.api.misc.EnergyContainerList;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.MaintenanceHatchPartMachine;
-import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 
 import net.minecraft.world.level.block.Block;
@@ -36,8 +36,7 @@ public class WirelessDataBankMachine extends WorkableElectricMultiblockMachine
     private final ConditionalSubscriptionHandler tickSubscription;
 
     protected UUID getTeamUUID() {
-        var team = ((FTBOwner) getOwner()).getPlayerTeam(getOwnerUUID());
-        return team != null ? team.getTeamId() : getOwnerUUID();
+        return OwnershipUtils.getTeamUUID(getOwner());
     }
 
     public WirelessDataBankMachine(BlockEntityCreationInfo info) {
@@ -109,11 +108,13 @@ public class WirelessDataBankMachine extends WorkableElectricMultiblockMachine
     }
 
     private void addHatchesToWirelessNetwork() {
-        WirelessDataStore.addHatches(getTeamUUID(), getOpticalHatches());
+        var owner = getTeamUUID();
+        if (owner != null) WirelessDataStore.addHatches(owner, getOpticalHatches());
     }
 
     private void removeHatchesFromWirelessNetwork() {
-        WirelessDataStore.removeHatches(getTeamUUID(), getOpticalHatches());
+        var owner = getTeamUUID();
+        if (owner != null) WirelessDataStore.removeHatches(owner, getOpticalHatches());
     }
 
     private List<IDataAccessHatch> getOpticalHatches() {

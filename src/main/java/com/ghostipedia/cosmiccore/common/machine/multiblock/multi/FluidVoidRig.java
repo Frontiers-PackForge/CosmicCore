@@ -14,6 +14,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
 import net.minecraft.network.chat.Component;
@@ -26,7 +27,7 @@ import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
 
 public class FluidVoidRig {
 
-    public final static MultiblockMachineDefinition VOID_MINER = REGISTRATE
+    public final static MachineEntry<MultiblockMachineDefinition> VOID_MINER = REGISTRATE
             .multiblock("void_fluid_rig",
                     VoidFluidDrillMachine::new)
             .langValue("§cVoid Fluid Rig")

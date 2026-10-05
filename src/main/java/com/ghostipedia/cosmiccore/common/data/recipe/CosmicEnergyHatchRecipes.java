@@ -41,12 +41,12 @@ public final class CosmicEnergyHatchRecipes {
     private static void register64AEnergyHatch(RecipeOutput provider, int tier, boolean input) {
         MachineDefinition transformer = requireMachine(powerTransformer(tier), "power transformer", tier);
         MachineDefinition source = requireMachine(
-                input ? CosmicMachines.ENERGY_INPUT_HATCH_16A[tier] :
-                        CosmicMachines.ENERGY_OUTPUT_HATCH_16A[tier],
+                input ? CosmicMachines.ENERGY_INPUT_HATCH_16A[tier].get() :
+                        CosmicMachines.ENERGY_OUTPUT_HATCH_16A[tier].get(),
                 input ? "16A energy hatch" : "16A dynamo hatch", tier);
         MachineDefinition result = requireMachine(
-                input ? CosmicMachines.ENERGY_INPUT_HATCH_64A[tier] :
-                        CosmicMachines.ENERGY_OUTPUT_HATCH_64A[tier],
+                input ? CosmicMachines.ENERGY_INPUT_HATCH_64A[tier].get() :
+                        CosmicMachines.ENERGY_OUTPUT_HATCH_64A[tier].get(),
                 input ? "64A substation energy hatch" : "64A substation dynamo hatch", tier);
 
         ASSEMBLER_RECIPES
@@ -67,8 +67,8 @@ public final class CosmicEnergyHatchRecipes {
         MachineDefinition source = requireMachine(substationHatch(tier, input),
                 input ? "64A substation energy hatch" : "64A substation dynamo hatch", tier);
         MachineDefinition result = requireMachine(
-                input ? CosmicMachines.ENERGY_INPUT_HATCH_256A[tier] :
-                        CosmicMachines.ENERGY_OUTPUT_HATCH_256A[tier],
+                input ? CosmicMachines.ENERGY_INPUT_HATCH_256A[tier].get() :
+                        CosmicMachines.ENERGY_OUTPUT_HATCH_256A[tier].get(),
                 input ? "256A substation energy hatch" : "256A substation dynamo hatch", tier);
 
         ASSEMBLER_RECIPES
@@ -86,16 +86,16 @@ public final class CosmicEnergyHatchRecipes {
 
     private static MachineDefinition substationHatch(int tier, boolean input) {
         if (tier <= HV) {
-            return input ? CosmicMachines.ENERGY_INPUT_HATCH_64A[tier] :
-                    CosmicMachines.ENERGY_OUTPUT_HATCH_64A[tier];
+            return input ? CosmicMachines.ENERGY_INPUT_HATCH_64A[tier].get() :
+                    CosmicMachines.ENERGY_OUTPUT_HATCH_64A[tier].get();
         }
-        return input ? GTMachines.SUBSTATION_ENERGY_INPUT_HATCH[tier] :
-                GTMachines.SUBSTATION_ENERGY_OUTPUT_HATCH[tier];
+        return input ? GTMachines.SUBSTATION_ENERGY_INPUT_HATCH[tier].get() :
+                GTMachines.SUBSTATION_ENERGY_OUTPUT_HATCH[tier].get();
     }
 
     private static MachineDefinition powerTransformer(int tier) {
         int transformerTier = !GTCEuAPI.isHighTier() && tier == UHV ? UV : tier;
-        return GTMachines.POWER_TRANSFORMER[transformerTier];
+        return GTMachines.POWER_TRANSFORMER[transformerTier].get();
     }
 
     private static int componentTier(int tier) {

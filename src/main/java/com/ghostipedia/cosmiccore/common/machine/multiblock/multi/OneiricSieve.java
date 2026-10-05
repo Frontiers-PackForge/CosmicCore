@@ -12,6 +12,7 @@ import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
@@ -25,7 +26,7 @@ import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.ELECTRIC_OVERC
 
 public class OneiricSieve {
 
-    public static final MultiblockMachineDefinition ONEIRIC_SIEVE = REGISTRATE
+    public static final MachineEntry<MultiblockMachineDefinition> ONEIRIC_SIEVE = REGISTRATE
             .multiblock("oneiric_sieve", WorkableElectricMultiblockMachine::new)
             .langValue("Oneiric Sieve")
             .recipeType(CosmicRecipeTypes.ONEIRIC_SIEVE)
@@ -42,7 +43,7 @@ public class OneiricSieve {
                     .slice("CACBAAABCAC", "CCC     CCC", "  C     C  ", "  CBDDDBC  ", "CCCCC CCCCC", "CB       BC")
                     .slice(" A BAAAB A ", "           ", "           ", "  BBCECBB  ", "    CAC    ", " BBBBBBBBB ")
                     .slice(" AABBBBBAA ", "           ", "           ", "           ", "           ", "           ")
-                    .where('E', Predicates.controller(Predicates.blocks(definition.get())))
+                    .where('E', Predicates.controller(Predicates.blocks(definition.getBlock())))
                     .where(' ', Predicates.any())
                     .where('A', blocks(SOUL_MUTED_CASING.get()))
                     .where('B', blocks(SOMARUST_CASING.get()))

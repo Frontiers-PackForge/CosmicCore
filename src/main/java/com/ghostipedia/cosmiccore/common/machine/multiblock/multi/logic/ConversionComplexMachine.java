@@ -123,13 +123,13 @@ public class ConversionComplexMachine extends WorkableElectricMultiblockMachine
     }
 
     @Override
-    protected @Nullable GTRecipe getRealRecipe(GTRecipe recipe) {
+    public @Nullable GTRecipe fullModifyRecipe(GTRecipe recipe) {
         int selectedConfiguration = getStructureTier();
         if (selectedConfiguration == 0 ||
                 recipe.recipeType != getRecipeTypes()[recipeTypeIndex(selectedConfiguration)]) {
             return null;
         }
-        return super.getRealRecipe(recipe);
+        return super.fullModifyRecipe(recipe);
     }
 
     @Override

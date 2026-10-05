@@ -101,7 +101,7 @@ public final class BiomeldVivariumMachine extends BloomwyrmUnitMachine {
 
         var builder = GTRecipeBuilder.of(
                 CosmicCore.id("biomeld_vivarium/" + getMode().serializedName() + "/" + entity.get().getPath()),
-                CosmicRecipeTypes.BIOMELD_VIVARIUM)
+                CosmicRecipeTypes.BIOMELD_VIVARIUM.get())
                 .inputFluids(nutrient.get())
                 .EUt(profile.tier().eut())
                 .duration(profile.tier().duration())

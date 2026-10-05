@@ -196,7 +196,7 @@ public class CosmicOreVeins {
         if (mono == null) return;
 
         IWorldGenLayer layer = src.layer();
-        if (layer == WorldGenLayers.STONE || layer == WorldGenLayers.DEEPSLATE) {
+        if (layer == WorldGenLayers.STONE.value() || layer == WorldGenLayers.DEEPSLATE.value()) {
             layer = CosmicWorldGenLayers.overworld();
         }
 

@@ -286,7 +286,7 @@ public class CosmicRecipeModifiers {
 
             }
 
-            if (recipe.getType() == GTRecipeTypes.ASSEMBLY_LINE_RECIPES) {
+            if (recipe.getType() == GTRecipeTypes.ASSEMBLY_LINE_RECIPES.get()) {
                 if (actualParallel > 64) {
                     actualParallel = 64;
                 }

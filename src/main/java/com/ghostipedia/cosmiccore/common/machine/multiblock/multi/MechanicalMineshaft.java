@@ -10,6 +10,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMa
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
@@ -21,7 +22,7 @@ import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
 
 public class MechanicalMineshaft {
 
-    public static final MultiblockMachineDefinition MECHANICAL_MINESHAFT = REGISTRATE
+    public static final MachineEntry<MultiblockMachineDefinition> MECHANICAL_MINESHAFT = REGISTRATE
             .multiblock("mechanical_mineshaft", WorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .appearanceBlock(GTBlocks.CASING_STAINLESS_CLEAN)

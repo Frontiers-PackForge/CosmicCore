@@ -7,11 +7,11 @@ import com.ghostipedia.cosmiccore.api.data.savedData.LinkedMultiblockSavedData;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.LinkedMultiblockHelper;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.LinkedMultiblockHelper.RolePair;
 import com.ghostipedia.cosmiccore.utils.ItemData;
+import com.ghostipedia.cosmiccore.utils.OwnershipUtils;
 
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableMultiblockMachine;
-import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.GlobalPos;
@@ -74,8 +74,7 @@ public abstract class LinkedWorkableMultiblockMachine extends WorkableMultiblock
     @Override
     @Nullable
     public UUID getTeamUUID() {
-        var team = ((FTBOwner) getOwner()).getPlayerTeam(getOwnerUUID());
-        return team != null ? team.getTeamId() : getOwnerUUID();
+        return OwnershipUtils.getTeamUUID(getOwner());
     }
 
     @Override

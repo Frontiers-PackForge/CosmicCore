@@ -36,7 +36,7 @@ public abstract class ElectricBlastFurnaceTierMixin extends WorkableElectricMult
 
     @Inject(method = "<init>(Lcom/gregtechceu/gtceu/api/blockentity/BlockEntityCreationInfo;)V", at = @At("TAIL"))
     private void cosmiccore$attachTierState(BlockEntityCreationInfo info, CallbackInfo ci) {
-        if (getDefinition() == GTMultiMachines.ELECTRIC_BLAST_FURNACE) {
+        if (getDefinition() == GTMultiMachines.ELECTRIC_BLAST_FURNACE.get()) {
             attachPersistentTrait("cosmiccore_ebf_tier", new ElectricBlastFurnaceTierState());
         }
     }
@@ -61,7 +61,7 @@ public abstract class ElectricBlastFurnaceTierMixin extends WorkableElectricMult
 
     @Override
     public void setStructureTier(int tier) {
-        if (getDefinition() != GTMultiMachines.ELECTRIC_BLAST_FURNACE) return;
+        if (getDefinition() != GTMultiMachines.ELECTRIC_BLAST_FURNACE.get()) return;
         int selectedTier = TieredMultiblockPatterns.clampTier(getDefinition(), tier);
         if (selectedTier == getStructureTier()) return;
         if (recipeLogic.isActive()) return;
@@ -89,7 +89,7 @@ public abstract class ElectricBlastFurnaceTierMixin extends WorkableElectricMult
 
     @Override
     public void beginStructureTierRecipe(GTRecipe recipe) {
-        if (getDefinition() == GTMultiMachines.ELECTRIC_BLAST_FURNACE && getStructureTier() > 0) {
+        if (getDefinition() == GTMultiMachines.ELECTRIC_BLAST_FURNACE.get() && getStructureTier() > 0) {
             String recipeId = recipe == null || recipe.id == null ? "" : recipe.id.toString();
             ElectricBlastFurnaceTierState tierState = cosmiccore$getTierState();
             if (tierState != null) tierState.beginRecipe(recipeId);
@@ -98,7 +98,7 @@ public abstract class ElectricBlastFurnaceTierMixin extends WorkableElectricMult
 
     @Override
     public void completeStructureTierRecipe(GTRecipe recipe) {
-        if (getDefinition() != GTMultiMachines.ELECTRIC_BLAST_FURNACE || getStructureTier() == 0) return;
+        if (getDefinition() != GTMultiMachines.ELECTRIC_BLAST_FURNACE.get() || getStructureTier() == 0) return;
         String recipeId = recipe == null || recipe.id == null ? "" : recipe.id.toString();
         ElectricBlastFurnaceTierState tierState = cosmiccore$getTierState();
         if (tierState != null) tierState.completeRecipe(recipeId);
@@ -107,7 +107,7 @@ public abstract class ElectricBlastFurnaceTierMixin extends WorkableElectricMult
     @Override
     public List<IWidget> getWidgetsForDisplay(PanelSyncManager syncManager) {
         List<IWidget> widgets = super.getWidgetsForDisplay(syncManager);
-        if (getDefinition() == GTMultiMachines.ELECTRIC_BLAST_FURNACE) {
+        if (getDefinition() == GTMultiMachines.ELECTRIC_BLAST_FURNACE.get()) {
             widgets.addAll(Math.min(4, widgets.size()), TieredMultiblockUi.createEbfBonusLines(
                     this::getStructureTier, this::getStructureTierStreak));
         }

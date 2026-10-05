@@ -6,7 +6,7 @@
                 "name": "cosmiccore:ambient_drone"
             }
         ],
-        "subtitle": "cosmiccore.subtitle.ambient_drone"
+        "subtitle": "subtitle.cosmiccore.ambient_drone"
     },
     "arcane_distil": {
         "sounds": [
@@ -15,7 +15,7 @@
                 "name": "cosmiccore:arcane_distil"
             }
         ],
-        "subtitle": "cosmiccore.subtitle.arcane_distil"
+        "subtitle": "subtitle.cosmiccore.arcane_distil"
     },
     "dawnforge": {
         "sounds": [
@@ -24,7 +24,7 @@
                 "name": "cosmiccore:dawnforge"
             }
         ],
-        "subtitle": "cosmiccore.subtitle.dawnforge"
+        "subtitle": "subtitle.cosmiccore.dawnforge"
     },
     "dying_star": {
         "sounds": [
@@ -33,7 +33,7 @@
                 "name": "cosmiccore:dying_star"
             }
         ],
-        "subtitle": "cosmiccore.subtitle.dying_star"
+        "subtitle": "subtitle.cosmiccore.dying_star"
     },
     "fluidizer": {
         "sounds": [
@@ -42,7 +42,7 @@
                 "name": "cosmiccore:fluidizer"
             }
         ],
-        "subtitle": "cosmiccore.subtitle.fluidizer"
+        "subtitle": "subtitle.cosmiccore.fluidizer"
     },
     "gas_succ": {
         "sounds": [
@@ -51,7 +51,7 @@
                 "name": "cosmiccore:gas_succ"
             }
         ],
-        "subtitle": "cosmiccore.subtitle.gas_succ"
+        "subtitle": "subtitle.cosmiccore.gas_succ"
     },
     "heavy_assembler": {
         "sounds": [
@@ -60,7 +60,7 @@
                 "name": "cosmiccore:heavy_assembler"
             }
         ],
-        "subtitle": "cosmiccore.subtitle.heavy_assembler"
+        "subtitle": "subtitle.cosmiccore.heavy_assembler"
     },
     "icv": {
         "sounds": [
@@ -69,7 +69,7 @@
                 "name": "cosmiccore:icv"
             }
         ],
-        "subtitle": "cosmiccore.subtitle.icv"
+        "subtitle": "subtitle.cosmiccore.icv"
     },
     "laminator": {
         "sounds": [
@@ -78,7 +78,7 @@
                 "name": "cosmiccore:laminator"
             }
         ],
-        "subtitle": "cosmiccore.subtitle.laminator"
+        "subtitle": "subtitle.cosmiccore.laminator"
     },
     "mining_machine": {
         "sounds": [
@@ -87,7 +87,7 @@
                 "name": "cosmiccore:mining_machine"
             }
         ],
-        "subtitle": "cosmiccore.subtitle.mining_machine"
+        "subtitle": "subtitle.cosmiccore.mining_machine"
     },
     "orbital_forge": {
         "sounds": [
@@ -96,7 +96,7 @@
                 "name": "cosmiccore:orbital_forge"
             }
         ],
-        "subtitle": "cosmiccore.subtitle.orbital_forge"
+        "subtitle": "subtitle.cosmiccore.orbital_forge"
     },
     "shake": {
         "sounds": [
@@ -105,7 +105,7 @@
                 "name": "cosmiccore:shake"
             }
         ],
-        "subtitle": "cosmiccore.subtitle.shake"
+        "subtitle": "subtitle.cosmiccore.shake"
     },
     "vorax": {
         "sounds": [
@@ -114,6 +114,6 @@
                 "name": "cosmiccore:vorax"
             }
         ],
-        "subtitle": "cosmiccore.subtitle.vorax"
+        "subtitle": "subtitle.cosmiccore.vorax"
     }
 }

@@ -11,6 +11,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMa
 import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
 import static com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates.autoAbilitiesNoEnergyIn;
@@ -23,7 +24,7 @@ import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createWor
 
 public class IndustrialFlotationPlant {
 
-    public static final MultiblockMachineDefinition INDUSTRIAL_FLOTATION_PLANT = REGISTRATE
+    public static final MachineEntry<MultiblockMachineDefinition> INDUSTRIAL_FLOTATION_PLANT = REGISTRATE
             .multiblock("industrial_flotation_plant", WorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.ALL)
             .appearanceBlock(LIGHTWEIGHT_DARK_STEEL_CASING)

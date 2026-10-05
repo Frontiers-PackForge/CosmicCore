@@ -16,6 +16,7 @@ import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
@@ -30,7 +31,7 @@ import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.*;
 
 public class IndustChemVat {
 
-    public final static MultiblockMachineDefinition INDUSTRIAL_CHEMPLANT = REGISTRATE
+    public final static MachineEntry<MultiblockMachineDefinition> INDUSTRIAL_CHEMPLANT = REGISTRATE
             .multiblock("industrial_chemical_vat", WorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.ALL)
             .recipeTypes(CosmicRecipeTypes.INDUSTRIAL_CHEMVAT, GTRecipeTypes.CRACKING_RECIPES)

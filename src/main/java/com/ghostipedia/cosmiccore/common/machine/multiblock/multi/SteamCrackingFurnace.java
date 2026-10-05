@@ -11,6 +11,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.multiblock.OriginOffset;
 import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
 import net.minecraft.network.chat.Component;
@@ -31,7 +32,7 @@ import static com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection.UP;
 
 public class SteamCrackingFurnace {
 
-    public static final MultiblockMachineDefinition STEAM_CRACKING_FURNACE = REGISTRATE
+    public static final MachineEntry<MultiblockMachineDefinition> STEAM_CRACKING_FURNACE = REGISTRATE
             .multiblock("steam_cracking_furnace", CoilWorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.ALL)
             .appearanceBlock(REFRACTORY_STRUCTURAL_CASING)

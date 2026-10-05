@@ -1,6 +1,5 @@
 package com.ghostipedia.cosmiccore.gtbridge;
 
-import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.capability.recipe.EmberRecipeCapability;
 import com.ghostipedia.cosmiccore.api.capability.recipe.SoulRecipeCapability;
 import com.ghostipedia.cosmiccore.common.data.CosmicSounds;
@@ -12,6 +11,8 @@ import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
+import com.gregtechceu.gtceu.api.registry.registrate.builder.GTRecipeTypeBuilder;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.GTRecipeTypeEntry;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import com.gregtechceu.gtceu.common.data.GTSoundEntries;
 import com.gregtechceu.gtceu.common.mui.GTGuiTextures;
@@ -23,162 +24,215 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 
+import com.tterrag.registrate.providers.ProviderType;
+
+import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicSounds.*;
 import static com.gregtechceu.gtceu.common.data.GCYMRecipeTypes.ALLOY_BLAST_RECIPES;
 import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.*;
 
 public class CosmicRecipeTypes {
 
-    public static final GTRecipeType LEYLINE_FABRICATION = register(CosmicCore.id("leyline_fabrication"), MULTIBLOCK)
+    private static GTRecipeTypeBuilder recipeType(String id, String group) {
+        return REGISTRATE.recipeType(id, group).setData(ProviderType.LANG, (context, provider) -> {});
+    }
+
+    public static final GTRecipeTypeEntry LEYLINE_FABRICATION = recipeType("leyline_fabrication", MULTIBLOCK)
             .setMaxIOSize(0, 0, 0, 0)
-            .setSound(GTSoundEntries.COMPRESSOR);
+            .setSound(GTSoundEntries.COMPRESSOR)
+            .register();
 
-    public static final GTRecipeType MECHANICAL_MINESHAFT = register(
-            CosmicCore.id("mechanical_mineshaft"), MULTIBLOCK)
+    public static final GTRecipeTypeEntry MECHANICAL_MINESHAFT = recipeType("mechanical_mineshaft", MULTIBLOCK)
             .setMaxIOSize(4, 4, 4, 4)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
-    public static final GTRecipeType ESSENCE_REACTOR = register(CosmicCore.id("essence_reactor"), MULTIBLOCK)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
+            .setEUIO(IO.IN)
+            .register();
+    public static final GTRecipeTypeEntry ESSENCE_REACTOR = recipeType("essence_reactor", MULTIBLOCK)
             .setMaxIOSize(4, 4, 4, 4)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
+            .setEUIO(IO.IN)
+            .register();
 
-    public static final GTRecipeType SLUDGE_DIGESTOR = register(CosmicCore.id("sludge_digestor"), MULTIBLOCK)
+    public static final GTRecipeTypeEntry SLUDGE_DIGESTOR = recipeType("sludge_digestor", MULTIBLOCK)
             .setMaxIOSize(3, 3, 2, 2)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
-    public static final GTRecipeType POWDERIZER = register(CosmicCore.id("powderizer"), MULTIBLOCK)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
+            .setEUIO(IO.IN)
+            .register();
+    public static final GTRecipeTypeEntry POWDERIZER = recipeType("powderizer", MULTIBLOCK)
             .setMaxIOSize(2, 2, 0, 0)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
-    public static final GTRecipeType INDUSTRIAL_ORE_SORTER = register(CosmicCore.id("industrial_ore_sorter"),
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
+            .setEUIO(IO.IN)
+            .register();
+    public static final GTRecipeTypeEntry INDUSTRIAL_ORE_SORTER = recipeType("industrial_ore_sorter",
             MULTIBLOCK)
             .setMaxIOSize(1, 6, 0, 0)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
-    public static final GTRecipeType INDUSTRIAL_FLOTATION_PLANT = register(
-            CosmicCore.id("industrial_flotation_plant"), MULTIBLOCK)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
+            .setEUIO(IO.IN)
+            .register();
+    public static final GTRecipeTypeEntry INDUSTRIAL_FLOTATION_PLANT = recipeType("industrial_flotation_plant",
+            MULTIBLOCK)
             .setMaxIOSize(2, 2, 2, 1)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
-    public static final GTRecipeType ONEIRIC_SIEVE = register(CosmicCore.id("oneiric_sieve"), MULTIBLOCK)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
+            .setEUIO(IO.IN)
+            .register();
+    public static final GTRecipeTypeEntry ONEIRIC_SIEVE = recipeType("oneiric_sieve", MULTIBLOCK)
             .setMaxIOSize(3, 3, 1, 1)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
-    public static final GTRecipeType DISSOLUTION_VAT = register(CosmicCore.id("dissolution_vat"), MULTIBLOCK)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
+            .setEUIO(IO.IN)
+            .register();
+    public static final GTRecipeTypeEntry DISSOLUTION_VAT = recipeType("dissolution_vat", MULTIBLOCK)
             .setMaxIOSize(2, 2, 2, 2)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
-    public static final GTRecipeType PHASE_SEPARATOR = register(CosmicCore.id("phase_separator"), MULTIBLOCK)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
+            .setEUIO(IO.IN)
+            .register();
+    public static final GTRecipeTypeEntry PHASE_SEPARATOR = recipeType("phase_separator", MULTIBLOCK)
             .setSound(GTSoundEntries.CENTRIFUGE)
             .setMaxIOSize(1, 0, 2, 6)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE));
-    public static final GTRecipeType SIMPLE_DESALTER = register(CosmicCore.id("simple_desalter"), ELECTRIC)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE))
+            .setEUIO(IO.IN)
+            .register();
+    public static final GTRecipeTypeEntry SIMPLE_DESALTER = recipeType("simple_desalter", ELECTRIC)
             .setSound(GTSoundEntries.CHEMICAL)
             .setMaxIOSize(0, 0, 3, 3)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE));
-    public static final GTRecipeType DESALTER = register(CosmicCore.id("desalter"), MULTIBLOCK)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE))
+            .setEUIO(IO.IN)
+            .register();
+    public static final GTRecipeTypeEntry DESALTER = recipeType("desalter", MULTIBLOCK)
             .setSound(GTSoundEntries.CHEMICAL)
             .setMaxIOSize(0, 0, 3, 3)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE));
-    public static final GTRecipeType STEAM_CRACKING_FURNACE = register(
-            CosmicCore.id("steam_cracking_furnace"), MULTIBLOCK)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE))
+            .setEUIO(IO.IN)
+            .register();
+    public static final GTRecipeTypeEntry STEAM_CRACKING_FURNACE = recipeType("steam_cracking_furnace", MULTIBLOCK)
             .setSound(GTSoundEntries.FIRE)
             .setMaxIOSize(1, 0, 2, 1)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
-    public static final GTRecipeType FRACTIONAL_CONDENSER = register(
-            CosmicCore.id("fractional_condenser"), MULTIBLOCK)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
+            .setEUIO(IO.IN)
+            .register();
+    public static final GTRecipeTypeEntry FRACTIONAL_CONDENSER = recipeType("fractional_condenser", MULTIBLOCK)
             .setSound(GTSoundEntries.COOLING)
             .setMaxIOSize(0, 1, 1, 5)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE));
-    public static final GTRecipeType FLUID_CATALYTIC_CRACKING = register(
-            CosmicCore.id("fluid_catalytic_cracking"), MULTIBLOCK)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE))
+            .setEUIO(IO.IN)
+            .register();
+    public static final GTRecipeTypeEntry FLUID_CATALYTIC_CRACKING = recipeType("fluid_catalytic_cracking", MULTIBLOCK)
             .setSound(GTSoundEntries.CHEMICAL)
             .setMaxIOSize(2, 2, 3, 6)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE));
-    public static final GTRecipeType HYDROTREATING = register(CosmicCore.id("hydrotreating"), MULTIBLOCK)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE))
+            .setEUIO(IO.IN)
+            .register();
+    public static final GTRecipeTypeEntry HYDROTREATING = recipeType("hydrotreating", MULTIBLOCK)
             .setSound(GTSoundEntries.CHEMICAL)
             .setMaxIOSize(2, 2, 3, 6)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE));
-    public static final GTRecipeType HYDROCRACKING = register(CosmicCore.id("hydrocracking"), MULTIBLOCK)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE))
+            .setEUIO(IO.IN)
+            .register();
+    public static final GTRecipeTypeEntry HYDROCRACKING = recipeType("hydrocracking", MULTIBLOCK)
             .setSound(GTSoundEntries.CHEMICAL)
             .setMaxIOSize(2, 2, 3, 6)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE));
-    public static final GTRecipeType CATALYTIC_REFORMING = register(
-            CosmicCore.id("catalytic_reforming"), MULTIBLOCK)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE))
+            .setEUIO(IO.IN)
+            .register();
+    public static final GTRecipeTypeEntry CATALYTIC_REFORMING = recipeType("catalytic_reforming", MULTIBLOCK)
             .setSound(GTSoundEntries.CHEMICAL)
             .setMaxIOSize(2, 2, 3, 6)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE));
-    public static final GTRecipeType DELAYED_COKING = register(CosmicCore.id("delayed_coking"), MULTIBLOCK)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE))
+            .setEUIO(IO.IN)
+            .register();
+    public static final GTRecipeTypeEntry DELAYED_COKING = recipeType("delayed_coking", MULTIBLOCK)
             .setSound(GTSoundEntries.FIRE)
             .setMaxIOSize(2, 2, 3, 6)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE));
-    public static final GTRecipeType VACUUM_DISTILLATION = register(
-            CosmicCore.id("vacuum_distillation"), MULTIBLOCK)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE))
+            .setEUIO(IO.IN)
+            .register();
+    public static final GTRecipeTypeEntry VACUUM_DISTILLATION = recipeType("vacuum_distillation", MULTIBLOCK)
             .setSound(GTSoundEntries.COOLING)
             .setMaxIOSize(0, 1, 1, 12)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE));
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE))
+            .setEUIO(IO.IN)
+            .register();
 
-    public static final GTRecipeType COSMIC_DUMMY_SPAM_YEETER = GTRecipeTypes
-            .register(CosmicCore.id("fuckassbeeball"), ELECTRIC)
-            .setMaxIOSize(54, 54, 54, 54);
+    public static final GTRecipeTypeEntry COSMIC_DUMMY_SPAM_YEETER = recipeType("fuckassbeeball", ELECTRIC)
+            .setMaxIOSize(54, 54, 54, 54)
+            .setEUIO(IO.IN)
+            .register();
 
-    public static final GTRecipeType LAMINATOR = GTRecipeTypes
-            .register(CosmicCore.id("laminator"), ELECTRIC)
+    public static final GTRecipeTypeEntry LAMINATOR = recipeType("laminator", ELECTRIC)
             .setSound(CosmicSounds.LAMINATOR)
             .setMaxIOSize(3, 2, 2, 0)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
-    public static final GTRecipeType AIO_LITHOGRAPHY_PROCESSOR = GTRecipeTypes
-            .register(CosmicCore.id("aio_lithography_processor"), ELECTRIC)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
+            .setEUIO(IO.IN)
+            .register();
+    public static final GTRecipeTypeEntry AIO_LITHOGRAPHY_PROCESSOR = recipeType("aio_lithography_processor", ELECTRIC)
             .setSound(GTSoundEntries.COOLING)
             .setMaxIOSize(6, 3, 2, 0)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
-    public static final GTRecipeType CHEMICAL_DEHYDRATOR = GTRecipeTypes
-            .register(CosmicCore.id("chemical_dehydrator"), ELECTRIC)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
+            .setEUIO(IO.IN)
+            .register();
+    public static final GTRecipeTypeEntry CHEMICAL_DEHYDRATOR = recipeType("chemical_dehydrator", ELECTRIC)
             .setSound(GTSoundEntries.CHEMICAL)
             .setMaxIOSize(2, 9, 2, 2)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
-    public static final GTRecipeType CRYSTALLIZER = GTRecipeTypes
-            .register(CosmicCore.id("crystallizer"), ELECTRIC)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
+            .setEUIO(IO.IN)
+            .register();
+    public static final GTRecipeTypeEntry CRYSTALLIZER = recipeType("crystallizer", ELECTRIC)
             .setSound(GTSoundEntries.CHEMICAL)
             .setMaxIOSize(0, 1, 1, 1)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_CRYSTALLIZATION));
-    public static final GTRecipeType DAWNFORGE_ECLIPSED = GTRecipeTypes
-            .register(CosmicCore.id("eclipsed_dawnforge"), ELECTRIC)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_CRYSTALLIZATION))
+            .setEUIO(IO.IN)
+            .register();
+    public static final GTRecipeTypeEntry DAWNFORGE_ECLIPSED = recipeType("eclipsed_dawnforge", ELECTRIC)
             .setSound(CosmicSounds.LAMINATOR)
             .setMaxIOSize(12, 1, 3, 1)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
-    public static final GTRecipeType VORAX = GTRecipeTypes
-            .register(CosmicCore.id("vorax"), ELECTRIC)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
+            .setEUIO(IO.IN)
+            .register();
+    public static final GTRecipeTypeEntry VORAX = recipeType("vorax", ELECTRIC)
             .setSound(CosmicSounds.VOARX)
             .setMaxIOSize(1, 0, 4, 2)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE));
-    public static final GTRecipeType MANA_FLUIDIZER = GTRecipeTypes
-            .register(CosmicCore.id("mana_fluidizer"), ELECTRIC)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE))
+            .setEUIO(IO.IN)
+            .register();
+    public static final GTRecipeTypeEntry MANA_FLUIDIZER = recipeType("mana_fluidizer", ELECTRIC)
             .setMaxIOSize(1, 1, 1, 1)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
+            .setEUIO(IO.IN)
+            .register();
 
-    public static final GTRecipeType PCB_FABRICATOR = GTRecipeTypes
-            .register(CosmicCore.id("pcb_fab"), ELECTRIC)
+    public static final GTRecipeTypeEntry PCB_FABRICATOR = recipeType("pcb_fab", ELECTRIC)
             .setMaxIOSize(8, 1, 4, 0)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE));
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE))
+            .setEUIO(IO.IN)
+            .register();
 
-    public static final GTRecipeType TITAN_FUSION_RECIPES = GTRecipeTypes
-            .register(CosmicCore.id("titan_fusion"), ELECTRIC)
+    public static final GTRecipeTypeEntry TITAN_FUSION_RECIPES = recipeType("titan_fusion", ELECTRIC)
             .setMaxIOSize(3, 3, 3, 6)
             .setSound(GTSoundEntries.REPLICATOR)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE));
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE))
+            .setEUIO(IO.IN)
+            .register();
 
-    public static final GTRecipeType LUNAR_HAMMER = GTRecipeTypes
-            .register(CosmicCore.id("lunar_hammer"), ELECTRIC)
+    public static final GTRecipeTypeEntry LUNAR_HAMMER = recipeType("lunar_hammer", ELECTRIC)
             .setMaxIOSize(3, 3, 2, 2)
             .setSound(GTSoundEntries.JET_ENGINE)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE));
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE))
+            .setEUIO(IO.IN)
+            .register();
 
-    public static final GTRecipeType CRYOGENICS_CHAMBER = GTRecipeTypes
-            .register(CosmicCore.id("cryo_chamber"), ELECTRIC)
+    public static final GTRecipeTypeEntry CRYOGENICS_CHAMBER = recipeType("cryo_chamber", ELECTRIC)
             .setMaxIOSize(6, 3, 3, 6)
             .setSound(GTSoundEntries.JET_ENGINE)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE));
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE))
+            .setEUIO(IO.IN)
+            .register();
 
-    public static final GTRecipeType SOUL_TESTER_RECIPES = GTRecipeTypes
-            .register(CosmicCore.id("soul_tester"), GTRecipeTypes.MULTIBLOCK)
+    public static final GTRecipeTypeEntry SOUL_TESTER_RECIPES = recipeType("soul_tester", GTRecipeTypes.MULTIBLOCK)
             .setMaxSize(IO.IN, SoulRecipeCapability.CAP, 1)
             .setMaxSize(IO.OUT, SoulRecipeCapability.CAP, 1)
             .setMaxIOSize(1, 1, 0, 0)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
+            .setEUIO(IO.IN)
+            .register();
 
     /*
      * public static final GTRecipeType EMBER_TESTER_RECIPES = GTRecipeTypes
@@ -189,150 +243,168 @@ public class CosmicRecipeTypes {
      * .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
      */
 
-    public static final GTRecipeType VOID_MINER = GTRecipeTypes
-            .register(CosmicCore.id("void_miner"), GTRecipeTypes.MULTIBLOCK)
+    public static final GTRecipeTypeEntry VOID_MINER = recipeType("void_miner", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(1, 27, 2, 0)
             .setSound(MINING_MACHINE)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
+            .setEUIO(IO.IN)
+            .register();
 
-    public static final GTRecipeType HEAVY_ASSEMBLER = GTRecipeTypes
-            .register(CosmicCore.id("heavy_assembler"), GTRecipeTypes.MULTIBLOCK)
+    public static final GTRecipeTypeEntry HEAVY_ASSEMBLER = recipeType("heavy_assembler", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(12, 3, 6, 0)
             .setSound(HEAVY_ASSEM)
             // TODO(8.0.0): custom CosmicGuiTextures.PROGRESS_BAR_HEAVY (LDLib ResourceTexture) has no
             // ProgressBarTextureSet equivalent; using PROGRESS_ASSEMBLER as closest cosmetic substitute
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ASSEMBLER));
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ASSEMBLER))
+            .setEUIO(IO.IN)
+            .register();
 
-    public static final GTRecipeType PLASMITE_FORGE = GTRecipeTypes
-            .register(CosmicCore.id("plasmite_forge"), GTRecipeTypes.MULTIBLOCK)
+    public static final GTRecipeTypeEntry PLASMITE_FORGE = recipeType("plasmite_forge", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(3, 3, 3, 3)
             .setSound(HEAVY_ASSEM)
             // TODO(8.0.0): custom CosmicGuiTextures.PROGRESS_BAR_HEAVY (LDLib ResourceTexture) has no
             // ProgressBarTextureSet equivalent; using PROGRESS_ASSEMBLER as closest cosmetic substitute
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ASSEMBLER));
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ASSEMBLER))
+            .setEUIO(IO.IN)
+            .register();
 
-    public static final GTRecipeType PRISMA_FOUNDRY = GTRecipeTypes
-            .register(CosmicCore.id("prisma_foundry"), GTRecipeTypes.MULTIBLOCK)
+    public static final GTRecipeTypeEntry PRISMA_FOUNDRY = recipeType("prisma_foundry", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(3, 6, 3, 0)
             .setSound(MINING_MACHINE)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
+            .setEUIO(IO.IN)
+            .register();
 
-    public static final GTRecipeType ATMOSPHERE_SIPHON = GTRecipeTypes
-            .register(CosmicCore.id("atmo_siphon"), GTRecipeTypes.MULTIBLOCK)
+    public static final GTRecipeTypeEntry ATMOSPHERE_SIPHON = recipeType("atmo_siphon", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(3, 0, 4, 16)
             .setSound(GAS_SUCC)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
+            .setEUIO(IO.IN)
+            .register();
 
-    public static final GTRecipeType MANA_DIGITIZER = GTRecipeTypes
-            .register(CosmicCore.id("mana_digitizer"), GTRecipeTypes.MULTIBLOCK)
+    public static final GTRecipeTypeEntry MANA_DIGITIZER = recipeType("mana_digitizer", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(1, 0, 2, 2)
             .setSound(GAS_SUCC)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
+            .setEUIO(IO.IN)
+            .register();
 
-    public static final GTRecipeType COMPONENT_ASSEMBLY_LINE = GTRecipeTypes
-            .register(CosmicCore.id("component_assembly_line"), GTRecipeTypes.MULTIBLOCK)
+    public static final GTRecipeTypeEntry COMPONENT_ASSEMBLY_LINE = recipeType("component_assembly_line",
+            GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(16, 1, 4, 2)
             .setSound(GAS_SUCC)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
-    public static final GTRecipeType GROVE_RECIPES = GTRecipeTypes
-            .register(CosmicCore.id("drygmy_grove"), GTRecipeTypes.MULTIBLOCK)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
+            .setEUIO(IO.IN)
+            .register();
+    public static final GTRecipeTypeEntry GROVE_RECIPES = recipeType("drygmy_grove", GTRecipeTypes.MULTIBLOCK)
             .setMaxSize(IO.IN, SoulRecipeCapability.CAP, 1)
             .setMaxSize(IO.OUT, SoulRecipeCapability.CAP, 1)
             .setMaxIOSize(2, 9, 1, 3)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
+            .setEUIO(IO.IN)
+            .register();
 
-    public final static GTRecipeType INDUSTRIAL_PRIMITIVE_BLAST_FURNACE_RECIPES = register(
-            CosmicCore.id("industrial_primitive_blast_furnace"), MULTIBLOCK)
+    public static final GTRecipeTypeEntry INDUSTRIAL_PRIMITIVE_BLAST_FURNACE_RECIPES = recipeType(
+            "industrial_primitive_blast_furnace", MULTIBLOCK)
             .setMaxIOSize(3, 3, 1, 0)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
-            .setMaxTooltips(1)
-            .setSound(GTSoundEntries.FIRE);
-    public static final GTRecipeType LEACHING_PLANT = GTRecipeTypes
-            .register(CosmicCore.id("leaching_plant"), GTRecipeTypes.MULTIBLOCK)
+            .setSound(GTSoundEntries.FIRE).register();
+    public static final GTRecipeTypeEntry LEACHING_PLANT = recipeType("leaching_plant", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(3, 6, 3, 3)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
+            .setEUIO(IO.IN)
+            .register();
 
-    public static final GTRecipeType HELLFIRE_FOUNDRY = GTRecipeTypes
-            .register(CosmicCore.id("hellfire_foundry"), GTRecipeTypes.MULTIBLOCK)
+    public static final GTRecipeTypeEntry HELLFIRE_FOUNDRY = recipeType("hellfire_foundry", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(5, 1, 1, 0)
             .setMaxSize(IO.IN, SoulRecipeCapability.CAP, 1)
-            .setMaxTooltips(4)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
-    public static final GTRecipeType SUFFERING_CHAMBER = GTRecipeTypes
-            .register(CosmicCore.id("suffering_chamber"), GTRecipeTypes.MULTIBLOCK)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
+            .setEUIO(IO.IN)
+            .register();
+    public static final GTRecipeTypeEntry SUFFERING_CHAMBER = recipeType("suffering_chamber", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(1, 0, 0, 0)
             .setMaxSize(IO.OUT, SoulRecipeCapability.CAP, 1)
-            .setMaxTooltips(5)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
-    public static final GTRecipeType ARCANE_DISTILLERY = GTRecipeTypes
-            .register(CosmicCore.id("arcane_distillery"), GTRecipeTypes.MULTIBLOCK)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
+            .setEUIO(IO.IN)
+            .register();
+    public static final GTRecipeTypeEntry ARCANE_DISTILLERY = recipeType("arcane_distillery", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(3, 2, 3, 2)
-            .setMaxTooltips(4)
             .setSound(CosmicSounds.ARCANE_DISTIL)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE));
-    public static final GTRecipeType ARCANE_FOLDING = GTRecipeTypes
-            .register(CosmicCore.id("arcane_folding"), GTRecipeTypes.MULTIBLOCK)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE))
+            .setEUIO(IO.IN)
+            .register();
+    public static final GTRecipeTypeEntry ARCANE_FOLDING = recipeType("arcane_folding", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(3, 2, 1, 0)
-            .setMaxTooltips(4)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE));
-    public static final GTRecipeType POLYMERIZER = GTRecipeTypes
-            .register(CosmicCore.id("polymerizer"), GTRecipeTypes.MULTIBLOCK)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE))
+            .setEUIO(IO.IN)
+            .register();
+    public static final GTRecipeTypeEntry POLYMERIZER = recipeType("polymerizer", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(3, 2, 3, 2)
-            .setMaxTooltips(4)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE));
-    public static final GTRecipeType HEMOPHAGIC_TRANSFUSER = GTRecipeTypes
-            .register(CosmicCore.id("hemophagic_transfuser"), GTRecipeTypes.MULTIBLOCK)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE))
+            .setEUIO(IO.IN)
+            .register();
+    public static final GTRecipeTypeEntry HEMOPHAGIC_TRANSFUSER = recipeType("hemophagic_transfuser",
+            GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(6, 6, 3, 3)
             .setMaxSize(IO.IN, SoulRecipeCapability.CAP, 1)
-            .setMaxTooltips(4)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
-    public static final GTRecipeType IMBUMENT_PYLON = GTRecipeTypes
-            .register(CosmicCore.id("imbument_pylon"), GTRecipeTypes.MULTIBLOCK)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
+            .setEUIO(IO.IN)
+            .register();
+    public static final GTRecipeTypeEntry IMBUMENT_PYLON = recipeType("imbument_pylon", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(6, 6, 3, 3)
             .setMaxSize(IO.IN, SoulRecipeCapability.CAP, 2)
-            .setMaxTooltips(5)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW)
-                    .addRecipeUIModifier(VitaeCampusRecipeUI.ALTAR_TIER));
-    public static final GTRecipeType CHROMATIC_FLOTATION_PLANT = GTRecipeTypes
-            .register(CosmicCore.id("chromatic_flotation_plant"), GTRecipeTypes.MULTIBLOCK)
+                    .addRecipeUIModifier(VitaeCampusRecipeUI.ALTAR_TIER))
+            .setEUIO(IO.IN)
+            .register();
+    public static final GTRecipeTypeEntry CHROMATIC_FLOTATION_PLANT = recipeType("chromatic_flotation_plant",
+            GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(3, 4, 3, 3)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
+            .setEUIO(IO.IN)
+            .register();
 
-    public static final GTRecipeType SPIRIT_CRUCIBLE = GTRecipeTypes
-            .register(CosmicCore.id("spirit_crucible"), GTRecipeTypes.MULTIBLOCK)
+    public static final GTRecipeTypeEntry SPIRIT_CRUCIBLE = recipeType("spirit_crucible", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(3, 6, 3, 0)
             .setSound(ARCANE_DISTIL)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
+            .setEUIO(IO.IN)
+            .register();
 
-    public static final GTRecipeType SOUL_FOUNDRY = GTRecipeTypes
-            .register(CosmicCore.id("soul_foundry"), GTRecipeTypes.MULTIBLOCK)
+    public static final GTRecipeTypeEntry SOUL_FOUNDRY = recipeType("soul_foundry", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(6, 1, 3, 1)
             .setSound(CosmicSounds.LAMINATOR)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
+            .setEUIO(IO.IN)
+            .register();
 
-    public static final GTRecipeType CALX_REACTOR = GTRecipeTypes
-            .register(CosmicCore.id("calx_reactor"), ELECTRIC)
+    public static final GTRecipeTypeEntry CALX_REACTOR = recipeType("calx_reactor", ELECTRIC)
             .setMaxIOSize(2, 2, 1, 0)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
+            .setEUIO(IO.IN)
+            .register();
 
-    public static final GTRecipeType ROASTER = GTRecipeTypes
-            .register(CosmicCore.id("roaster"), ELECTRIC)
+    public static final GTRecipeTypeEntry ROASTER = recipeType("roaster", ELECTRIC)
             .setMaxIOSize(2, 3, 1, 0)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
-    public static final GTRecipeType MANA_LEACHING_TUB = GTRecipeTypes
-            .register(CosmicCore.id("mana_leaching_tub"), ELECTRIC)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
+            .setEUIO(IO.IN)
+            .register();
+    public static final GTRecipeTypeEntry MANA_LEACHING_TUB = recipeType("mana_leaching_tub", ELECTRIC)
             .setMaxIOSize(1, 1, 2, 2)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
-    public static final GTRecipeType THERMOMAG = GTRecipeTypes
-            .register(CosmicCore.id("thermomagnitizer"), ELECTRIC)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
+            .setEUIO(IO.IN)
+            .register();
+    public static final GTRecipeTypeEntry THERMOMAG = recipeType("thermomagnitizer", ELECTRIC)
             .setMaxIOSize(3, 2, 0, 0)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
-    public static final GTRecipeType VAC_BUBBLER = GTRecipeTypes
-            .register(CosmicCore.id("vacuum_bubbler"), ELECTRIC)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
+            .setEUIO(IO.IN)
+            .register();
+    public static final GTRecipeTypeEntry VAC_BUBBLER = recipeType("vacuum_bubbler", ELECTRIC)
             .setMaxIOSize(2, 3, 2, 3)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
-    public static final GTRecipeType LARGE_ROASTER = GTRecipeTypes
-            .register(CosmicCore.id("large_roaster"), ELECTRIC)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
+            .setEUIO(IO.IN)
+            .register();
+    public static final GTRecipeTypeEntry LARGE_ROASTER = recipeType("large_roaster", ELECTRIC)
             .setMaxSize(IO.IN, EmberRecipeCapability.CAP, 1)
             .setMaxIOSize(4, 4, 4, 4)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW)
@@ -343,49 +415,57 @@ public class CosmicRecipeTypes {
                     .setRecipeViewerLayoutGridBuilder(FluidRecipeCapability.CAP, IO.IN,
                             layout -> new String[] { "ss", "ss" })
                     .setRecipeViewerLayoutGridBuilder(FluidRecipeCapability.CAP, IO.OUT,
-                            layout -> new String[] { "ss", "ss" }));
-    public static final GTRecipeType VILE_FISSION = GTRecipeTypes
-            .register(CosmicCore.id("vile_fission"), ELECTRIC)
+                            layout -> new String[] { "ss", "ss" }))
+            .setEUIO(IO.IN)
+            .register();
+    public static final GTRecipeTypeEntry VILE_FISSION = recipeType("vile_fission", ELECTRIC)
             .setMaxSize(IO.IN, EmberRecipeCapability.CAP, 1)
             .setMaxIOSize(1, 1, 1, 1)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
+            .setEUIO(IO.IN)
+            .register();
 
-    public static final GTRecipeType VOID_SALT_FISSION = GTRecipeTypes
-            .register(CosmicCore.id("void_salt_fission"), ELECTRIC)
+    public static final GTRecipeTypeEntry VOID_SALT_FISSION = recipeType("void_salt_fission", ELECTRIC)
             .setMaxSize(IO.IN, EmberRecipeCapability.CAP, 1)
             .setMaxIOSize(2, 3, 2, 2)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
+            .setEUIO(IO.IN)
+            .register();
 
-    public static final GTRecipeType RADBOLT_RECONSTRUCTOR = GTRecipeTypes
-            .register(CosmicCore.id("reconstructor"), ELECTRIC)
+    public static final GTRecipeTypeEntry RADBOLT_RECONSTRUCTOR = recipeType("reconstructor", ELECTRIC)
             .setMaxIOSize(3, 2, 1, 1)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
+            .setEUIO(IO.IN)
+            .register();
 
-    public static final GTRecipeType SPOOLING_MACHINE = GTRecipeTypes
-            .register(CosmicCore.id("spooling_machine"), ELECTRIC)
+    public static final GTRecipeTypeEntry SPOOLING_MACHINE = recipeType("spooling_machine", ELECTRIC)
             .setMaxIOSize(3, 2, 1, 0)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
-    public static final GTRecipeType ORBITAL_FORGE_EBF = GTRecipeTypes
-            .register(CosmicCore.id("orbital_forge"), GTRecipeTypes.MULTIBLOCK)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
+            .setEUIO(IO.IN)
+            .register();
+    public static final GTRecipeTypeEntry ORBITAL_FORGE_EBF = recipeType("orbital_forge", GTRecipeTypes.MULTIBLOCK)
             .setSound(CosmicSounds.ORBITAL_FORGE)
             .setHasResearchSlot(true)
             .setMaxIOSize(3, 3, 3, 3)
             // TODO(8.0.0): PROGRESS_BAR_ARC_FURNACE had no ProgressBarTextureSet; closest substitute
             // 8.0.0 removed GTRecipeType.addDataInfo(...) -> data infos registered in init() via
             // getDataInfos().add(...)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_FUSION));
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_FUSION))
+            .setEUIO(IO.IN)
+            .register();
 
-    public static final GTRecipeType ORBITAL_FORGE_ABS = GTRecipeTypes
-            .register(CosmicCore.id("orbital_forge_abs"), GTRecipeTypes.MULTIBLOCK)
+    public static final GTRecipeTypeEntry ORBITAL_FORGE_ABS = recipeType("orbital_forge_abs", GTRecipeTypes.MULTIBLOCK)
             .setSound(CosmicSounds.ORBITAL_FORGE)
             .setHasResearchSlot(true)
             .setMaxIOSize(9, 3, 3, 3)
             // TODO(8.0.0): PROGRESS_BAR_COKE_OVEN had no ProgressBarTextureSet; closest substitute
             // 8.0.0 removed GTRecipeType.addDataInfo(...) -> data infos registered in init() via
             // getDataInfos().add(...)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE));
-    public static final GTRecipeType ALLOY_BLASTING_KILN = GTRecipeTypes
-            .register(CosmicCore.id("alloy_blasting_kiln"), GTRecipeTypes.MULTIBLOCK)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE))
+            .setEUIO(IO.IN)
+            .register();
+    public static final GTRecipeTypeEntry ALLOY_BLASTING_KILN = recipeType("alloy_blasting_kiln",
+            GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(9, 0, 3, 1)
             .setEUIO(IO.IN)
             .UI(builder -> builder
@@ -393,148 +473,166 @@ public class CosmicRecipeTypes {
                     .setFluidSlotsOverlay(IO.IN, 0, 2, GTGuiTextures.FURNACE_OVERLAY_2)
                     .setFluidSlotOverlay(IO.OUT, 0, GTGuiTextures.FURNACE_OVERLAY_2)
                     .setProgressBar(GTGuiTextures.PROGRESS_ARROW)
-                    .addRecipeUIModifier(AlloyBlastingKilnRecipeUI.COIL_INFO))
-            .setSound(GTSoundEntries.ARC);
-    public static final GTRecipeType DAWN_FORGE = GTRecipeTypes
-            .register(CosmicCore.id("dawn_forge"), GTRecipeTypes.MULTIBLOCK)
+                    .addRecipeUIModifier(AlloyBlastingKilnRecipeUI.COIL_INFO)
+                    .addRecipeUIModifier(AlloyBlastingKilnRecipeUI.PYROFLUX_INFO))
+            .setSound(GTSoundEntries.ARC)
+            .setEUIO(IO.IN)
+            .register();
+    public static final GTRecipeTypeEntry DAWN_FORGE = recipeType("dawn_forge", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(8, 1, 2, 0)
             .setMaxSize(IO.IN, EmberRecipeCapability.CAP, 1)
             .setSound(DAWN_FORGE_SFX)
-            .setMaxTooltips(5)
             // TODO(8.0.0): custom CosmicGuiTextures.DAWN_FORGE (LDLib ResourceTexture) has no
             // ProgressBarTextureSet equivalent; using PROGRESS_ARROW_MULTIPLE as closest cosmetic substitute
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE));
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE))
+            .setEUIO(IO.IN)
+            .register();
 
-    public static final GTRecipeType CINDER_HEARTH = GTRecipeTypes
-            .register(CosmicCore.id("cinder_hearth"), GTRecipeTypes.MULTIBLOCK)
+    public static final GTRecipeTypeEntry CINDER_HEARTH = recipeType("cinder_hearth", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(3, 0, 3, 3)
             .setMaxSize(IO.OUT, EmberRecipeCapability.CAP, 1)
             .setMaxSize(IO.IN, SoulRecipeCapability.CAP, 1)
             .setSound(DAWN_FORGE_SFX)
-            .setMaxTooltips(7)
             // TODO(8.0.0): GTGuiTextures.PROGRESS_BAR_BOILER_HEAT is a plain UITexture (not a
             // ProgressBarTextureSet) in 8.0.0; using PROGRESS_BOILER_FUEL_STEEL as closest cosmetic substitute
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_BOILER_FUEL_STEEL));
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_BOILER_FUEL_STEEL))
+            .setEUIO(IO.IN)
+            .register();
 
-    public static final GTRecipeType ARCANE_CRUCIBLE = GTRecipeTypes
-            .register(CosmicCore.id("arcane_crucible"), GTRecipeTypes.MULTIBLOCK)
+    public static final GTRecipeTypeEntry ARCANE_CRUCIBLE = recipeType("arcane_crucible", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(6, 4, 3, 3)
             .setMaxSize(IO.IN, EmberRecipeCapability.CAP, 1)
             .setMaxSize(IO.IN, SoulRecipeCapability.CAP, 1)
             .setSound(DAWN_FORGE_SFX)
-            .setMaxTooltips(7)
             // TODO(8.0.0): GTGuiTextures.PROGRESS_BAR_MASS_FAB is a plain UITexture (not a
             // ProgressBarTextureSet) in 8.0.0; using PROGRESS_ARROW_MULTIPLE as closest cosmetic substitute
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE));
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE))
+            .setEUIO(IO.IN)
+            .register();
 
-    public static final GTRecipeType PYROTHERMIC_REFINERY = GTRecipeTypes
-            .register(CosmicCore.id("pyrothermic_refinery"), GTRecipeTypes.MULTIBLOCK)
+    public static final GTRecipeTypeEntry PYROTHERMIC_REFINERY = recipeType("pyrothermic_refinery",
+            GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(3, 3, 3, 3)
             .setMaxSize(IO.IN, EmberRecipeCapability.CAP, 1)
             .setMaxSize(IO.IN, SoulRecipeCapability.CAP, 1)
             .setSound(GTSoundEntries.JET_ENGINE)
-            .setMaxTooltips(3)
             // TODO(8.0.0): GTGuiTextures.PROGRESS_BAR_MASS_FAB is a plain UITexture (not a
             // ProgressBarTextureSet) in 8.0.0; using PROGRESS_ARROW_MULTIPLE as closest cosmetic substitute
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE));
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE))
+            .setEUIO(IO.IN)
+            .register();
 
-    public static final GTRecipeType MANA_ETCHING_FACTORY = GTRecipeTypes
-            .register(CosmicCore.id("mana_etching"), GTRecipeTypes.MULTIBLOCK)
+    public static final GTRecipeTypeEntry MANA_ETCHING_FACTORY = recipeType("mana_etching", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(3, 2, 3, 0)
             .setMaxSize(IO.IN, EmberRecipeCapability.CAP, 1)
             .setSound(DAWN_FORGE_SFX)
-            .setMaxTooltips(5)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_CRYSTALLIZATION));
-    public static final GTRecipeType BIO_LAB = GTRecipeTypes.register(CosmicCore.id("bio_lab"), ELECTRIC)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_CRYSTALLIZATION))
+            .setEUIO(IO.IN)
+            .register();
+    public static final GTRecipeTypeEntry BIO_LAB = recipeType("bio_lab", ELECTRIC)
             .setMaxIOSize(6, 2, 3, 2)
             .setSound(DAWN_FORGE_SFX)
-            .setMaxTooltips(5)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_CRYSTALLIZATION));
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_CRYSTALLIZATION))
+            .setEUIO(IO.IN)
+            .register();
 
-    public static final GTRecipeType STAR_LADDER_RESEARCH = GTRecipeTypes
-            .register(CosmicCore.id("star_ladder_research"), GTRecipeTypes.MULTIBLOCK)
+    public static final GTRecipeTypeEntry STAR_LADDER_RESEARCH = recipeType("star_ladder_research",
+            GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(16, 16, 16, 16)
             // .setSound(CosmicSounds.BLACK_HOLE_CRY)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
+            .setEUIO(IO.IN)
+            .register();
 
-    public static final GTRecipeType STELLAR_IRIS = GTRecipeTypes
-            .register(CosmicCore.id("stellar_iris"), GTRecipeTypes.MULTIBLOCK)
+    public static final GTRecipeTypeEntry STELLAR_IRIS = recipeType("stellar_iris", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(16, 16, 16, 16)
             // .setSound(CosmicSounds.BLACK_HOLE_CRY)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
+            .setEUIO(IO.IN)
+            .register();
 
     // Stellar Iris Module Recipe Types
-    public static final GTRecipeType STELLAR_SMELTING = GTRecipeTypes
-            .register(CosmicCore.id("ignition_complex"), GTRecipeTypes.MULTIBLOCK)
+    public static final GTRecipeTypeEntry STELLAR_SMELTING = recipeType("ignition_complex", GTRecipeTypes.MULTIBLOCK)
             .setSound(GAS_SUCC)
             .setMaxIOSize(9, 9, 3, 3)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
+            .setEUIO(IO.IN)
+            .register();
 
-    public static final GTRecipeType CHROMATIC_DISTILLATION_PLANT = GTRecipeTypes
-            .register(CosmicCore.id("chormatic_distillation_plant"), GTRecipeTypes.MULTIBLOCK)
+    public static final GTRecipeTypeEntry CHROMATIC_DISTILLATION_PLANT = recipeType("chormatic_distillation_plant",
+            GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(1, 1, 1, 16)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
-    public static final GTRecipeType CELESTIAL_BORE = GTRecipeTypes
-            .register(CosmicCore.id("celestial_bore"), GTRecipeTypes.MULTIBLOCK)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
+            .setEUIO(IO.IN)
+            .register();
+    public static final GTRecipeTypeEntry CELESTIAL_BORE = recipeType("celestial_bore", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(1, 54, 3, 18)
             .setSound(CosmicSounds.LAMINATOR)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
+            .setEUIO(IO.IN)
+            .register();
     // 8.0.0 removed GTRecipeType.addDataInfo(...) -> data infos registered in init() via getDataInfos().add(...)
-    public static final GTRecipeType NAQUAHINE_REACTOR = GTRecipeTypes
-            .register(CosmicCore.id("naquahine_reactor"), GTRecipeTypes.MULTIBLOCK)
+    public static final GTRecipeTypeEntry NAQUAHINE_REACTOR = recipeType("naquahine_reactor", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(1, 0, 1, 0)
             .setSound(GTSoundEntries.ARC)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
-    public static final GTRecipeType MINI_NAQUAHINE_REACTOR = GTRecipeTypes
-            .register(CosmicCore.id("mini_naquahine_reactor"), GTRecipeTypes.GENERATOR)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
+            .setEUIO(IO.IN)
+            .register();
+    public static final GTRecipeTypeEntry MINI_NAQUAHINE_REACTOR = recipeType("mini_naquahine_reactor",
+            GTRecipeTypes.GENERATOR)
             .setMaxIOSize(1, 0, 1, 0)
             .setSound(GTSoundEntries.ARC)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_GAS_COLLECTOR));
-    public static final GTRecipeType TURBINE_POWER_STATION = GTRecipeTypes
-            .register(CosmicCore.id("turbine_power_station"), GTRecipeTypes.GENERATOR)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_GAS_COLLECTOR))
+            .setEUIO(IO.OUT)
+            .register();
+    public static final GTRecipeTypeEntry TURBINE_POWER_STATION = recipeType("turbine_power_station",
+            GTRecipeTypes.GENERATOR)
             .setMaxIOSize(0, 0, 1, 1)
             .setEUIO(IO.OUT)
             .setSound(GAS_SUCC)
             .UI(builder -> builder.setFluidSlotOverlay(IO.IN, 0, GTGuiTextures.CENTRIFUGE_OVERLAY)
-                    .setProgressBar(GTGuiTextures.PROGRESS_GAS_COLLECTOR));
-    public static final GTRecipeType COMBUSTION_POWER_STATION = GTRecipeTypes
-            .register(CosmicCore.id("combustion_power_station"), GTRecipeTypes.GENERATOR)
+                    .setProgressBar(GTGuiTextures.PROGRESS_GAS_COLLECTOR))
+            .register();
+    public static final GTRecipeTypeEntry COMBUSTION_POWER_STATION = recipeType("combustion_power_station",
+            GTRecipeTypes.GENERATOR)
             .setMaxIOSize(0, 0, 1, 1)
             .setEUIO(IO.OUT)
             .setSound(GAS_SUCC)
             .UI(builder -> builder.setFluidSlotOverlay(IO.IN, 0, GTGuiTextures.FURNACE_OVERLAY_2)
-                    .setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE));
-    public static final GTRecipeType INDUSTRIAL_CHEMVAT = GTRecipeTypes
-            .register(CosmicCore.id("industrial_chemvat"), GTRecipeTypes.MULTIBLOCK)
+                    .setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE))
+            .register();
+    public static final GTRecipeTypeEntry INDUSTRIAL_CHEMVAT = recipeType("industrial_chemvat",
+            GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(6, 6, 6, 6)
             .setHasResearchSlot(true)
             .setSound(CHEMVAT)
-            .setMaxTooltips(5)
             .onRecipeBuild(ResearchManager::createDefaultResearchRecipe)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE));
-    public static final GTRecipeType BIOVAT = GTRecipeTypes
-            .register(CosmicCore.id("biovat"), GTRecipeTypes.MULTIBLOCK)
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE))
+            .setEUIO(IO.IN)
+            .register();
+    public static final GTRecipeTypeEntry BIOVAT = recipeType("biovat", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(6, 6, 3, 3)
             .setHasResearchSlot(true)
             .setSound(GTSoundEntries.CHEMICAL)
-            .setMaxTooltips(6)
             .onRecipeBuild(ResearchManager::createDefaultResearchRecipe)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE));
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE))
+            .setEUIO(IO.IN)
+            .register();
 
     // 8.0.0 removed GTRecipeType.addDataInfo(...) -> data info registered in init() via getDataInfos().add(...)
-    public static final GTRecipeType WASP_RECIPES = GTRecipeTypes
-            .register(CosmicCore.id("wasp"), GTRecipeTypes.MULTIBLOCK)
+    public static final GTRecipeTypeEntry WASP_RECIPES = recipeType("wasp", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(2, 15, 3, 5)
-            .setMaxTooltips(4)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_SIFTER));
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_SIFTER))
+            .setEUIO(IO.IN)
+            .register();
 
     // Dummy recipe. Maybe add recipes here? Either way it won't be used for recipe searching, that's taken care of by
     // BeeRecipeLogic
-    public static final GTRecipeType BEES = GTRecipeTypes
-            .register(CosmicCore.id("bees"), GTRecipeTypes.MULTIBLOCK)
+    public static final GTRecipeTypeEntry BEES = recipeType("bees", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(1, 9, 0, 0)
-            .setMaxTooltips(6)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE));
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE))
+            .setEUIO(IO.IN)
+            .register();
 
     /*
      * TODO: Multiblocks that might not need a RecipeType or might use it to do really weird things
@@ -544,54 +642,61 @@ public class CosmicRecipeTypes {
      */
     // Todo - Custom JEI page / Custom Heating Logic, Custom Slag Generation Logic, THE WHOLE FUCKING PIPENET PROPERTY
     // DEDICATED TO SUPERMOLTEN SLAG [FEAR]
-    public static final GTRecipeType VOMAHINE_CORE_DRILL = GTRecipeTypes
-            .register(CosmicCore.id("core_drill"), GTRecipeTypes.MULTIBLOCK)
+    public static final GTRecipeTypeEntry VOMAHINE_CORE_DRILL = recipeType("core_drill", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(3, 6, 3, 6)
             .setHasResearchSlot(true)
             .setSound(GTSoundEntries.REPLICATOR) // TODO - Sounds, VFX
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE));
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE))
+            .setEUIO(IO.IN)
+            .register();
     // Todo - Custom JEI page
-    public static final GTRecipeType REGOLITH_SIFTER = GTRecipeTypes
-            .register(CosmicCore.id("regolith_sifter"), GTRecipeTypes.MULTIBLOCK)
+    public static final GTRecipeTypeEntry REGOLITH_SIFTER = recipeType("regolith_sifter", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(0, 6, 2, 0)
             .setHasResearchSlot(true)
             .setSound(GTSoundEntries.REPLICATOR) // TODO - Sounds
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE));
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE))
+            .setEUIO(IO.IN)
+            .register();
     /*
      * TODO: Soul Folding with LifeEssence lets you create your first potential which is your first source of
      * L.Infinity. Later soul folding/forging allows for unique machine augmentations.
      */
-    public static final GTRecipeType LIFE_FORCE_MANIPULATOR = GTRecipeTypes
-            .register(CosmicCore.id("life_force_manipulator"), GTRecipeTypes.MULTIBLOCK)
+    public static final GTRecipeTypeEntry LIFE_FORCE_MANIPULATOR = recipeType("life_force_manipulator",
+            GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(2, 3, 6, 6)
             .setHasResearchSlot(true)
             .setSound(GTSoundEntries.REPLICATOR) // TODO - Sounds
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE));
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE))
+            .setEUIO(IO.IN)
+            .register();
     /*
      * TODO: Neutron Forge Pressure/Heat Buildup Mechanic, feeding it astronomically large amounts of plasma allow it to
      * unlock 'COSMIC PARALLELS' - Which Allow MULTIPLE UNIQUE RECIPES to run at once.
      */
-    public static final GTRecipeType NEUTRON_FORGE = GTRecipeTypes
-            .register(CosmicCore.id("neutron_forge"), GTRecipeTypes.MULTIBLOCK)
+    public static final GTRecipeTypeEntry NEUTRON_FORGE = recipeType("neutron_forge", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(12, 12, 12, 12)
             .setHasResearchSlot(true)
             .setSound(GTSoundEntries.REPLICATOR) // TODO - Sounds
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE));
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE))
+            .setEUIO(IO.IN)
+            .register();
 
-    public static final GTRecipeType MULTITHREADED_PROCESSOR = GTRecipeTypes
-            .register(CosmicCore.id("dream_basin"), GTRecipeTypes.MULTIBLOCK)
+    public static final GTRecipeTypeEntry MULTITHREADED_PROCESSOR = recipeType("dream_basin", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(9, 9, 9, 9)
             .setSound(GTSoundEntries.ASSEMBLER)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE));
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE))
+            .setEUIO(IO.IN)
+            .register();
     /*
      * TODO - Allow This block to replace the Master Ritual stone, and then set the structure shape based on the ritual
      */
-    public static final GTRecipeType MECHANICAL_RITUAL = GTRecipeTypes
-            .register(CosmicCore.id("mechanical_ritual"), GTRecipeTypes.MULTIBLOCK)
+    public static final GTRecipeTypeEntry MECHANICAL_RITUAL = recipeType("mechanical_ritual", GTRecipeTypes.MULTIBLOCK)
             .setMaxIOSize(4, 4, 4, 4) // TODO - Figure out what's the optimal outputs
             .setHasResearchSlot(true)
             .setSound(GTSoundEntries.CHEMICAL) // TODO - Sounds
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE));
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE))
+            .setEUIO(IO.IN)
+            .register();
     /*
      * TODO - Go Find all the info about the actual Concept Incinerator, That's so much lore to dig through but I don't
      * remember if this also erases the concept out of peoples memories as well as all traces of an idea.
@@ -618,196 +723,184 @@ public class CosmicRecipeTypes {
     // .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE));
 
     // Link Test Station recipe type for testing cross-dimensional linking
-    public static final GTRecipeType LINK_TEST_RECIPES = GTRecipeTypes
-            .register(CosmicCore.id("link_test"), ELECTRIC)
+    public static final GTRecipeTypeEntry LINK_TEST_RECIPES = recipeType("link_test", ELECTRIC)
             .setMaxIOSize(2, 2, 0, 0)
             .setSound(GTSoundEntries.ASSEMBLER)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
+            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
+            .setEUIO(IO.IN)
+            .register();
 
-    public static final GTRecipeType ABYSSAL_CULTURE_VAT = GTRecipeTypes
-            .register(CosmicCore.id("abyssal_culture_vat"), MULTIBLOCK)
+    public static final GTRecipeTypeEntry ABYSSAL_CULTURE_VAT = recipeType("abyssal_culture_vat", MULTIBLOCK)
             .setMaxIOSize(1, 1, 3, 3)
             .setSound(GTSoundEntries.CHEMICAL)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE)
-                    .addRecipeUIModifier(BloomwyrmRecipeUI.COMMON));
+                    .addRecipeUIModifier(BloomwyrmRecipeUI.COMMON))
+            .setEUIO(IO.IN)
+            .register();
 
-    public static final GTRecipeType BIOMELD_VIVARIUM = GTRecipeTypes
-            .register(CosmicCore.id("biomeld_vivarium"), MULTIBLOCK)
+    public static final GTRecipeTypeEntry BIOMELD_VIVARIUM = recipeType("biomeld_vivarium", MULTIBLOCK)
             .setMaxIOSize(0, 8, 1, 1)
             .setMaxSize(IO.OUT, SoulRecipeCapability.CAP, 1)
             .setSound(GTSoundEntries.CHEMICAL)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE)
-                    .addRecipeUIModifier(BloomwyrmRecipeUI.COMMON));
+                    .addRecipeUIModifier(BloomwyrmRecipeUI.COMMON))
+            .setEUIO(IO.IN)
+            .register();
 
-    public static final GTRecipeType SCULK_BIOCHAMBER = GTRecipeTypes
-            .register(CosmicCore.id("sculk_biochamber"), MULTIBLOCK)
+    public static final GTRecipeTypeEntry SCULK_BIOCHAMBER = recipeType("sculk_biochamber", MULTIBLOCK)
             .setMaxIOSize(6, 6, 5, 5)
             .setSound(GTSoundEntries.CHEMICAL)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE)
-                    .addRecipeUIModifier(BloomwyrmRecipeUI.COMMON));
+                    .addRecipeUIModifier(BloomwyrmRecipeUI.COMMON))
+            .setEUIO(IO.IN)
+            .register();
 
-    public static final GTRecipeType BIOMANA_DIGESTOR = GTRecipeTypes
-            .register(CosmicCore.id("biomana_digestor"), MULTIBLOCK)
+    public static final GTRecipeTypeEntry BIOMANA_DIGESTOR = recipeType("biomana_digestor", MULTIBLOCK)
             .setMaxIOSize(4, 4, 4, 4)
             .setSound(GTSoundEntries.CHEMICAL)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE)
-                    .addRecipeUIModifier(BloomwyrmRecipeUI.COMMON));
+                    .addRecipeUIModifier(BloomwyrmRecipeUI.COMMON))
+            .setEUIO(IO.IN)
+            .register();
 
-    public static final GTRecipeType MANAWOMB_LEECHING_POND = GTRecipeTypes
-            .register(CosmicCore.id("manawomb_leeching_pond"), MULTIBLOCK)
+    public static final GTRecipeTypeEntry MANAWOMB_LEECHING_POND = recipeType("manawomb_leeching_pond", MULTIBLOCK)
             .setMaxIOSize(6, 6, 3, 4)
             .setSound(GTSoundEntries.CHEMICAL)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW_MULTIPLE)
-                    .addRecipeUIModifier(BloomwyrmRecipeUI.COMMON));
+                    .addRecipeUIModifier(BloomwyrmRecipeUI.COMMON))
+            .setEUIO(IO.IN)
+            .register();
 
-    public static void init() {
-        for (GTRecipeType type : new GTRecipeType[] {
-                MECHANICAL_MINESHAFT, ESSENCE_REACTOR, SLUDGE_DIGESTOR, POWDERIZER, INDUSTRIAL_ORE_SORTER,
-                INDUSTRIAL_FLOTATION_PLANT, ONEIRIC_SIEVE,
-                DISSOLUTION_VAT, PHASE_SEPARATOR, SIMPLE_DESALTER, DESALTER, STEAM_CRACKING_FURNACE,
-                FRACTIONAL_CONDENSER, FLUID_CATALYTIC_CRACKING, HYDROTREATING, HYDROCRACKING,
-                CATALYTIC_REFORMING, DELAYED_COKING, VACUUM_DISTILLATION, COSMIC_DUMMY_SPAM_YEETER, LAMINATOR,
-                AIO_LITHOGRAPHY_PROCESSOR, CHEMICAL_DEHYDRATOR, CRYSTALLIZER,
-                DAWNFORGE_ECLIPSED,
-                VORAX, MANA_FLUIDIZER,
-                PCB_FABRICATOR, TITAN_FUSION_RECIPES, LUNAR_HAMMER, CRYOGENICS_CHAMBER, SOUL_TESTER_RECIPES,
-                VOID_MINER, HEAVY_ASSEMBLER, PLASMITE_FORGE, PRISMA_FOUNDRY, ATMOSPHERE_SIPHON, MANA_DIGITIZER,
-                COMPONENT_ASSEMBLY_LINE, GROVE_RECIPES, LEACHING_PLANT, HELLFIRE_FOUNDRY, SUFFERING_CHAMBER,
-                ARCANE_DISTILLERY, ARCANE_FOLDING, POLYMERIZER, HEMOPHAGIC_TRANSFUSER, IMBUMENT_PYLON,
-                CHROMATIC_FLOTATION_PLANT,
-                SPIRIT_CRUCIBLE, SOUL_FOUNDRY, CALX_REACTOR, ROASTER, MANA_LEACHING_TUB, THERMOMAG, VAC_BUBBLER,
-                LARGE_ROASTER, VILE_FISSION, VOID_SALT_FISSION, RADBOLT_RECONSTRUCTOR, SPOOLING_MACHINE,
-                ORBITAL_FORGE_EBF, ORBITAL_FORGE_ABS, ALLOY_BLASTING_KILN, DAWN_FORGE, CINDER_HEARTH,
-                ARCANE_CRUCIBLE,
-                PYROTHERMIC_REFINERY, MANA_ETCHING_FACTORY, BIO_LAB, STAR_LADDER_RESEARCH, STELLAR_IRIS,
-                STELLAR_SMELTING, CHROMATIC_DISTILLATION_PLANT, CELESTIAL_BORE, NAQUAHINE_REACTOR,
-                INDUSTRIAL_CHEMVAT, BIOVAT, WASP_RECIPES, BEES, VOMAHINE_CORE_DRILL, REGOLITH_SIFTER,
-                LIFE_FORCE_MANIPULATOR, NEUTRON_FORGE, MULTITHREADED_PROCESSOR, MECHANICAL_RITUAL,
-                LINK_TEST_RECIPES, ABYSSAL_CULTURE_VAT, BIOMELD_VIVARIUM, SCULK_BIOCHAMBER, BIOMANA_DIGESTOR,
-                MANAWOMB_LEECHING_POND }) {
-            type.setEUIO(IO.IN);
+    public static void init() {}
+
+    private static void setMaxIOSize(GTRecipeType type, int itemInputs, int itemOutputs,
+                                     int fluidInputs, int fluidOutputs) {
+        type.maxInputs.put(ItemRecipeCapability.CAP, itemInputs);
+        type.maxOutputs.put(ItemRecipeCapability.CAP, itemOutputs);
+        type.maxInputs.put(FluidRecipeCapability.CAP, fluidInputs);
+        type.maxOutputs.put(FluidRecipeCapability.CAP, fluidOutputs);
+    }
+
+    public static void configure() {
+        if (VACUUM_DISTILLATION.get().getIconSupplier() == null) {
+            VACUUM_DISTILLATION.get().setIconSupplier(
+                    com.gregtechceu.gtceu.common.data.machines.GTMultiMachines.DISTILLATION_TOWER::asStack);
         }
-        MINI_NAQUAHINE_REACTOR.setEUIO(IO.OUT);
+        MIXER_RECIPES.get().maxInputs.put(EmberRecipeCapability.CAP, 1);
 
         // 8.0.0: GTRecipeType.addDataInfo(...) was removed; register XEI data-info lines on the dataInfos list.
-        ORBITAL_FORGE_EBF.getDataInfos().add(data -> {
+        ORBITAL_FORGE_EBF.get().getDataInfos().add(data -> {
             int temp = data.getInt("ebf_temp");
             return Component.translatable("gtceu.recipe.temperature", temp).getString();
         });
-        ORBITAL_FORGE_EBF.getDataInfos().add(data -> {
+        ORBITAL_FORGE_EBF.get().getDataInfos().add(data -> {
             int temp = data.getInt("ebf_temp");
             ICoilType requiredCoil = ICoilType.getMinRequiredType(temp);
-            if (requiredCoil != null && !requiredCoil.getMaterial().isNull()) {
+            if (requiredCoil != null && requiredCoil.getMaterial() != null) {
                 return Component.translatable("gtceu.recipe.coil.tier",
                         Component.translatable(requiredCoil.getMaterial().getUnlocalizedName()).getString())
                         .getString();
             }
             return "";
         });
-        ORBITAL_FORGE_ABS.getDataInfos().add(data -> {
+        ORBITAL_FORGE_ABS.get().getDataInfos().add(data -> {
             int temp = data.getInt("ebf_temp");
             return Component.translatable("gtceu.recipe.temperature", temp).getString();
         });
-        ORBITAL_FORGE_ABS.getDataInfos().add(data -> {
+        ORBITAL_FORGE_ABS.get().getDataInfos().add(data -> {
             int temp = data.getInt("ebf_temp");
             ICoilType requiredCoil = ICoilType.getMinRequiredType(temp);
-            if (requiredCoil != null && !requiredCoil.getMaterial().isNull()) {
+            if (requiredCoil != null && requiredCoil.getMaterial() != null) {
                 return Component.translatable("gtceu.recipe.coil.tier",
                         Component.translatable(requiredCoil.getMaterial().getUnlocalizedName()).getString())
                         .getString();
             }
             return "";
         });
-        NAQUAHINE_REACTOR.getDataInfos().add(data -> {
+        NAQUAHINE_REACTOR.get().getDataInfos().add(data -> {
             int minStrength = data.getInt("min_field");
             return Component.translatable("cosmiccore.recipe.minField", minStrength).getString();
         });
-        NAQUAHINE_REACTOR.getDataInfos().add(data -> {
+        NAQUAHINE_REACTOR.get().getDataInfos().add(data -> {
             int decayRate = data.getInt("decay_rate");
             if (!data.getBoolean("per_tick")) {
                 return Component.translatable("cosmiccore.recipe.fieldSlam", decayRate).getString();
             }
             return Component.translatable("cosmiccore.recipe.fieldDecay", decayRate).getString();
         });
-        WASP_RECIPES.getDataInfos()
+        WASP_RECIPES.get().getDataInfos()
                 .add(data -> Component.translatable("cosmiccore.recipe.asteroid_weight_greater_1").getString());
-        for (GTRecipeType type : new GTRecipeType[] {
+        for (GTRecipeTypeEntry type : new GTRecipeTypeEntry[] {
                 ABYSSAL_CULTURE_VAT, BIOMELD_VIVARIUM, SCULK_BIOCHAMBER, BIOMANA_DIGESTOR,
                 MANAWOMB_LEECHING_POND }) {
-            type.getDataInfos().add(data -> data.contains(BloomwyrmRecipeKeys.BIOPOWER_INPUT) ?
+            type.get().getDataInfos().add(data -> data.contains(BloomwyrmRecipeKeys.BIOPOWER_INPUT) ?
                     Component.translatable(
                             "cosmiccore.bloomwyrm.recipe.biopower_input",
                             data.getInt(BloomwyrmRecipeKeys.BIOPOWER_INPUT)).getString() :
                     "");
-            type.getDataInfos().add(data -> data.contains(BloomwyrmRecipeKeys.BIOPOWER_OUTPUT) ?
+            type.get().getDataInfos().add(data -> data.contains(BloomwyrmRecipeKeys.BIOPOWER_OUTPUT) ?
                     Component.translatable(
                             "cosmiccore.bloomwyrm.recipe.biopower_output",
                             data.getInt(BloomwyrmRecipeKeys.BIOPOWER_OUTPUT)).getString() :
                     "");
-            type.getDataInfos().add(data -> data.contains(BloomwyrmRecipeKeys.CHARGE_INPUT) ?
+            type.get().getDataInfos().add(data -> data.contains(BloomwyrmRecipeKeys.CHARGE_INPUT) ?
                     Component.translatable(
                             "cosmiccore.bloomwyrm.recipe.charge_input",
                             data.getLong(BloomwyrmRecipeKeys.CHARGE_INPUT)).getString() :
                     "");
-            type.getDataInfos().add(data -> data.contains(BloomwyrmRecipeKeys.CHARGE_OUTPUT) ?
+            type.get().getDataInfos().add(data -> data.contains(BloomwyrmRecipeKeys.CHARGE_OUTPUT) ?
                     Component.translatable(
                             "cosmiccore.bloomwyrm.recipe.charge_output",
                             data.getLong(BloomwyrmRecipeKeys.CHARGE_OUTPUT)).getString() :
                     "");
-            type.getDataInfos().add(data -> data.contains(BloomwyrmRecipeKeys.MAX_PARALLEL) ?
+            type.get().getDataInfos().add(data -> data.contains(BloomwyrmRecipeKeys.MAX_PARALLEL) ?
                     Component.translatable(
                             "cosmiccore.bloomwyrm.recipe.max_parallel",
                             data.getInt(BloomwyrmRecipeKeys.MAX_PARALLEL)).getString() :
                     "");
         }
 
-        LASER_ENGRAVER_RECIPES.setMaxIOSize(2, 2, 1, 1);
-        PACKER_RECIPES.setMaxIOSize(3, 2, 0, 0);
+        setMaxIOSize(LASER_ENGRAVER_RECIPES.get(), 2, 2, 1, 1);
+        setMaxIOSize(PACKER_RECIPES.get(), 3, 2, 0, 0);
         // Oh my God
-        MIXER_RECIPES.setMaxTooltips(4);
-        BREWING_RECIPES.setMaxTooltips(4);
-        FERMENTING_RECIPES.setMaxTooltips(4);
-        DISTILLERY_RECIPES.setMaxTooltips(4);
-        AUTOCLAVE_RECIPES.setMaxTooltips(4);
-        FLUID_HEATER_RECIPES.setMaxTooltips(4);
-        CRACKING_RECIPES.setMaxIOSize(2, 2, 2, 2);
-        CHEMICAL_RECIPES.onRecipeBuild((builder, provider) -> {
+        setMaxIOSize(CRACKING_RECIPES.get(), 2, 2, 2, 2);
+        CHEMICAL_RECIPES.get().getRecipeBuilder().onSave((builder, provider) -> {
             LARGE_CHEMICAL_RECIPES.copyFrom(builder)
                     .save(provider);
             INDUSTRIAL_CHEMVAT.copyFrom(builder)
                     .save(provider);
         });
-        LARGE_CHEMICAL_RECIPES.onRecipeBuild((builder, provider) -> {
+        LARGE_CHEMICAL_RECIPES.get().getRecipeBuilder().onSave((builder, provider) -> {
             INDUSTRIAL_CHEMVAT.copyFrom(builder)
                     .save(provider);
         });
-        STEAM_TURBINE_FUELS.onRecipeBuild((builder, provider) -> {
+        STEAM_TURBINE_FUELS.get().getRecipeBuilder().onSave((builder, provider) -> {
             if (!builder.id.equals(GTCEu.id("steam"))) {
                 TURBINE_POWER_STATION.copyFrom(builder)
                         .save(provider);
             }
         });
-        GAS_TURBINE_FUELS.onRecipeBuild((builder, provider) -> {
+        GAS_TURBINE_FUELS.get().getRecipeBuilder().onSave((builder, provider) -> {
             TURBINE_POWER_STATION.copyFrom(builder)
                     .save(provider);
         });
-        COMBUSTION_GENERATOR_FUELS.onRecipeBuild((builder, provider) -> {
+        COMBUSTION_GENERATOR_FUELS.get().getRecipeBuilder().onSave((builder, provider) -> {
             COMBUSTION_POWER_STATION.copyFrom(builder)
                     .save(provider);
         });
 
         // Eclipsed Forge is the big EU powered version of the Dawn Forge
-        DAWN_FORGE.onRecipeBuild((builder, provider) -> {
+        DAWN_FORGE.get().getRecipeBuilder().onSave((builder, provider) -> {
             DAWNFORGE_ECLIPSED.copyFrom(builder)
                     .save(provider);
         });
         // Large Roaster can do all the small Roaster can, but also allows Ember :)
-        ROASTER.onRecipeBuild((builder, provider) -> {
+        ROASTER.get().getRecipeBuilder().onSave((builder, provider) -> {
             LARGE_ROASTER.copyFrom(builder)
                     .save(provider);
         });
 
-        BLAST_RECIPES.onRecipeBuild((builder, provider) -> {
+        BLAST_RECIPES.get().getRecipeBuilder().onSave((builder, provider) -> {
             var orbitBuilderEBF = ORBITAL_FORGE_EBF.copyFrom(builder);
             // Orbital Forge ONLY copies Standard EBF recipes, if an EBF recipe contains a dimension condition, it is
             // assumed it can't be done in space
@@ -824,13 +917,13 @@ public class CosmicRecipeTypes {
             }
         });
 
-        // BLAST_RECIPES.onRecipeBuild((builder, provider) -> {
+        // BLAST_RECIPES.get().getRecipeBuilder().onSave((builder, provider) -> {
         // STELLAR_SMELTING.copyFrom(builder)
         // .save(provider);
         // });
 
         ALLOY_BLAST_RECIPES.getCategory().setXEIVisible(false);
-        ALLOY_BLAST_RECIPES.onRecipeBuild((builder, provider) -> {
+        ALLOY_BLAST_RECIPES.get().getRecipeBuilder().onSave((builder, provider) -> {
             var orbitBuilderABS = ORBITAL_FORGE_ABS.copyFrom(builder);
             // Orbital Forge ONLY copies Standard ABS recipes, if an ABS recipe contains a dimension condition, it is
             // assumed it can't be done in space
@@ -845,7 +938,7 @@ public class CosmicRecipeTypes {
                                         ResourceLocation.parse("frontiers:sun_orbit"))))
                         .save(provider);
             }
-            builder.recipeType(ALLOY_BLASTING_KILN).category(ALLOY_BLASTING_KILN.getCategory());
+            builder.recipeType(ALLOY_BLASTING_KILN.get()).category(ALLOY_BLASTING_KILN.getCategory());
         });
     }
 }

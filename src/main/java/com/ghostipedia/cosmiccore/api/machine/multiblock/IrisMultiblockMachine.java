@@ -624,12 +624,12 @@ public class IrisMultiblockMachine extends WorkableElectricMultiblockMachine imp
     @OnlyIn(Dist.CLIENT)
     public void soundTick() {
         if (isFormed) {
-            var sound = CosmicSounds.CHEMVAT;
+            var sound = CosmicSounds.CHEMVAT.get();
             if (stage == DEATH) {
-                sound = CosmicSounds.STELLAR_BODY_DYING;
+                sound = CosmicSounds.STELLAR_BODY_DYING.get();
             }
             if (stage == BLACK_HOLE) {
-                sound = CosmicSounds.BLACK_HOLE_CRY;
+                sound = CosmicSounds.BLACK_HOLE_CRY.get();
             }
 
             if (workingSound instanceof AutoReleasedSound soundEntry) {

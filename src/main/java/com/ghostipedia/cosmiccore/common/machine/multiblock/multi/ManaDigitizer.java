@@ -11,6 +11,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMa
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
@@ -26,7 +27,7 @@ import static com.gregtechceu.gtceu.common.data.GTBlocks.*;
 
 public class ManaDigitizer {
 
-    public final static MultiblockMachineDefinition BOTANICAL_SIMULATION_COMPLEX = REGISTRATE
+    public final static MachineEntry<MultiblockMachineDefinition> BOTANICAL_SIMULATION_COMPLEX = REGISTRATE
             .multiblock("botanical_simulation_complex",
                     WorkableElectricMultiblockMachine::new)
             .langValue("§aBotanical Simulation Complex")

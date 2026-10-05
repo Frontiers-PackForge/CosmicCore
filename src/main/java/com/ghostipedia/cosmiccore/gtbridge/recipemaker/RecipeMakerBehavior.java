@@ -420,7 +420,7 @@ public class RecipeMakerBehavior implements IItemUIHolder {
             }
         }
 
-        if (type == CosmicRecipeTypes.IMBUMENT_PYLON) {
+        if (type == CosmicRecipeTypes.IMBUMENT_PYLON.get()) {
             content.child(new TextWidget<>(Text.lang("block.cosmiccore.imbument_pylon")).height(9));
             content.child(fieldRow(Text.lang("cosmiccore.recipemaker.pylon.altar"), 86,
                     new TextFieldWidget().setNumbers(4, 6)
@@ -711,7 +711,7 @@ public class RecipeMakerBehavior implements IItemUIHolder {
                 addBloomwyrmData(draft, "maxCampusParallel", state.bloomwyrmMaxParallel[0]);
             }
         }
-        if (type == CosmicRecipeTypes.IMBUMENT_PYLON) {
+        if (type == CosmicRecipeTypes.IMBUMENT_PYLON.get()) {
             draft.extraLines.add(".altarTier(" + state.pylonAltarTier[0] + ")");
             if (state.pylonAnimaInput[0] > 0) {
                 draft.extraLines.add(".animaInput(" + state.pylonAnimaInput[0] + ")");
@@ -724,18 +724,18 @@ public class RecipeMakerBehavior implements IItemUIHolder {
     }
 
     private static boolean isBloomwyrmType(GTRecipeType type) {
-        return type == CosmicRecipeTypes.ABYSSAL_CULTURE_VAT ||
-                type == CosmicRecipeTypes.SCULK_BIOCHAMBER ||
-                type == CosmicRecipeTypes.BIOMANA_DIGESTOR ||
-                type == CosmicRecipeTypes.MANAWOMB_LEECHING_POND;
+        return type == CosmicRecipeTypes.ABYSSAL_CULTURE_VAT.get() ||
+                type == CosmicRecipeTypes.SCULK_BIOCHAMBER.get() ||
+                type == CosmicRecipeTypes.BIOMANA_DIGESTOR.get() ||
+                type == CosmicRecipeTypes.MANAWOMB_LEECHING_POND.get();
     }
 
     private static boolean isBloomwyrmProducer(GTRecipeType type) {
-        return type == CosmicRecipeTypes.ABYSSAL_CULTURE_VAT;
+        return type == CosmicRecipeTypes.ABYSSAL_CULTURE_VAT.get();
     }
 
     private static boolean supportsBloomwyrmParallel(GTRecipeType type) {
-        return type == CosmicRecipeTypes.SCULK_BIOCHAMBER || type == CosmicRecipeTypes.BIOMANA_DIGESTOR;
+        return type == CosmicRecipeTypes.SCULK_BIOCHAMBER.get() || type == CosmicRecipeTypes.BIOMANA_DIGESTOR.get();
     }
 
     private static void addBloomwyrmData(RecipeDraft draft, String method, String value) {

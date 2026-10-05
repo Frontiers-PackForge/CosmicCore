@@ -8,6 +8,7 @@ import com.ghostipedia.cosmiccore.ember.blockentity.CosmicEmberReceptorBlockEnti
 
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 
@@ -31,8 +32,9 @@ public class CosmicEmberCapabilities {
         registerHatches(event, CosmicMachines.EMBER_EXPORT_HATCH);
     }
 
-    private static void registerHatches(RegisterCapabilitiesEvent event, MachineDefinition[] definitions) {
-        for (MachineDefinition definition : definitions) {
+    private static void registerHatches(RegisterCapabilitiesEvent event,
+                                        MachineEntry<MachineDefinition>[] definitions) {
+        for (MachineEntry<MachineDefinition> definition : definitions) {
             if (definition == null) continue;
             event.registerBlock(EmbersCapabilities.EMBER_BLOCK_CAPABILITY, (level, pos, state, blockEntity, side) -> {
                 if (MetaMachine.getMachine(level, pos) instanceof EmberHatchPartMachine hatch) {

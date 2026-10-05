@@ -11,6 +11,7 @@ import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.BLOODSTEEL_KUVITE_PLATING;
@@ -20,7 +21,7 @@ import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createWor
 
 public final class ImbumentPylon {
 
-    public static final MultiblockMachineDefinition IMBUMENT_PYLON = REGISTRATE
+    public static final MachineEntry<MultiblockMachineDefinition> IMBUMENT_PYLON = REGISTRATE
             .multiblock("imbument_pylon", ImbumentPylonMachine::new)
             .langValue("Imbument Pylon")
             .rotationState(RotationState.NON_Y_AXIS)

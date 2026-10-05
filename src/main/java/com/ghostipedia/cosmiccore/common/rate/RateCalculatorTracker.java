@@ -276,10 +276,10 @@ public final class RateCalculatorTracker {
             ItemStack[] stacks = ItemRecipeCapability.CAP.of(content.content()).getItems();
             if (stacks.length != 1) result.add(RateCalculatorResource.unknown("item", itemKey(stacks),
                     stacks.length == 0 ? 0 : stacks[0].getCount(), chance, content.maxChance(), perTick,
-                    chance == content.maxChance() || itemLogic == ChanceLogic.OR, itemLogic.toString(),
+                    chance == content.maxChance() || itemLogic == ChanceLogic.OR.get(), itemLogic.toString(),
                     RateCalculatorResource.itemAlternatives(stacks, registries)));
             else result.add(RateCalculatorResource.item(stacks[0], chance, content.maxChance(), perTick,
-                    true, chance == content.maxChance() || itemLogic == ChanceLogic.OR, itemLogic.toString(),
+                    true, chance == content.maxChance() || itemLogic == ChanceLogic.OR.get(), itemLogic.toString(),
                     registries));
         }
         ChanceLogic fluidLogic = recipe.getChanceLogicForCapability(FluidRecipeCapability.CAP, input ? IO.IN : IO.OUT,
@@ -290,10 +290,10 @@ public final class RateCalculatorTracker {
             FluidStack[] stacks = FluidRecipeCapability.CAP.of(content.content()).getFluids();
             if (stacks.length != 1) result.add(RateCalculatorResource.unknown("fluid", fluidKey(stacks),
                     stacks.length == 0 ? 0 : stacks[0].getAmount(), chance, content.maxChance(), perTick,
-                    chance == content.maxChance() || fluidLogic == ChanceLogic.OR, fluidLogic.toString(),
+                    chance == content.maxChance() || fluidLogic == ChanceLogic.OR.get(), fluidLogic.toString(),
                     RateCalculatorResource.fluidAlternatives(stacks, registries)));
             else result.add(RateCalculatorResource.fluid(stacks[0], chance, content.maxChance(), perTick,
-                    true, chance == content.maxChance() || fluidLogic == ChanceLogic.OR, fluidLogic.toString(),
+                    true, chance == content.maxChance() || fluidLogic == ChanceLogic.OR.get(), fluidLogic.toString(),
                     registries));
         }
         return result;

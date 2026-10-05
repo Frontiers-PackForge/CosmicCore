@@ -14,6 +14,7 @@ import com.gregtechceu.gtceu.api.multiblock.MultiPredicate;
 import com.gregtechceu.gtceu.api.multiblock.pattern.IBlockPattern;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 
 import net.minecraft.network.chat.Component;
 
@@ -37,7 +38,7 @@ import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.DUMMY_RECIPES;
 
 public final class HephaestusCauldron {
 
-    public static final MultiblockMachineDefinition MACHINE = REGISTRATE
+    public static final MachineEntry<MultiblockMachineDefinition> MACHINE = REGISTRATE
             .multiblock("hephaestus_cauldron", HephaestusCauldronMachine::new)
             .langValue("Hephaestus' Cauldron")
             .rotationState(RotationState.NON_Y_AXIS)
@@ -58,8 +59,8 @@ public final class HephaestusCauldron {
 
     public static void init() {
         TieredMultiblockPatterns.register(MACHINE,
-                () -> pattern(MACHINE, HephaestusCauldronStructure.TIER_2),
-                () -> pattern(MACHINE, HephaestusCauldronStructure.TIER_3));
+                () -> pattern(MACHINE.get(), HephaestusCauldronStructure.TIER_2),
+                () -> pattern(MACHINE.get(), HephaestusCauldronStructure.TIER_3));
     }
 
     public static @NotNull IBlockPattern pattern(

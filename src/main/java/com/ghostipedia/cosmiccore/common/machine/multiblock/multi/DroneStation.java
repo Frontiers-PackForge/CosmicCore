@@ -10,6 +10,7 @@ import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
@@ -22,7 +23,7 @@ import static com.gregtechceu.gtceu.common.data.GTBlocks.*;
 
 public class DroneStation {
 
-    public final static MultiblockMachineDefinition DRONE_STATION = REGISTRATE
+    public final static MachineEntry<MultiblockMachineDefinition> DRONE_STATION = REGISTRATE
             .multiblock("drone_station",
                     DroneStationMachine::new)
             .langValue("Drone Station")

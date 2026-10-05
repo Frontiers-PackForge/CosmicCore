@@ -13,6 +13,7 @@ import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
 import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.EXPORT_SOUL;
@@ -26,7 +27,7 @@ import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.ELECTRIC_OVERC
 
 public class SufferingChamber {
 
-    public static final MultiblockMachineDefinition SUFFERING_CHAMBER = REGISTRATE
+    public static final MachineEntry<MultiblockMachineDefinition> SUFFERING_CHAMBER = REGISTRATE
             .multiblock("suffering_chamber", WorkableElectricMultiblockMachine::new)
             .langValue("§cSuffering Chamber")
             .recipeType(CosmicRecipeTypes.SUFFERING_CHAMBER)
@@ -47,7 +48,7 @@ public class SufferingChamber {
                     .slice("AAAAAAAAAAA", " AAAAAAAAA ", " A       A ", " AF     FA ", " A       A ", " AA     AA ", "  A     A  ", "  A     A  ")
                     .slice("A ABBBBBA A", "A ABBQBBA A", "  AB   BA  ", "  AD   DA  ", "  A D D A  ", "  A  E  A  ", "           ", "           ")
                     .slice("AAA     AAA", "AA       AA", "A         A", "A         A", "           ", "           ", "           ", "           ")
-                    .where('Q', Predicates.controller(Predicates.blocks(definition.get())))
+                    .where('Q', Predicates.controller(Predicates.blocks(definition.getBlock())))
                     .where(' ', Predicates.any())
                     .where('A', blocks(CASING_STRESS_PROOF.get()).setMinGlobalLimited(185)
                             .or(autoAbilitiesNoEnergyIn(CosmicRecipeTypes.SUFFERING_CHAMBER))

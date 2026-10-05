@@ -22,6 +22,7 @@ import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTMachines;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
@@ -55,7 +56,7 @@ import static com.gregtechceu.gtceu.api.multiblock.Predicates.states;
 
 public final class BloomwyrmSystem {
 
-    public static final MultiblockMachineDefinition BLOOMWYRM_HEART = REGISTRATE
+    public static final MachineEntry<MultiblockMachineDefinition> BLOOMWYRM_HEART = REGISTRATE
             .multiblock("bloomwyrm_heart", BloomwyrmHeartMachine::new)
             .langValue("Bloomwyrm Heart")
             .tooltips(
@@ -116,10 +117,11 @@ public final class BloomwyrmSystem {
                 GTMachines.ENERGY_INPUT_HATCH_16A)
                 .flatMap(Arrays::stream)
                 .filter(Objects::nonNull)
+                .map(MachineEntry::get)
                 .toArray(MachineDefinition[]::new);
     }
 
-    public static final MultiblockMachineDefinition ABYSSAL_CULTURE_VAT = REGISTRATE
+    public static final MachineEntry<MultiblockMachineDefinition> ABYSSAL_CULTURE_VAT = REGISTRATE
             .multiblock("abyssal_culture_vat", AbyssalCultureVatMachine::new)
             .langValue("Abyssal Culture Vat")
             .tooltips(
@@ -151,7 +153,7 @@ public final class BloomwyrmSystem {
                     CosmicCore.id("block/multiblock/mixing_vessel"))
             .register();
 
-    public static final MultiblockMachineDefinition BIOMELD_VIVARIUM = REGISTRATE
+    public static final MachineEntry<MultiblockMachineDefinition> BIOMELD_VIVARIUM = REGISTRATE
             .multiblock("biomeld_vivarium", BiomeldVivariumMachine::new)
             .langValue("Biomeld Vivarium")
             .tooltips(
@@ -193,7 +195,7 @@ public final class BloomwyrmSystem {
                     CosmicCore.id("block/multiblock/mixing_vessel"))
             .register();
 
-    public static final MultiblockMachineDefinition SCULK_BIOCHAMBER = REGISTRATE
+    public static final MachineEntry<MultiblockMachineDefinition> SCULK_BIOCHAMBER = REGISTRATE
             .multiblock("sculk_biochamber", SculkBiochamberMachine::new)
             .langValue("Sculk Biochamber")
             .tooltips(
@@ -227,7 +229,7 @@ public final class BloomwyrmSystem {
                     CosmicCore.id("block/multiblock/vomahine_chemplant"))
             .register();
 
-    public static final MultiblockMachineDefinition BIOMANA_DIGESTOR = REGISTRATE
+    public static final MachineEntry<MultiblockMachineDefinition> BIOMANA_DIGESTOR = REGISTRATE
             .multiblock("biomana_digestor", BiomanaDigestorMachine::new)
             .langValue("Biomana Digestor")
             .tooltips(
@@ -274,7 +276,7 @@ public final class BloomwyrmSystem {
                     CosmicCore.id("block/multiblock/solidifier"))
             .register();
 
-    public static final MultiblockMachineDefinition MANAWOMB_LEECHING_POND = REGISTRATE
+    public static final MachineEntry<MultiblockMachineDefinition> MANAWOMB_LEECHING_POND = REGISTRATE
             .multiblock("manawomb_leeching_pond", ManawombLeachingPondMachine::new)
             .langValue("Manawomb Leaching Pond")
             .tooltips(

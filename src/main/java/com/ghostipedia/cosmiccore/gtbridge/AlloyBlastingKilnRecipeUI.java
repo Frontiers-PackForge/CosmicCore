@@ -29,27 +29,29 @@ public final class AlloyBlastingKilnRecipeUI {
                 Text.lang("gtceu.recipe.temperature", FormattingUtil.formatTemperature(temperature))));
 
         ICoilType requiredCoil = ICoilType.getMinRequiredType(temperature);
-        if (requiredCoil != null && !requiredCoil.getMaterial().isNull()) {
+        if (requiredCoil != null && requiredCoil.getMaterial() != null) {
             widget.textComponents.child(new TextWidget<>(Text.lang("gtceu.recipe.coil.tier",
                     Component.translatable(requiredCoil.getMaterial().getUnlocalizedName()).getString())));
         }
-
-        long pyroflux = FoundryPyrofluxPolicy.demand(recipe);
-        widget.textComponents.child(new TextWidget<>(Text.lang(
-                "cosmiccore.recipe.alloy_blasting_kiln.pyroflux",
-                FormattingUtil.formatNumbers(pyroflux))));
 
         List<ItemStack> items = GTCEuAPI.HEATING_COILS.entrySet().stream()
                 .filter(coil -> coil.getKey().getCoilTemperature() >= temperature)
                 .map(coil -> new ItemStack(coil.getValue().get()))
                 .toList();
-        widget.textComponents.child(RecipeViewerSlotWidget.create()
+        widget.textComponents.child(RecipeViewerSlotWidget.create(ItemStack.class)
                 .recipeSlotRole(RecipeSlotRole.RENDER_ONLY)
                 .value(ItemStackList.of(items))
                 .background(IDrawable.EMPTY)
                 .decoration()
                 .right(23)
                 .bottom(-3));
+    };
+
+    public static final RecipeUIModifier PYROFLUX_INFO = (recipe, widget) -> {
+        long pyroflux = FoundryPyrofluxPolicy.demand(recipe);
+        widget.textComponents.child(new TextWidget<>(Text.lang(
+                "cosmiccore.recipe.alloy_blasting_kiln.pyroflux",
+                FormattingUtil.formatNumbers(pyroflux))));
     };
 
     private AlloyBlastingKilnRecipeUI() {}

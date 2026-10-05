@@ -31,6 +31,7 @@ import com.ghostipedia.cosmiccore.common.data.worldgen.CosmicWorldGenLayers;
 import com.ghostipedia.cosmiccore.common.data.worldgen.field.InitialOreSurvey;
 import com.ghostipedia.cosmiccore.common.data.worldgen.firmament.CosmicFirmamentFeatures;
 import com.ghostipedia.cosmiccore.common.data.worldgen.generator.CosmicChunkGenerators;
+import com.ghostipedia.cosmiccore.common.data.worldgen.generator.CosmicVeinGenerators;
 import com.ghostipedia.cosmiccore.common.firmament.FirmamentSpaceGravityCompat;
 import com.ghostipedia.cosmiccore.common.item.armor.boots.TravelerBootsMigration;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.bloomwyrm.BloomwyrmChunkLoading;
@@ -50,7 +51,9 @@ import com.gregtechceu.gtceu.config.ConfigHolder;
 
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 import net.minecraft.commands.synchronization.SingletonArgumentInfo;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
@@ -67,6 +70,8 @@ import net.neoforged.neoforge.registries.RegisterEvent;
 import appeng.api.features.GridLinkables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static com.gregtechceu.gtceu.api.registry.GTRegistries.Keys.WORLD_GEN_LAYER;
 
 @Mod(CosmicCore.MOD_ID)
 public class CosmicCore {
@@ -93,6 +98,7 @@ public class CosmicCore {
         CosmicIngredientTypes.register(modBus);
         CosmicTemperatureModifiers.register(modBus);
         CosmicChunkGenerators.register(modBus);
+        CosmicVeinGenerators.init(modBus);
         CosmicCropFeatures.register(modBus);
         CosmicFirmamentFeatures.register(modBus);
         CosmicRituals.register(modBus);
@@ -144,6 +150,16 @@ public class CosmicCore {
     public void modifyExistingMaterials(PostMaterialEvent event) {
         CosmicMaterials.modifyMaterials();
         CosmicBundleMaterials.registerLateOutputs();
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public void configureRecipeTypes(RegisterEvent event) {
+        if (event.getRegistryKey() == Registries.RECIPE_TYPE) {
+            CosmicRecipeTypes.configure();
+        }
+        if (event.getRegistryKey() == WORLD_GEN_LAYER) {
+            CosmicWorldGenLayers.configure();
+        }
     }
 
     @SubscribeEvent

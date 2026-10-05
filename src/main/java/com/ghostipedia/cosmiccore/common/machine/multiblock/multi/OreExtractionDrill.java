@@ -11,6 +11,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
@@ -27,24 +28,29 @@ import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
 public class OreExtractionDrill {
 
     // LV: Solid Steel, HV: Stainless Steel, IV: Titanium, ZPM: TungstenSteel
-    public static final MultiblockMachineDefinition ORE_EXTRACTION_DRILL_LV = registerDrill("ore_extraction_drill_lv",
+    public static final MachineEntry<MultiblockMachineDefinition> ORE_EXTRACTION_DRILL_LV = registerDrill(
+            "ore_extraction_drill_lv",
             GTValues.LV, GTBlocks.CASING_STEEL_SOLID,
             GTCEu.id("block/casings/solid/machine_casing_solid_steel"));
 
-    public static final MultiblockMachineDefinition ORE_EXTRACTION_DRILL_HV = registerDrill("ore_extraction_drill_hv",
+    public static final MachineEntry<MultiblockMachineDefinition> ORE_EXTRACTION_DRILL_HV = registerDrill(
+            "ore_extraction_drill_hv",
             GTValues.HV, GTBlocks.CASING_STAINLESS_CLEAN,
             GTCEu.id("block/casings/solid/machine_casing_clean_stainless_steel"));
 
-    public static final MultiblockMachineDefinition ORE_EXTRACTION_DRILL_IV = registerDrill("ore_extraction_drill_iv",
+    public static final MachineEntry<MultiblockMachineDefinition> ORE_EXTRACTION_DRILL_IV = registerDrill(
+            "ore_extraction_drill_iv",
             GTValues.IV, GTBlocks.CASING_TITANIUM_STABLE,
             GTCEu.id("block/casings/solid/machine_casing_stable_titanium"));
 
-    public static final MultiblockMachineDefinition ORE_EXTRACTION_DRILL_ZPM = registerDrill("ore_extraction_drill_zpm",
+    public static final MachineEntry<MultiblockMachineDefinition> ORE_EXTRACTION_DRILL_ZPM = registerDrill(
+            "ore_extraction_drill_zpm",
             GTValues.ZPM, GTBlocks.CASING_TUNGSTENSTEEL_ROBUST,
             GTCEu.id("block/casings/solid/machine_casing_robust_tungstensteel"));
 
-    private static MultiblockMachineDefinition registerDrill(String id, int tier, BlockEntry<Block> casing,
-                                                             ResourceLocation casingTexture) {
+    private static MachineEntry<MultiblockMachineDefinition> registerDrill(String id, int tier,
+                                                                           BlockEntry<Block> casing,
+                                                                           ResourceLocation casingTexture) {
         int chunkDiameter = OreExtractionDrillMachine.getChunkDiameterForTier(tier);
         return REGISTRATE
                 .multiblock(id, holder -> new OreExtractionDrillMachine(holder, tier))

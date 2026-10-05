@@ -14,6 +14,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMa
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
 import static com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates.autoAbilitiesNoEnergyIn;
@@ -26,7 +27,7 @@ import static com.gregtechceu.gtceu.common.data.GTBlocks.*;
 
 public class VoidMiner {
 
-    public final static MultiblockMachineDefinition VOID_MINER = REGISTRATE
+    public final static MachineEntry<MultiblockMachineDefinition> VOID_MINER = REGISTRATE
             .multiblock("void_miner",
                     WorkableElectricMultiblockMachine::new)
             .langValue("§cVoid Miner")

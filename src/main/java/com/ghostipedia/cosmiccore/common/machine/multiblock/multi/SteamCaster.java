@@ -11,6 +11,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
@@ -20,7 +21,7 @@ import static com.gregtechceu.gtceu.common.data.GTBlocks.CASING_BRONZE_PIPE;
 
 public class SteamCaster {
 
-    public static final MultiblockMachineDefinition STEAM_CASTER = REGISTRATE
+    public static final MachineEntry<MultiblockMachineDefinition> STEAM_CASTER = REGISTRATE
             .multiblock("steam_caster", WeakSteamParallelMultiBlockMachine::new)
             .rotationState(RotationState.ALL)
             .appearanceBlock(BRONZE_HULL)

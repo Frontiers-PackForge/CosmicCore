@@ -13,6 +13,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
@@ -26,7 +27,7 @@ import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createWor
 
 public class LunarHammer {
 
-    public final static MultiblockMachineDefinition LUNAR_HAMMER = REGISTRATE
+    public final static MachineEntry<MultiblockMachineDefinition> LUNAR_HAMMER = REGISTRATE
             .multiblock("lunar_sheer_hammer",
                     TitanFusionReactorMachine::new)
             .langValue("§9Lunar Hammer")

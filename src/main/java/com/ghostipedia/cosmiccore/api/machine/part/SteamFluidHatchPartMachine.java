@@ -23,9 +23,9 @@ public class SteamFluidHatchPartMachine extends FluidHatchPartMachine {
         MachineDefinition newDefinition = null;
 
         if (io == IO.IN) {
-            newDefinition = CosmicMachines.STEAM_EXPORT_HATCH;
+            newDefinition = CosmicMachines.STEAM_EXPORT_HATCH.get();
         } else if (io == IO.OUT) {
-            newDefinition = CosmicMachines.STEAM_IMPORT_HATCH;
+            newDefinition = CosmicMachines.STEAM_IMPORT_HATCH.get();
         }
         if (newDefinition == null) return false;
 

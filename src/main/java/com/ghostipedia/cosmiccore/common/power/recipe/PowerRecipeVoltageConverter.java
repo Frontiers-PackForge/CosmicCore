@@ -40,7 +40,7 @@ public final class PowerRecipeVoltageConverter {
             int tier = GTUtil.getTierByVoltage(originalVal.voltage());
             long targetVoltz = GTValues.V[tier];
             double amperageAdjustment = (double) adjustedEUT / targetVoltz * recipe.duration;
-            int targetAmps = PowerRecipeWorkloadCurves.targetAmperage(recipe.recipeType.registryName.getPath(),
+            int targetAmps = PowerRecipeWorkloadCurves.targetAmperage(recipe.recipeType.id.getPath(),
                     amperageAdjustment);
             if (targetAmps <= 0) {
                 return false;

@@ -12,6 +12,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
@@ -24,7 +25,7 @@ import static com.gregtechceu.gtceu.api.multiblock.Predicates.blocks;
 
 public class TitanFusion {
 
-    public final static MultiblockMachineDefinition TITAN_FUSION_REACTOR = REGISTRATE
+    public final static MachineEntry<MultiblockMachineDefinition> TITAN_FUSION_REACTOR = REGISTRATE
             .multiblock("titan_fusion_reactor",
                     TitanFusionReactorMachine::new)
             .langValue("§9Titan Fusion Reactor")

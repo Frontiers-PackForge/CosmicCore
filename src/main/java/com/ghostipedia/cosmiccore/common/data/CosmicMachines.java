@@ -1,7 +1,6 @@
 package com.ghostipedia.cosmiccore.common.data;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
-import com.ghostipedia.cosmiccore.api.capability.recipe.CosmicRecipeCapabilities;
 import com.ghostipedia.cosmiccore.api.capability.souls.SoulType;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.DimensionalEnergyCapacitor;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.DimensionalEnergyInterface;
@@ -16,6 +15,7 @@ import com.ghostipedia.cosmiccore.common.ae2gt.CosmicStockingBusPartMachine;
 import com.ghostipedia.cosmiccore.common.ae2gt.CosmicStockingHatchPartMachine;
 import com.ghostipedia.cosmiccore.common.block.debug.CreativeThermiaContainerMachine;
 import com.ghostipedia.cosmiccore.common.compat.gtceu.FluidDrillingRegistration;
+import com.ghostipedia.cosmiccore.common.compat.gtceu.MachineDefinitionOverrides;
 import com.ghostipedia.cosmiccore.common.data.materials.CosmicMaterials;
 import com.ghostipedia.cosmiccore.common.machine.FlightDiffuserMachine;
 import com.ghostipedia.cosmiccore.common.machine.WirelessChargerMachine;
@@ -55,7 +55,8 @@ import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifierList;
-import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
+import com.gregtechceu.gtceu.api.registry.registrate.builder.MachineBuilder;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.client.util.TooltipHelper;
 import com.gregtechceu.gtceu.common.data.*;
 import com.gregtechceu.gtceu.common.data.GTMachines;
@@ -118,14 +119,14 @@ public class CosmicMachines {
     private static final int[] EMBER_TIERS = tiersBetween(ULV, ELECTRIC_TIERS[ELECTRIC_TIERS.length - 1]);
     private static final int[] VITAE_TIERS = tiersBetween(MV, ELECTRIC_TIERS[ELECTRIC_TIERS.length - 1]);
 
-    public static final MachineDefinition LEYLINE_ME_HATCH = REGISTRATE
+    public static final MachineEntry<MachineDefinition> LEYLINE_ME_HATCH = REGISTRATE
             .machine("leyline_me_hatch", LeylineMEHatch::new)
             .langValue("ME Leyline Pattern Hatch").tier(MV).rotationState(RotationState.ALL)
             .modelProperty(GTMachineModelProperties.IS_FORMED, false)
             .overlayTieredHullModel(GTCEu.id("block/machine/part/computation_data_hatch"))
             .register();
 
-    public static final MultiblockMachineDefinition LEYLINE_COMPRESSOR = REGISTRATE
+    public static final MachineEntry<MultiblockMachineDefinition> LEYLINE_COMPRESSOR = REGISTRATE
             .multiblock("leyline_compressor",
                     LeylineCompressorMachine::new)
             .langValue("Leyline Compressor").rotationState(RotationState.NON_Y_AXIS)
@@ -166,11 +167,11 @@ public class CosmicMachines {
                     GTCEu.id("block/multiblock/data_bank"))
             .register();
 
-    public final static MachineDefinition[] SOUL_IMPORT_HATCH = registerSoulHatch(
+    public final static MachineEntry<MachineDefinition>[] SOUL_IMPORT_HATCH = registerSoulHatch(
             "soul_input_hatch", "Soul Input Hatch",
             IO.IN, HIGH_TIERS, IMPORT_SOUL);
 
-    public static final MachineDefinition POWER_TOWER_ME_INPUT = REGISTRATE
+    public static final MachineEntry<MachineDefinition> POWER_TOWER_ME_INPUT = REGISTRATE
             .machine("power_tower_me_input", info -> new PowerTowerMEHatch(info, true))
             .langValue("Power Tower ME Input").tier(HV).rotationState(RotationState.ALL)
             .modelProperty(GTMachineModelProperties.IS_FORMED, false)
@@ -179,7 +180,7 @@ public class CosmicMachines {
             .overlayTieredHullModel(GTCEu.id("block/machine/part/computation_data_hatch"))
             .register();
 
-    public static final MachineDefinition POWER_TOWER_ME_OUTPUT = REGISTRATE
+    public static final MachineEntry<MachineDefinition> POWER_TOWER_ME_OUTPUT = REGISTRATE
             .machine("power_tower_me_output", info -> new PowerTowerMEHatch(info, false))
             .langValue("Power Tower ME Output").tier(HV).rotationState(RotationState.ALL)
             .modelProperty(GTMachineModelProperties.IS_FORMED, false)
@@ -188,7 +189,7 @@ public class CosmicMachines {
             .overlayTieredHullModel(GTCEu.id("block/machine/part/optical_data_hatch"))
             .register();
 
-    public static final MultiblockMachineDefinition POWER_TOWER = REGISTRATE
+    public static final MachineEntry<MultiblockMachineDefinition> POWER_TOWER = REGISTRATE
             .multiblock("power_tower", PowerTowerMachine::new)
             .langValue("Power Tower")
             .rotationState(RotationState.NON_Y_AXIS)
@@ -261,56 +262,58 @@ public class CosmicMachines {
             .workableCasingModel(CosmicCore.id("block/casings/solid/refractory_structural_casing"),
                     GTCEu.id("block/multiblock/data_bank"))
             .register();
-    public static final MachineDefinition[] SOUL_EXPORT_HATCH = registerSoulHatch(
+    public static final MachineEntry<MachineDefinition>[] SOUL_EXPORT_HATCH = registerSoulHatch(
             "soul_output_hatch", "Soul Output Hatch",
             IO.OUT, HIGH_TIERS, EXPORT_SOUL);
 
-    public static final MachineDefinition[] QUINTESSENTIA_IMPORT_HATCH = registerQuintessentiaHatch(
+    public static final MachineEntry<MachineDefinition>[] QUINTESSENTIA_IMPORT_HATCH = registerQuintessentiaHatch(
             "input_quintessentia_hatch", "Input Quintessentia Hatch",
             IO.IN, VITAE_TIERS, IMPORT_VITAE_NETWORK);
-    public static final MachineDefinition[] QUINTESSENTIA_EXPORT_HATCH = registerQuintessentiaHatch(
+    public static final MachineEntry<MachineDefinition>[] QUINTESSENTIA_EXPORT_HATCH = registerQuintessentiaHatch(
             "output_quintessentia_hatch", "Output Quintessentia Hatch",
             IO.OUT, VITAE_TIERS, EXPORT_VITAE_NETWORK);
-    public static final MachineDefinition[] SPAWNER_HATCH = registerSpawnerHatch(VITAE_TIERS);
+    public static final MachineEntry<MachineDefinition>[] SPAWNER_HATCH = registerSpawnerHatch(VITAE_TIERS);
 
-    public static final MachineDefinition[] EMBER_IMPORT_HATCH = registerEmberHatch(
+    public static final MachineEntry<MachineDefinition>[] EMBER_IMPORT_HATCH = registerEmberHatch(
             "ember_input_hatch", "Ember Input Hatch",
             IO.IN, EMBER_TIERS, IMPORT_EMBER);
-    public static final MachineDefinition[] EMBER_EXPORT_HATCH = registerEmberHatch(
+    public static final MachineEntry<MachineDefinition>[] EMBER_EXPORT_HATCH = registerEmberHatch(
             "ember_output_hatch", "Ember Output Hatch",
             IO.OUT, EMBER_TIERS, EXPORT_EMBER);
 
-    public static final MachineDefinition[] THERMIA_VENT = registerThermiaTieredHatch(
+    public static final MachineEntry<MachineDefinition>[] THERMIA_VENT = registerThermiaTieredHatch(
             "thermia_export_hatch", "Thermia Vent", "thermia_output_hatch",
             IO.OUT, HIGH_TIERS, EXPORT_THERMIA);
-    public static final MachineDefinition[] THERMIA_SOCKET = registerThermiaTieredHatch(
+    public static final MachineEntry<MachineDefinition>[] THERMIA_SOCKET = registerThermiaTieredHatch(
             "thermia_import_hatch", "Thermia Socket", "thermia_input_hatch",
             IO.IN, HIGH_TIERS, IMPORT_THERMIA);
 
-    public static final MachineDefinition[] WIRELESS_ENERGY_INPUT_HATCH = registerWirelessEnergyTieredHatch(
+    public static final MachineEntry<MachineDefinition>[] WIRELESS_ENERGY_INPUT_HATCH = registerWirelessEnergyTieredHatch(
             "wireless_energy_hatch", "Wireless Energy Hatch", "wireless_energy_1a",
             IO.IN, HIGH_TIERS, 1, PartAbility.INPUT_ENERGY);
-    public static final MachineDefinition[] WIRELESS_ENERGY_OUTPUT_DYNAMO = registerWirelessEnergyTieredHatch(
+    public static final MachineEntry<MachineDefinition>[] WIRELESS_ENERGY_OUTPUT_DYNAMO = registerWirelessEnergyTieredHatch(
             "wireless_energy_dynamo", "Wireless Energy Dynamo", "wireless_energy_1a",
             IO.OUT, HIGH_TIERS, 1, PartAbility.OUTPUT_ENERGY);
-    public static final MachineDefinition[] WIRELESS_ENERGY_INPUT_HATCH_4A = registerWirelessEnergyTieredHatch(
+    public static final MachineEntry<MachineDefinition>[] WIRELESS_ENERGY_INPUT_HATCH_4A = registerWirelessEnergyTieredHatch(
             "4a_wireless_energy_hatch", "4A Wireless Energy Hatch", "wireless_energy_4a",
             IO.IN, HIGH_TIERS, 4, PartAbility.INPUT_ENERGY);
-    public static final MachineDefinition[] WIRELESS_ENERGY_OUTPUT_DYNAMO_4A = registerWirelessEnergyTieredHatch(
+    public static final MachineEntry<MachineDefinition>[] WIRELESS_ENERGY_OUTPUT_DYNAMO_4A = registerWirelessEnergyTieredHatch(
             "4a_wireless_energy_dynamo", "4A Wireless Energy Dynamo", "wireless_energy_4a",
             IO.OUT, HIGH_TIERS, 4, PartAbility.OUTPUT_ENERGY);
-    public static final MachineDefinition[] WIRELESS_ENERGY_INPUT_HATCH_16A = registerWirelessEnergyTieredHatch(
+    public static final MachineEntry<MachineDefinition>[] WIRELESS_ENERGY_INPUT_HATCH_16A = registerWirelessEnergyTieredHatch(
             "16a_wireless_energy_hatch", "16A Wireless Energy Hatch", "wireless_energy_16a",
             IO.IN, HIGH_TIERS, 16, PartAbility.INPUT_ENERGY);
-    public static final MachineDefinition[] WIRELESS_ENERGY_OUTPUT_DYNAMO_16A = registerWirelessEnergyTieredHatch(
+    public static final MachineEntry<MachineDefinition>[] WIRELESS_ENERGY_OUTPUT_DYNAMO_16A = registerWirelessEnergyTieredHatch(
             "16a_wireless_energy_dynamo", "16A Wireless Energy Dynamo", "wireless_energy_16a",
             IO.OUT, HIGH_TIERS, 16, PartAbility.OUTPUT_ENERGY);
 
-    public static final MachineDefinition[] NAQUAHINE_MINI_REACTOR = CosmicMachinesUtils.registerSimpleGenerator(
-            "naquahine_mini_reactor",
-            CosmicRecipeTypes.MINI_NAQUAHINE_REACTOR, genericGeneratorTankSizeFunction, 0.0f, GTValues.IV, GTValues.LuV,
-            GTValues.ZPM, GTValues.UV, GTValues.UHV);
-    public static final Pair<MachineDefinition, MachineDefinition> STEAM_BENDER = CosmicMachinesUtils
+    public static final MachineEntry<MachineDefinition>[] NAQUAHINE_MINI_REACTOR = CosmicMachinesUtils
+            .registerSimpleGenerator(
+                    "naquahine_mini_reactor",
+                    CosmicRecipeTypes.MINI_NAQUAHINE_REACTOR, genericGeneratorTankSizeFunction, 0.0f, GTValues.IV,
+                    GTValues.LuV,
+                    GTValues.ZPM, GTValues.UV, GTValues.UHV);
+    public static final Pair<MachineEntry<MachineDefinition>, MachineEntry<MachineDefinition>> STEAM_BENDER = CosmicMachinesUtils
             .registerSteamMachines(
                     "steam_bender", SimpleSteamMachine::new, (pressure, builder) -> builder
                             .rotationState(RotationState.NON_Y_AXIS)
@@ -322,7 +325,7 @@ public class CosmicMachines {
                             .modelProperty(GTMachineModelProperties.VENT_DIRECTION, RelativeDirection.BACK)
                             .workableSteamHullModel(pressure, GTCEu.id("block/machines/bender"))
                             .register());
-    public static final Pair<MachineDefinition, MachineDefinition> STEAM_WIREMILL = CosmicMachinesUtils
+    public static final Pair<MachineEntry<MachineDefinition>, MachineEntry<MachineDefinition>> STEAM_WIREMILL = CosmicMachinesUtils
             .registerSteamMachines(
                     "steam_wiremill", SimpleSteamMachine::new, (pressure, builder) -> builder
                             .rotationState(RotationState.NON_Y_AXIS)
@@ -335,7 +338,8 @@ public class CosmicMachines {
                             .workableSteamHullModel(pressure, GTCEu.id("block/machines/wiremill"))
                             .register());
 
-    public static final MachineDefinition[] COSMIC_PARALLEL_HATCH = registerTieredMachines("cosmic_parallel_hatch",
+    public static final MachineEntry<MachineDefinition>[] COSMIC_PARALLEL_HATCH = registerTieredMachines(
+            "cosmic_parallel_hatch",
             CosmicParallelHatchPartMachine::new,
             (tier, builder) -> builder
                     .langValue(switch (tier) {
@@ -351,7 +355,7 @@ public class CosmicMachines {
                     .register(),
             ZPM, UV, UHV, UEV, UIV);
 
-    public static final MachineDefinition[] COSMIC_MODULE_HATCH = registerTieredMachines("module_hatch",
+    public static final MachineEntry<MachineDefinition>[] COSMIC_MODULE_HATCH = registerTieredMachines("module_hatch",
             ModuleHatchPartMachine::new,
             (tier, builder) -> builder
                     .langValue(switch (tier) {
@@ -368,7 +372,7 @@ public class CosmicMachines {
                     .tooltips(Component.translatable("gtceu.machine.parallel_hatch_mk_1.tooltip"))
                     .register(),
             UV, UHV, UEV);
-    public static final MachineDefinition[] CALX_REACTOR = registerTieredMachines("calx_reactor",
+    public static final MachineEntry<MachineDefinition>[] CALX_REACTOR = registerTieredMachines("calx_reactor",
             (holder, tier) -> new SimpleTieredMachine(holder, tier, defaultTankSizeFunction),
             (tier, builder) -> builder
                     .recipeType(CosmicRecipeTypes.CALX_REACTOR)
@@ -383,7 +387,8 @@ public class CosmicMachines {
                     .register(),
             ELECTRIC_TIERS);
 
-    public static final MachineDefinition[] MANA_LEACHING_TUB = registerTieredMachines("mana_leaching_tub",
+    public static final MachineEntry<MachineDefinition>[] MANA_LEACHING_TUB = registerTieredMachines(
+            "mana_leaching_tub",
             (holder, tier) -> new SimpleTieredMachine(holder, tier, defaultTankSizeFunction),
             (tier, builder) -> builder.recipeType(CosmicRecipeTypes.MANA_LEACHING_TUB)
                     .ui(GTSingleblockMachinePanels.GENERAL_MACHINE)
@@ -397,7 +402,7 @@ public class CosmicMachines {
                     .register(),
             ELECTRIC_TIERS);
 
-    public static final MachineDefinition[] ROASTER = registerTieredMachines("roaster",
+    public static final MachineEntry<MachineDefinition>[] ROASTER = registerTieredMachines("roaster",
             (holder, tier) -> new SimpleTieredMachine(holder, tier, defaultTankSizeFunction),
             (tier, builder) -> builder.recipeType(CosmicRecipeTypes.ROASTER)
                     .ui(GTSingleblockMachinePanels.GENERAL_MACHINE)
@@ -410,7 +415,7 @@ public class CosmicMachines {
                     .register(),
             ELECTRIC_TIERS);
 
-    public static final MachineDefinition[] THERMOMAG = registerTieredMachines("thermomagnitizer",
+    public static final MachineEntry<MachineDefinition>[] THERMOMAG = registerTieredMachines("thermomagnitizer",
             (holder, tier) -> new SimpleTieredMachine(holder, tier, defaultTankSizeFunction),
             (tier, builder) -> builder.recipeType(CosmicRecipeTypes.THERMOMAG)
                     .ui(GTSingleblockMachinePanels.GENERAL_MACHINE)
@@ -423,7 +428,7 @@ public class CosmicMachines {
                     .register(),
             ELECTRIC_TIERS);
 
-    public static final MachineDefinition[] SPOOLING_MACHINE = registerTieredMachines("spooling_machine",
+    public static final MachineEntry<MachineDefinition>[] SPOOLING_MACHINE = registerTieredMachines("spooling_machine",
             (holder, tier) -> new SimpleTieredMachine(holder, tier, defaultTankSizeFunction),
             (tier, builder) -> builder.recipeType(CosmicRecipeTypes.SPOOLING_MACHINE)
                     .ui(GTSingleblockMachinePanels.GENERAL_MACHINE)
@@ -434,7 +439,7 @@ public class CosmicMachines {
                     .register(),
             ELECTRIC_TIERS);
 
-    public static final MachineDefinition[] LAMINATOR = registerTieredMachines("laminator",
+    public static final MachineEntry<MachineDefinition>[] LAMINATOR = registerTieredMachines("laminator",
             (holder, tier) -> new SimpleTieredMachine(holder, tier, defaultTankSizeFunction),
             (tier, builder) -> builder
                     .langValue("%s Laminator %s".formatted(VLVH[tier], VLVT[tier]))
@@ -446,7 +451,7 @@ public class CosmicMachines {
                     .register(),
             tiersBetween(LV, UIV));
 
-    public static final MachineDefinition[] AIO_LITHOGRAPHY_PROCESSOR = registerTieredMachines(
+    public static final MachineEntry<MachineDefinition>[] AIO_LITHOGRAPHY_PROCESSOR = registerTieredMachines(
             "aio_lithography_processor",
             (holder, tier) -> new SimpleTieredMachine(holder, tier, defaultTankSizeFunction),
             (tier, builder) -> builder
@@ -460,7 +465,8 @@ public class CosmicMachines {
                     .register(),
             tiersBetween(LV, UIV));
 
-    public static final MachineDefinition[] CHEMICAL_DEHYDRATOR = registerTieredMachines("chemical_dehydrator",
+    public static final MachineEntry<MachineDefinition>[] CHEMICAL_DEHYDRATOR = registerTieredMachines(
+            "chemical_dehydrator",
             (holder, tier) -> new SimpleTieredMachine(holder, tier, defaultTankSizeFunction),
             (tier, builder) -> builder
                     .langValue("%s Chemical Dehydrator %s".formatted(VLVH[tier], VLVT[tier]))
@@ -475,7 +481,7 @@ public class CosmicMachines {
                     .register(),
             tiersBetween(LV, UIV));
 
-    public static final MachineDefinition[] CRYSTALLIZER = registerTieredMachines("crystallizer",
+    public static final MachineEntry<MachineDefinition>[] CRYSTALLIZER = registerTieredMachines("crystallizer",
             (holder, tier) -> new SimpleTieredMachine(holder, tier, defaultTankSizeFunction),
             (tier, builder) -> builder
                     .langValue("%s Crystallizer %s".formatted(VLVH[tier], VLVT[tier]))
@@ -489,7 +495,7 @@ public class CosmicMachines {
                     .register(),
             tiersBetween(MV, UIV));
 
-    public static final MachineDefinition[] DESALTER = registerTieredMachines("desalter",
+    public static final MachineEntry<MachineDefinition>[] DESALTER = registerTieredMachines("desalter",
             (holder, tier) -> new SimpleTieredMachine(holder, tier, defaultTankSizeFunction),
             (tier, builder) -> builder
                     .langValue("%s Desalter %s".formatted(VLVH[tier], VLVT[tier]))
@@ -503,7 +509,7 @@ public class CosmicMachines {
                     .register(),
             tiersBetween(LV, MV));
 
-    public static final MachineDefinition[] VAC_BUBBLER = registerTieredMachines("vacuum_bubbler",
+    public static final MachineEntry<MachineDefinition>[] VAC_BUBBLER = registerTieredMachines("vacuum_bubbler",
             (holder, tier) -> new SimpleTieredMachine(holder, tier, defaultTankSizeFunction),
             (tier, builder) -> builder
                     .recipeType(CosmicRecipeTypes.VAC_BUBBLER)
@@ -518,7 +524,7 @@ public class CosmicMachines {
                     .register(),
             ELECTRIC_TIERS);
 
-    public static final MachineDefinition[] WIRELESS_CHARGER = registerTieredMachines("wireless_charger",
+    public static final MachineEntry<MachineDefinition>[] WIRELESS_CHARGER = registerTieredMachines("wireless_charger",
             WirelessChargerMachine::new,
             (tier, builder) -> builder
                     .langValue("%s Wireless Charger".formatted(VN[tier]))
@@ -532,7 +538,7 @@ public class CosmicMachines {
                     .register(),
             GTValues.tiersBetween(HV, UIV));
 
-    public static final MachineDefinition[] FLIGHT_DIFFUSER = registerTieredMachines("flight_diffuser",
+    public static final MachineEntry<MachineDefinition>[] FLIGHT_DIFFUSER = registerTieredMachines("flight_diffuser",
             FlightDiffuserMachine::new,
             (tier, builder) -> builder
                     .langValue("%s Flight Diffuser".formatted(VN[tier]))
@@ -555,7 +561,7 @@ public class CosmicMachines {
     // TODO(forestry): INDUSTRIAL_APIARY (IndustrialApiaryMachine + BEES recipes) shelved with Forestry (bead
     // cosmiccore-42.13)
 
-    public static final MachineDefinition[] BIO_LAB_SINGLE = registerTieredMachines("biolab",
+    public static final MachineEntry<MachineDefinition>[] BIO_LAB_SINGLE = registerTieredMachines("biolab",
             (holder, tier) -> new SimpleTieredMachine(holder, tier, defaultTankSizeFunction), (tier, builder) -> builder
                     .langValue("%s Bio Lab %s".formatted(VLVH[tier], VLVT[tier]))
                     .rotationState(RotationState.NON_Y_AXIS)
@@ -568,7 +574,7 @@ public class CosmicMachines {
                     .register(),
             LV, MV, HV, EV, IV, LuV, ZPM, UV);
 
-    public final static MachineDefinition COSMIC_STOCKING_ME_PART_BUS = REGISTRATE
+    public final static MachineEntry<MachineDefinition> COSMIC_STOCKING_ME_PART_BUS = REGISTRATE
             .machine("cosmic_me_assemblyline_bus", CosmicStockingBusPartMachine::new)
             .langValue("ME Assembly Line Bus")
             .tier(UV)
@@ -587,15 +593,15 @@ public class CosmicMachines {
                     Component.translatable("gtceu.part_sharing.enabled"))
             .register();
 
-    public static final MachineDefinition[] ME_COMPUTATION_CORES = registerMEComputationComponents(
+    public static final MachineEntry<MachineDefinition>[] ME_COMPUTATION_CORES = registerMEComputationComponents(
             MEComputationComponentPartMachine.Role.COMPUTATION_CORE);
-    public static final MachineDefinition ME_COMPUTATION_CORE = ME_COMPUTATION_CORES[LV];
+    public static final MachineEntry<MachineDefinition> ME_COMPUTATION_CORE = ME_COMPUTATION_CORES[LV];
 
-    public static final MachineDefinition[] ME_POWER_RELAYS = registerMEComputationComponents(
+    public static final MachineEntry<MachineDefinition>[] ME_POWER_RELAYS = registerMEComputationComponents(
             MEComputationComponentPartMachine.Role.POWER_RELAY);
-    public static final MachineDefinition ME_POWER_RELAY = ME_POWER_RELAYS[LV];
+    public static final MachineEntry<MachineDefinition> ME_POWER_RELAY = ME_POWER_RELAYS[LV];
 
-    public static final MachineDefinition ME_COMPUTATION_UPLINK = REGISTRATE
+    public static final MachineEntry<MachineDefinition> ME_COMPUTATION_UPLINK = REGISTRATE
             .machine("me_computation_uplink", MEComputationUplinkPartMachine::new)
             .langValue("ME Computation Uplink")
             .tier(HV)
@@ -615,7 +621,7 @@ public class CosmicMachines {
                     Component.translatable("gtceu.part_sharing.disabled"))
             .register();
 
-    public final static MachineDefinition COSMIC_STOCKING_ME_PART_HATCH = REGISTRATE
+    public final static MachineEntry<MachineDefinition> COSMIC_STOCKING_ME_PART_HATCH = REGISTRATE
             .machine("cosmic_me_assemblyline_hatch", CosmicStockingHatchPartMachine::new)
             .langValue("ME Assembly Line Hatch")
             .tier(UV)
@@ -638,28 +644,28 @@ public class CosmicMachines {
         REGISTRATE.creativeModeTab(GTCreativeModeTabs.MACHINE);
     }
 
-    public static final MachineDefinition[] ENERGY_INPUT_HATCH_4A = registerEnergyHatches(
+    public static final MachineEntry<MachineDefinition>[] ENERGY_INPUT_HATCH_4A = registerEnergyHatches(
             "energy_input_hatch_4a", IO.IN, 4, PartAbility.INPUT_ENERGY, GTValues.tiersBetween(LV, HV));
-    public static final MachineDefinition[] ENERGY_OUTPUT_HATCH_4A = registerEnergyHatches(
+    public static final MachineEntry<MachineDefinition>[] ENERGY_OUTPUT_HATCH_4A = registerEnergyHatches(
             "energy_output_hatch_4a", IO.OUT, 4, PartAbility.OUTPUT_ENERGY, GTValues.tiersBetween(ULV, HV));
-    public static final MachineDefinition[] ENERGY_INPUT_HATCH_16A = registerEnergyHatches(
+    public static final MachineEntry<MachineDefinition>[] ENERGY_INPUT_HATCH_16A = registerEnergyHatches(
             "energy_input_hatch_16a", IO.IN, 16, PartAbility.INPUT_ENERGY, GTValues.tiersBetween(LV, HV));
-    public static final MachineDefinition[] ENERGY_OUTPUT_HATCH_16A = registerEnergyHatches(
+    public static final MachineEntry<MachineDefinition>[] ENERGY_OUTPUT_HATCH_16A = registerEnergyHatches(
             "energy_output_hatch_16a", IO.OUT, 16, PartAbility.OUTPUT_ENERGY, GTValues.tiersBetween(ULV, HV));
-    public static final MachineDefinition[] ENERGY_INPUT_HATCH_64A = registerEnergyHatches(
+    public static final MachineEntry<MachineDefinition>[] ENERGY_INPUT_HATCH_64A = registerEnergyHatches(
             "energy_input_hatch_64a", IO.IN, 64, PartAbility.SUBSTATION_INPUT_ENERGY,
             GTValues.tiersBetween(LV, HV));
-    public static final MachineDefinition[] ENERGY_OUTPUT_HATCH_64A = registerEnergyHatches(
+    public static final MachineEntry<MachineDefinition>[] ENERGY_OUTPUT_HATCH_64A = registerEnergyHatches(
             "energy_output_hatch_64a", IO.OUT, 64, PartAbility.SUBSTATION_OUTPUT_ENERGY,
             GTValues.tiersBetween(LV, HV));
-    public static final MachineDefinition[] ENERGY_INPUT_HATCH_256A = registerEnergyHatches(
+    public static final MachineEntry<MachineDefinition>[] ENERGY_INPUT_HATCH_256A = registerEnergyHatches(
             "energy_input_hatch_256a", IO.IN, 256, PartAbility.SUBSTATION_INPUT_ENERGY,
             GTValues.tiersBetween(LV, GTCEuAPI.isHighTier() ? OpV : UHV));
-    public static final MachineDefinition[] ENERGY_OUTPUT_HATCH_256A = registerEnergyHatches(
+    public static final MachineEntry<MachineDefinition>[] ENERGY_OUTPUT_HATCH_256A = registerEnergyHatches(
             "energy_output_hatch_256a", IO.OUT, 256, PartAbility.SUBSTATION_OUTPUT_ENERGY,
             GTValues.tiersBetween(LV, GTCEuAPI.isHighTier() ? OpV : UHV));
 
-    public static final MachineDefinition[] LOW_TIER_ROTOR_HOLDER = registerTieredMachines(
+    public static final MachineEntry<MachineDefinition>[] LOW_TIER_ROTOR_HOLDER = registerTieredMachines(
             "rotor_holder",
             RotorHolderPartMachine::new,
             (tier, builder) -> builder
@@ -738,8 +744,8 @@ public class CosmicMachines {
     // CosmicCore.id("block/casings/solid/reinforced_naquadria_casing"),
     // GTCEu.id("block/multiblock/generator/extreme_combustion_engine"));
 
-    private static MachineDefinition[] registerSoulHatch(String name, String displayName, IO io,
-                                                         int[] tiers, PartAbility... abilities) {
+    private static MachineEntry<MachineDefinition>[] registerSoulHatch(String name, String displayName, IO io,
+                                                                       int[] tiers, PartAbility... abilities) {
         return registerTieredMachines(name,
                 (holder, tier) -> new SoulHatchPartMachine(holder, tier, io),
                 (tier, builder) -> builder
@@ -756,8 +762,8 @@ public class CosmicMachines {
                 tiers);
     }
 
-    private static MachineDefinition[] registerQuintessentiaHatch(String name, String displayName, IO io,
-                                                                  int[] tiers, PartAbility... abilities) {
+    private static MachineEntry<MachineDefinition>[] registerQuintessentiaHatch(String name, String displayName, IO io,
+                                                                                int[] tiers, PartAbility... abilities) {
         return registerTieredMachines(name,
                 (holder, tier) -> new QuintessentiaHatchPartMachine(holder, tier, io),
                 (tier, builder) -> builder
@@ -773,7 +779,7 @@ public class CosmicMachines {
                 tiers);
     }
 
-    private static MachineDefinition[] registerSpawnerHatch(int[] tiers) {
+    private static MachineEntry<MachineDefinition>[] registerSpawnerHatch(int[] tiers) {
         return registerTieredMachines("spawner_hatch",
                 SpawnerHatchPartMachine::new,
                 (tier, builder) -> builder
@@ -787,8 +793,8 @@ public class CosmicMachines {
                 tiers);
     }
 
-    private static MachineDefinition[] registerEmberHatch(String name, String displayName, IO io,
-                                                          int[] tiers, PartAbility... abilities) {
+    private static MachineEntry<MachineDefinition>[] registerEmberHatch(String name, String displayName, IO io,
+                                                                        int[] tiers, PartAbility... abilities) {
         return registerTieredMachines(name,
                 (holder, tier) -> new EmberHatchPartMachine(holder, tier, io),
                 (tier, builder) -> {
@@ -816,8 +822,9 @@ public class CosmicMachines {
                 tiers);
     }
 
-    private static MachineDefinition[] registerEnergyHatches(String name, IO io, int amperage, PartAbility ability,
-                                                             int... tiers) {
+    private static MachineEntry<MachineDefinition>[] registerEnergyHatches(String name, IO io, int amperage,
+                                                                           PartAbility ability,
+                                                                           int... tiers) {
         String direction = io == IO.IN ? "input" : "output";
         String tooltipDirection = io == IO.IN ? "in" : "out";
         boolean substation = ability == PartAbility.SUBSTATION_INPUT_ENERGY ||
@@ -850,9 +857,10 @@ public class CosmicMachines {
                 tiers);
     }
 
-    private static MachineDefinition[] registerWirelessEnergyTieredHatch(String name, String displayName, String model,
-                                                                         IO io, int[] tiers, int amperage,
-                                                                         PartAbility... abilities) {
+    private static MachineEntry<MachineDefinition>[] registerWirelessEnergyTieredHatch(String name, String displayName,
+                                                                                       String model,
+                                                                                       IO io, int[] tiers, int amperage,
+                                                                                       PartAbility... abilities) {
         return registerTieredMachines(name,
                 (holder, tier) -> new WirelessEnergyHatchPartMachine(holder, tier, io, amperage),
                 (tier, builder) -> builder
@@ -866,8 +874,9 @@ public class CosmicMachines {
                 tiers);
     }
 
-    private static MachineDefinition[] registerThermiaTieredHatch(String name, String displayName, String model, IO io,
-                                                                  int[] tiers, PartAbility... abilities) {
+    private static MachineEntry<MachineDefinition>[] registerThermiaTieredHatch(String name, String displayName,
+                                                                                String model, IO io,
+                                                                                int[] tiers, PartAbility... abilities) {
         return registerTieredMachines(name,
                 (holder, tier) -> new ThermiaHatchPartMachine(holder, tier, io),
                 (tier, builder) -> builder
@@ -886,7 +895,8 @@ public class CosmicMachines {
                 tiers);
     }
 
-    public static final MachineDefinition CROP_HOLDER = REGISTRATE.machine("crop_holder", CropHolderPartMachines::new)
+    public static final MachineEntry<MachineDefinition> CROP_HOLDER = REGISTRATE
+            .machine("crop_holder", CropHolderPartMachines::new)
             .langValue("Crop Holder")
             .tier(HV)
             .rotationState(RotationState.ALL)
@@ -901,7 +911,8 @@ public class CosmicMachines {
 
     // TODO(forestry): BEE_HOLDER (BeeHolderPartMachine) shelved with Forestry (bead cosmiccore-42.13)
 
-    public static final MachineDefinition SENSOR_HATCH = REGISTRATE.machine("sensor_hatch", WirelessDataSensor::new)
+    public static final MachineEntry<MachineDefinition> SENSOR_HATCH = REGISTRATE
+            .machine("sensor_hatch", WirelessDataSensor::new)
             .langValue("Sensor Hatch")
             .rotationState(RotationState.ALL)
             .abilities(PSS_SENSORS)
@@ -913,7 +924,7 @@ public class CosmicMachines {
                     }))
             .register();
 
-    public static final MachineDefinition CREATIVE_HEAT = REGISTRATE
+    public static final MachineEntry<MachineDefinition> CREATIVE_HEAT = REGISTRATE
             .machine("creative_thermal", CreativeThermiaContainerMachine::new)
             .rotationState(RotationState.NONE)
             .model(createSingleOverlayTieredHullMachineModel(GTModels.BLANK_TEXTURE,
@@ -922,11 +933,11 @@ public class CosmicMachines {
             .tier(GTValues.MAX)
             .register();
 
-    private static MachineDefinition[] registerTieredMachines(String name,
-                                                              BiFunction<BlockEntityCreationInfo, Integer, MetaMachine> factory,
-                                                              BiFunction<Integer, MachineBuilder<MachineDefinition, MetaMachine, ?>, MachineDefinition> builder,
-                                                              int... tiers) {
-        MachineDefinition[] definitions = new MachineDefinition[GTValues.TIER_COUNT];
+    private static MachineEntry<MachineDefinition>[] registerTieredMachines(String name,
+                                                                            BiFunction<BlockEntityCreationInfo, Integer, MetaMachine> factory,
+                                                                            BiFunction<Integer, MachineBuilder<MachineDefinition, MetaMachine, ?>, MachineEntry<MachineDefinition>> builder,
+                                                                            int... tiers) {
+        MachineEntry<MachineDefinition>[] definitions = new MachineEntry[GTValues.TIER_COUNT];
         for (int tier : tiers) {
             var register = REGISTRATE.machine(GTValues.VN[tier].toLowerCase(Locale.ROOT) + "_" + name,
                     holder -> factory.apply(holder, tier)).tier(tier);
@@ -935,9 +946,9 @@ public class CosmicMachines {
         return definitions;
     }
 
-    private static MachineDefinition[] registerMEComputationComponents(
-                                                                       MEComputationComponentPartMachine.Role role) {
-        MachineDefinition[] definitions = new MachineDefinition[GTValues.TIER_COUNT];
+    private static MachineEntry<MachineDefinition>[] registerMEComputationComponents(
+                                                                                     MEComputationComponentPartMachine.Role role) {
+        MachineEntry<MachineDefinition>[] definitions = new MachineEntry[GTValues.TIER_COUNT];
         for (MEComputationComponentTier componentTier : MEComputationComponentTier.values()) {
             int tier = componentTier.gtTier();
             String baseName = role == MEComputationComponentPartMachine.Role.COMPUTATION_CORE ?
@@ -976,7 +987,7 @@ public class CosmicMachines {
         return definitions;
     }
 
-    public static final MultiblockMachineDefinition DIMENSIONAL_ENERGY_CAPACITOR = REGISTRATE
+    public static final MachineEntry<MultiblockMachineDefinition> DIMENSIONAL_ENERGY_CAPACITOR = REGISTRATE
             .multiblock("dimensional_energy_capacitor", DimensionalEnergyCapacitor::new)
             .langValue("Power Substation")
             .rotationState(RotationState.ALL)
@@ -1020,7 +1031,7 @@ public class CosmicMachines {
                     GTCEu.id("block/multiblock/power_substation"))
             .register();
 
-    public static final MultiblockMachineDefinition DIMENSIONAL_ENERGY_INTERFACE = REGISTRATE
+    public static final MachineEntry<MultiblockMachineDefinition> DIMENSIONAL_ENERGY_INTERFACE = REGISTRATE
             .multiblock("dimensional_energy_interface", DimensionalEnergyInterface::new)
             .langValue("Power Substation Dimensional Interface")
             .rotationState(RotationState.ALL)
@@ -1050,7 +1061,7 @@ public class CosmicMachines {
                     GTCEu.id("block/multiblock/data_bank"))
             .register();
 
-    public static final MachineDefinition STEAM_IMPORT_HATCH = REGISTRATE
+    public static final MachineEntry<MachineDefinition> STEAM_IMPORT_HATCH = REGISTRATE
             .machine("steam_fluid_input_hatch", holder -> new SteamFluidHatchPartMachine(holder, IO.IN, 4000, 1))
             .rotationState(RotationState.ALL)
             .abilities(PartAbility.IMPORT_FLUIDS, STEAM_IMPORT_FLUIDS)
@@ -1062,7 +1073,7 @@ public class CosmicMachines {
             .modelProperty(GTMachineModelProperties.IS_FORMED, false)
             .langValue("Fluid Input Hatch (Steam)")
             .register();
-    public static final MachineDefinition STEAM_EXPORT_HATCH = REGISTRATE
+    public static final MachineEntry<MachineDefinition> STEAM_EXPORT_HATCH = REGISTRATE
             .machine("steam_fluid_output_hatch", holder -> new SteamFluidHatchPartMachine(holder, IO.OUT, 4000, 1))
             .rotationState(RotationState.ALL)
             .abilities(PartAbility.EXPORT_FLUIDS)
@@ -1074,7 +1085,7 @@ public class CosmicMachines {
             .langValue("Fluid Output Hatch (Steam)")
             .register();
 
-    public static final MultiblockMachineDefinition WIRELESS_DATA_TRANSMITTER = REGISTRATE
+    public static final MachineEntry<MultiblockMachineDefinition> WIRELESS_DATA_TRANSMITTER = REGISTRATE
             .multiblock("wireless_data_transmitter", WirelessDataBankMachine::new)
             .langValue("Wireless Data Transmitter")
             .rotationState(RotationState.NON_Y_AXIS)
@@ -1175,7 +1186,7 @@ public class CosmicMachines {
             .workableCasingModel(GTCEu.id("block/casings/hpca/high_power_casing"),
                     CosmicCore.id("block/multiblock/wireless_data_transmitter"))
             .register();
-    public static final MultiblockMachineDefinition LOCAL_POWER_CAPACITOR = REGISTRATE
+    public static final MachineEntry<MultiblockMachineDefinition> LOCAL_POWER_CAPACITOR = REGISTRATE
             .multiblock("capacitor_array", PowerCapacitorMachine::new)
             .langValue("Power Capacitor")
             .rotationState(RotationState.NON_Y_AXIS)
@@ -1208,7 +1219,7 @@ public class CosmicMachines {
                     GTCEu.id("block/multiblock/power_substation"))
             .register();
 
-    public static final MachineDefinition WIRELESS_DATA_HATCH = REGISTRATE
+    public static final MachineEntry<MachineDefinition> WIRELESS_DATA_HATCH = REGISTRATE
             .machine("wireless_data_hatch", WirelessDataHatchPartMachine::new)
             .langValue("Wireless Data Hatch")
             .rotationState(RotationState.ALL)
@@ -1218,7 +1229,7 @@ public class CosmicMachines {
             .overlayTieredHullModel("wireless_data_hatch")
             .register();
 
-    public static final MachineDefinition DRONE_MAINTENANCE_INTERFACE = REGISTRATE
+    public static final MachineEntry<MachineDefinition> DRONE_MAINTENANCE_INTERFACE = REGISTRATE
             .machine("drone_maintenance_interface",
                     (blockEntity) -> new DroneMaintenanceInterfacePartMachine(blockEntity))
             .rotationState(RotationState.ALL)
@@ -1230,7 +1241,7 @@ public class CosmicMachines {
             .langValue("Drone Maintenance Interface")
             .register();
 
-    public static final MachineDefinition STERILIZATION_HATCH = REGISTRATE
+    public static final MachineEntry<MachineDefinition> STERILIZATION_HATCH = REGISTRATE
             .machine("sterilization_hatch", (holder) -> new SterilizationHatchPartMachine(holder, ZPM, IO.IN, 16000))
             .langValue("Sterilzation Hatch")
             .rotationState(RotationState.ALL)
@@ -1240,7 +1251,7 @@ public class CosmicMachines {
             .abilities(STERILIZE_HATCH)
             .register();
 
-    public static final MachineDefinition HUGE_STERILIZATION_HATCH = REGISTRATE
+    public static final MachineEntry<MachineDefinition> HUGE_STERILIZATION_HATCH = REGISTRATE
             .machine("huge_sterilization_hatch",
                     (holder) -> new SterilizationHatchPartMachine(holder, ZPM, IO.IN, 16000))
             .langValue("Sterilzation Hatch")
@@ -1251,17 +1262,19 @@ public class CosmicMachines {
             .abilities(STERILIZE_HATCH)
             .register();
 
-    public static final MachineDefinition[] FLUID_IMPORT_HATCH_4X_HV = CosmicMachinesUtils.registerFluidHatches(
-            "input_hatch_4x", "Quadruple Input Hatch", "fluid_hatch.import",
-            IO.IN, FluidHatchPartMachine.INITIAL_TANK_CAPACITY_4X, 4,
-            new int[] { GTValues.HV },
-            PartAbility.IMPORT_FLUIDS, PartAbility.IMPORT_FLUIDS_4X);
+    public static final MachineEntry<MachineDefinition>[] FLUID_IMPORT_HATCH_4X_HV = CosmicMachinesUtils
+            .registerFluidHatches(
+                    "input_hatch_4x", "Quadruple Input Hatch", "fluid_hatch.import",
+                    IO.IN, FluidHatchPartMachine.INITIAL_TANK_CAPACITY_4X, 4,
+                    new int[] { GTValues.HV },
+                    PartAbility.IMPORT_FLUIDS, PartAbility.IMPORT_FLUIDS_4X);
 
-    public static final MachineDefinition[] FLUID_EXPORT_HATCH_4X_HV = CosmicMachinesUtils.registerFluidHatches(
-            "output_hatch_4x", "Quadruple Output Hatch", "fluid_hatch.export",
-            IO.OUT, FluidHatchPartMachine.INITIAL_TANK_CAPACITY_4X, 4,
-            new int[] { GTValues.HV },                                   // only HV
-            PartAbility.EXPORT_FLUIDS, PartAbility.EXPORT_FLUIDS_4X);
+    public static final MachineEntry<MachineDefinition>[] FLUID_EXPORT_HATCH_4X_HV = CosmicMachinesUtils
+            .registerFluidHatches(
+                    "output_hatch_4x", "Quadruple Output Hatch", "fluid_hatch.export",
+                    IO.OUT, FluidHatchPartMachine.INITIAL_TANK_CAPACITY_4X, 4,
+                    new int[] { GTValues.HV },                                   // only HV
+                    PartAbility.EXPORT_FLUIDS, PartAbility.EXPORT_FLUIDS_4X);
 
     // public static final MultiblockMachineDefinition LARGE_STEAM_TURBINE = registerLargeTurbineCosmic(
     // "steam_large_turbine",
@@ -1303,7 +1316,6 @@ public class CosmicMachines {
 
     public static void init() {
         SteamBoilerTooltips.init();
-        GTRecipeTypes.MIXER_RECIPES.setMaxSize(IO.IN, CosmicRecipeCapabilities.EMBER, 1);
         TieredMultiblockPatterns.register(GTMultiMachines.ELECTRIC_BLAST_FURNACE,
                 () -> MultiblockPatternBuilder.start(FRONT, UP, LEFT)
                         .slice("XXXXX", "FRRRF", "F   F", "F   F", "F   F", "FRRRF", "XXXXX")
@@ -1313,7 +1325,7 @@ public class CosmicMachines {
                         .slice("XXSXX", "FRRRF", "F   F", "F   F", "F   F", "FRRRF", "XXXXX")
                         .where('S', controller(blocks(GTMultiMachines.ELECTRIC_BLAST_FURNACE.getBlock())))
                         .where('X', blocks(CASING_INVAR_HEATPROOF.get()).setMinGlobalLimited(16)
-                                .and(autoAbilities(GTMultiMachines.ELECTRIC_BLAST_FURNACE.getRecipeTypes()))
+                                .and(autoAbilities(GTMultiMachines.ELECTRIC_BLAST_FURNACE.get().getRecipeTypes()))
                                 .and(autoAbilities(true, false, false)))
                         .where('M', abilities(PartAbility.MUFFLER))
                         .where('F', blocks(ChemicalHelper.getBlock(TagPrefix.frameGt, CosmicMaterials.Nostium)))
@@ -1321,58 +1333,90 @@ public class CosmicMachines {
                         .where('C', heatingCoils())
                         .where(' ', any())
                         .build());
-        GTMultiMachines.ELECTRIC_BLAST_FURNACE.setRecipeModifier(new RecipeModifierList(
-                GTMultiMachines.ELECTRIC_BLAST_FURNACE.getRecipeModifier(), EBF_TIER_STREAK));
-        GTMultiMachines.ELECTRIC_BLAST_FURNACE.setAlwaysTryModifyRecipe(true);
-        GTMultiMachines.LARGE_COMBUSTION_ENGINE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
-        GTMultiMachines.LARGE_COMBUSTION_ENGINE.setRenderXEIPreview(false);
-        GTMultiMachines.LARGE_COMBUSTION_ENGINE.setRenderWorldPreview(false);
-        GTMultiMachines.LARGE_PLASMA_TURBINE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
-        GTMultiMachines.LARGE_PLASMA_TURBINE.setRenderXEIPreview(false);
-        GTMultiMachines.LARGE_PLASMA_TURBINE.setRenderWorldPreview(false);
-        GTMultiMachines.EXTREME_COMBUSTION_ENGINE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
-        GTMultiMachines.EXTREME_COMBUSTION_ENGINE.setRenderXEIPreview(false);
-        GTMultiMachines.EXTREME_COMBUSTION_ENGINE.setRenderWorldPreview(false);
-        GTMultiMachines.ASSEMBLY_LINE.setRecipeModifier(new RecipeModifierList(
-                DEFAULT_ENVIRONMENT_REQUIREMENT, COSMIC_MODULES, OC_NON_PERFECT));
-        GTMultiMachines.ASSEMBLY_LINE.setAlwaysTryModifyRecipe(true);
+        MachineDefinitionOverrides.edit(GTMultiMachines.ELECTRIC_BLAST_FURNACE, properties -> {
+            properties.recipeModifier(new RecipeModifierList(properties.recipeModifier(), EBF_TIER_STREAK));
+            properties.alwaysTryModifyRecipe(true);
+        });
+        MachineDefinitionOverrides.edit(GTMultiMachines.LARGE_COMBUSTION_ENGINE,
+                properties -> properties.recipeTypes(new GTRecipeType[] { DUMMY_RECIPES.get() }));
+        MachineDefinitionOverrides.editMultiblock(GTMultiMachines.LARGE_COMBUSTION_ENGINE,
+                properties -> properties.renderMultiblockXEIPreview(false));
+        MachineDefinitionOverrides.editMultiblock(GTMultiMachines.LARGE_COMBUSTION_ENGINE,
+                properties -> properties.renderMultiblockWorldPreview(false));
+        MachineDefinitionOverrides.edit(GTMultiMachines.LARGE_PLASMA_TURBINE,
+                properties -> properties.recipeTypes(new GTRecipeType[] { DUMMY_RECIPES.get() }));
+        MachineDefinitionOverrides.editMultiblock(GTMultiMachines.LARGE_PLASMA_TURBINE,
+                properties -> properties.renderMultiblockXEIPreview(false));
+        MachineDefinitionOverrides.editMultiblock(GTMultiMachines.LARGE_PLASMA_TURBINE,
+                properties -> properties.renderMultiblockWorldPreview(false));
+        MachineDefinitionOverrides.edit(GTMultiMachines.EXTREME_COMBUSTION_ENGINE,
+                properties -> properties.recipeTypes(new GTRecipeType[] { DUMMY_RECIPES.get() }));
+        MachineDefinitionOverrides.editMultiblock(GTMultiMachines.EXTREME_COMBUSTION_ENGINE,
+                properties -> properties.renderMultiblockXEIPreview(false));
+        MachineDefinitionOverrides.editMultiblock(GTMultiMachines.EXTREME_COMBUSTION_ENGINE,
+                properties -> properties.renderMultiblockWorldPreview(false));
+        MachineDefinitionOverrides.edit(GTMultiMachines.ASSEMBLY_LINE, properties -> {
+            properties.recipeModifier(
+                    new RecipeModifierList(DEFAULT_ENVIRONMENT_REQUIREMENT, COSMIC_MODULES, OC_NON_PERFECT));
+            properties.alwaysTryModifyRecipe(true);
+        });
         // TODO(cosmiccore-42.14): GCYMMachines.MEGA_BLAST_FURNACE removed in GTCEu 8.0
-        GTMultiMachines.POWER_SUBSTATION.setRenderXEIPreview(false);
-        GTMultiMachines.POWER_SUBSTATION.setRenderWorldPreview(false);
+        MachineDefinitionOverrides.editMultiblock(GTMultiMachines.POWER_SUBSTATION,
+                properties -> properties.renderMultiblockXEIPreview(false));
+        MachineDefinitionOverrides.editMultiblock(GTMultiMachines.POWER_SUBSTATION,
+                properties -> properties.renderMultiblockWorldPreview(false));
 
-        GTMultiMachines.LARGE_STEAM_TURBINE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
-        GTMultiMachines.LARGE_STEAM_TURBINE.setRenderXEIPreview(false);
-        GTMultiMachines.LARGE_STEAM_TURBINE.setRenderWorldPreview(false);
+        MachineDefinitionOverrides.edit(GTMultiMachines.LARGE_STEAM_TURBINE,
+                properties -> properties.recipeTypes(new GTRecipeType[] { DUMMY_RECIPES.get() }));
+        MachineDefinitionOverrides.editMultiblock(GTMultiMachines.LARGE_STEAM_TURBINE,
+                properties -> properties.renderMultiblockXEIPreview(false));
+        MachineDefinitionOverrides.editMultiblock(GTMultiMachines.LARGE_STEAM_TURBINE,
+                properties -> properties.renderMultiblockWorldPreview(false));
 
-        GTMultiMachines.LARGE_GAS_TURBINE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
-        GTMultiMachines.LARGE_GAS_TURBINE.setRenderXEIPreview(false);
-        GTMultiMachines.LARGE_GAS_TURBINE.setRenderWorldPreview(false);
-        GCYMMachines.ROTARY_HEARTH_FURNACE.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
-        GCYMMachines.ROTARY_HEARTH_FURNACE.setRenderXEIPreview(false);
-        GCYMMachines.ROTARY_HEARTH_FURNACE.setRenderWorldPreview(false);
-        GCYMMachines.MEGA_VACUUM_FREEZER.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
-        GCYMMachines.MEGA_VACUUM_FREEZER.setRenderXEIPreview(false);
-        GCYMMachines.MEGA_VACUUM_FREEZER.setRenderWorldPreview(false);
+        MachineDefinitionOverrides.edit(GTMultiMachines.LARGE_GAS_TURBINE,
+                properties -> properties.recipeTypes(new GTRecipeType[] { DUMMY_RECIPES.get() }));
+        MachineDefinitionOverrides.editMultiblock(GTMultiMachines.LARGE_GAS_TURBINE,
+                properties -> properties.renderMultiblockXEIPreview(false));
+        MachineDefinitionOverrides.editMultiblock(GTMultiMachines.LARGE_GAS_TURBINE,
+                properties -> properties.renderMultiblockWorldPreview(false));
+        MachineDefinitionOverrides.edit(GCYMMachines.ROTARY_HEARTH_FURNACE,
+                properties -> properties.recipeTypes(new GTRecipeType[] { DUMMY_RECIPES.get() }));
+        MachineDefinitionOverrides.editMultiblock(GCYMMachines.ROTARY_HEARTH_FURNACE,
+                properties -> properties.renderMultiblockXEIPreview(false));
+        MachineDefinitionOverrides.editMultiblock(GCYMMachines.ROTARY_HEARTH_FURNACE,
+                properties -> properties.renderMultiblockWorldPreview(false));
+        MachineDefinitionOverrides.edit(GCYMMachines.MEGA_VACUUM_FREEZER,
+                properties -> properties.recipeTypes(new GTRecipeType[] { DUMMY_RECIPES.get() }));
+        MachineDefinitionOverrides.editMultiblock(GCYMMachines.MEGA_VACUUM_FREEZER,
+                properties -> properties.renderMultiblockXEIPreview(false));
+        MachineDefinitionOverrides.editMultiblock(GCYMMachines.MEGA_VACUUM_FREEZER,
+                properties -> properties.renderMultiblockWorldPreview(false));
 
         FluidDrillingRegistration.init();
 
-        for (MachineDefinition miner : GTMachines.MINER) {
+        for (MachineEntry<MachineDefinition> miner : GTMachines.MINER) {
             if (miner == null) continue;
-            miner.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
+            MachineDefinitionOverrides.edit(miner,
+                    properties -> properties.recipeTypes(new GTRecipeType[] { DUMMY_RECIPES.get() }));
         }
-        GTMachines.STEAM_MINER.first().setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
-        GTMachines.STEAM_MINER.second().setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
+        MachineDefinitionOverrides.edit(GTMachines.STEAM_MINER.first(),
+                properties -> properties.recipeTypes(new GTRecipeType[] { DUMMY_RECIPES.get() }));
+        MachineDefinitionOverrides.edit(GTMachines.STEAM_MINER.second(),
+                properties -> properties.recipeTypes(new GTRecipeType[] { DUMMY_RECIPES.get() }));
 
-        for (MultiblockMachineDefinition largeMiner : GTMultiMachines.LARGE_MINER) {
+        for (MachineEntry<MultiblockMachineDefinition> largeMiner : GTMultiMachines.LARGE_MINER) {
             if (largeMiner == null) continue;
-            largeMiner.setRecipeTypes(new GTRecipeType[] { DUMMY_RECIPES });
-            largeMiner.setRenderXEIPreview(false);
-            largeMiner.setRenderWorldPreview(false);
+            MachineDefinitionOverrides.edit(largeMiner,
+                    properties -> properties.recipeTypes(new GTRecipeType[] { DUMMY_RECIPES.get() }));
+            MachineDefinitionOverrides.editMultiblock(largeMiner,
+                    properties -> properties.renderMultiblockXEIPreview(false));
+            MachineDefinitionOverrides.editMultiblock(largeMiner,
+                    properties -> properties.renderMultiblockWorldPreview(false));
         }
 
-        for (MultiblockMachineDefinition definition : FUSION_REACTOR) {
+        for (MachineEntry<MultiblockMachineDefinition> definition : FUSION_REACTOR) {
             if (definition == null) continue;
-            definition.setPattern("main", GTMemoizer.memoize(() -> {
+            MachineDefinitionOverrides.setPattern(definition, "main", GTMemoizer.memoize(() -> {
                 var casing = blocks(FusionReactorMachine.getCasingState(definition.getTier()));
                 return MultiblockPatternBuilder
                         .start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
@@ -1391,7 +1435,7 @@ public class CosmicMachines {
                         .slice("####CC###CC####", "###EAAOGOAAE###", "####CC###CC####")
                         .slice("######ICI######", "####GGAAAGG####", "######ICI######")
                         .slice("###############", "######OSO######", "###############")
-                        .where('S', controller(blocks(definition.get())))
+                        .where('S', controller(blocks(definition.getBlock())))
                         .where('G', blocks(FUSION_GLASS.get()).or(casing))
                         .where('E', casing.or(
                                 blocks(PartAbility.INPUT_ENERGY.getBlockRange(definition.getTier(), UV)
@@ -1408,7 +1452,7 @@ public class CosmicMachines {
                         .build();
             }));
         }
-        GCYMMachines.LARGE_CENTRIFUGE.setPattern("main",
+        MachineDefinitionOverrides.setPattern(GCYMMachines.LARGE_CENTRIFUGE, "main",
                 GTMemoizer.memoize(() -> MultiblockPatternBuilder
                         .start(RelativeDirection.FRONT, RelativeDirection.UP, RelativeDirection.LEFT)
                         .slice("#XXX#", "XXXXX", "#XXX#")
@@ -1418,7 +1462,7 @@ public class CosmicMachines {
                         .slice("#XXX#", "XXSXX", "#XXX#")
                         .where('S', controller(blocks(GCYMMachines.LARGE_CENTRIFUGE.getBlock())))
                         .where('X', blocks(CASING_VIBRATION_SAFE.get()).setMinGlobalLimited(40)
-                                .or(Predicates.autoAbilities(CENTRIFUGE_RECIPES))
+                                .or(Predicates.autoAbilities(CENTRIFUGE_RECIPES.get()))
                                 .or(Predicates.autoAbilities(true, false, true))
                                 .or(abilities(STERILIZE_HATCH).setMaxGlobalLimited(1, 1)))
                         .where('P', Predicates.blocks(CASING_STEEL_PIPE.get()))
@@ -1426,12 +1470,12 @@ public class CosmicMachines {
                         .where('#', Predicates.any())
                         .build()));
 
-        GTMultiMachines.DISTILLATION_TOWER
-                .setAppearance(LIGHTWEIGHT_STAINLESS_STEEL_CASING::getDefaultState);
-        GTMultiMachines.DISTILLATION_TOWER.setPattern("main", GTMemoizer.memoize(() -> {
+        MachineDefinitionOverrides.edit(GTMultiMachines.DISTILLATION_TOWER,
+                properties -> properties.appearance(LIGHTWEIGHT_STAINLESS_STEEL_CASING::getDefaultState));
+        MachineDefinitionOverrides.setPattern(GTMultiMachines.DISTILLATION_TOWER, "main", GTMemoizer.memoize(() -> {
             MultiPredicate exportPredicate = abilities(PartAbility.EXPORT_FLUIDS_1X);
             if (GTCEu.Mods.isAE2Loaded()) {
-                exportPredicate = exportPredicate.or(blocks(GTAEMachines.FLUID_EXPORT_HATCH_ME.get()));
+                exportPredicate = exportPredicate.or(blocks(GTAEMachines.FLUID_EXPORT_HATCH_ME.getBlock()));
             }
             exportPredicate = exportPredicate.setMaxLayerLimited(1);
             MultiPredicate maintenance = autoAbilities(true, false, false).setMaxGlobalLimited(1);
@@ -1456,7 +1500,7 @@ public class CosmicMachines {
         }));
         VacuumDistillationTower.init();
 
-        GTMultiMachines.ASSEMBLY_LINE.setPattern("main",
+        MachineDefinitionOverrides.setPattern(GTMultiMachines.ASSEMBLY_LINE, "main",
                 GTMemoizer.memoize(() -> MultiblockPatternBuilder.start(BACK, UP, RIGHT)
                         .slice("FIF", "RTR", "SAG", "#Y#")
                         .sliceRepeatable(3, 15, "FIF", "RTR", "DAG", "#Y#")

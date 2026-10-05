@@ -46,7 +46,8 @@ public abstract class GTEmiRecipeCatalystClassificationFixMixin {
 
             float chance = (float) content.chance() / content.maxChance();
             var mapped = ItemRecipeCapability.mapIngredientToEntryList(item);
-            ingredients.add(EmiStackConverter.ITEM.convertTo(mapped, chance));
+            ingredients
+                    .add(EmiStackConverter.ITEM.convertTo(mapped, chance, java.util.function.UnaryOperator.identity()));
         }
 
         for (Content content : recipe.getInputContents(FluidRecipeCapability.CAP)) {
@@ -55,7 +56,8 @@ public abstract class GTEmiRecipeCatalystClassificationFixMixin {
             float chance = (float) content.chance() / content.maxChance();
             var mapped = FluidRecipeCapability.mapIngredientToEntryList(
                     FluidRecipeCapability.CAP.of(content.content()));
-            ingredients.add(EmiStackConverter.FLUID.convertTo(mapped, chance));
+            ingredients.add(
+                    EmiStackConverter.FLUID.convertTo(mapped, chance, java.util.function.UnaryOperator.identity()));
         }
 
         return ingredients;

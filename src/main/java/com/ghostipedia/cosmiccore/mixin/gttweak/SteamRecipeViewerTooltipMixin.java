@@ -3,7 +3,6 @@ package com.ghostipedia.cosmiccore.mixin.gttweak;
 import com.ghostipedia.cosmiccore.common.power.steam.SteamRecipeExecution;
 
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
-import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
 import com.gregtechceu.gtceu.api.recipe.gui.GTRecipeViewerWidget;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
@@ -35,23 +34,24 @@ import static com.gregtechceu.gtceu.common.data.GTRecipeTypes.WIREMILL_RECIPES;
 @Mixin(value = GTRecipeViewerWidget.class, remap = false)
 public abstract class SteamRecipeViewerTooltipMixin {
 
-    private static final Set<GTRecipeType> COSMICCORE$STEAM_RECIPE_TYPES = Set.of(
-            EXTRACTOR_RECIPES,
-            MACERATOR_RECIPES,
-            COMPRESSOR_RECIPES,
-            FORGE_HAMMER_RECIPES,
-            FURNACE_RECIPES,
-            ALLOY_SMELTER_RECIPES,
-            ROCK_BREAKER_RECIPES,
-            BENDER_RECIPES,
-            WIREMILL_RECIPES);
+    private static final Set<com.gregtechceu.gtceu.api.registry.registrate.entry.GTRecipeTypeEntry> COSMICCORE$STEAM_RECIPE_TYPES = Set
+            .of(
+                    EXTRACTOR_RECIPES,
+                    MACERATOR_RECIPES,
+                    COMPRESSOR_RECIPES,
+                    FORGE_HAMMER_RECIPES,
+                    FURNACE_RECIPES,
+                    ALLOY_SMELTER_RECIPES,
+                    ROCK_BREAKER_RECIPES,
+                    BENDER_RECIPES,
+                    WIREMILL_RECIPES);
 
     @Shadow
     private GTRecipe modifiedRecipe;
 
     @Inject(method = "loadContentIntoSlots", at = @At("TAIL"), require = 1)
     private void cosmiccore$appendSteamExecutionTooltip(CallbackInfo ci) {
-        if (!COSMICCORE$STEAM_RECIPE_TYPES.contains(modifiedRecipe.getType())) return;
+        if (COSMICCORE$STEAM_RECIPE_TYPES.stream().noneMatch(entry -> entry.get() == modifiedRecipe.getType())) return;
 
         var plan = SteamRecipeExecution.resolve(modifiedRecipe);
         if (plan == null) return;

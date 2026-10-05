@@ -47,7 +47,7 @@ public class SprayCanEventListener {
             behavior.handleBlocks(pos, ConfigHolder.INSTANCE.tools.sprayCanChainLength, fakeContext);
         }
 
-        GTSoundEntries.SPRAY_CAN_TOOL.play(level, null, player.position(), 1.0f, 1.0f);
+        GTSoundEntries.SPRAY_CAN_TOOL.get().play(level, null, player.position(), 1.0f, 1.0f);
     }
 
     // just pulls out some repeated code for cleanliness into this method to check if it is a spraycan

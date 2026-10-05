@@ -12,6 +12,7 @@ import com.gregtechceu.gtceu.api.multiblock.OriginOffset;
 import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
 import net.minecraft.network.chat.Component;
@@ -32,7 +33,7 @@ import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createWor
 
 public class PhaseSeparator {
 
-    public static final MultiblockMachineDefinition PHASE_SEPARATOR = REGISTRATE
+    public static final MachineEntry<MultiblockMachineDefinition> PHASE_SEPARATOR = REGISTRATE
             .multiblock("phase_separator", WorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.ALL)
             .appearanceBlock(LIGHTWEIGHT_STAINLESS_STEEL_CASING)

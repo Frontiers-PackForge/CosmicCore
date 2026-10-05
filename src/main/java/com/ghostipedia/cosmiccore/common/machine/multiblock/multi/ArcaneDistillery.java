@@ -12,6 +12,7 @@ import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
 import static com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates.autoAbilitiesNoEnergyIn;
@@ -25,7 +26,7 @@ import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.ELECTRIC_OVERC
 
 public class ArcaneDistillery {
 
-    public static final MultiblockMachineDefinition ARCANE_DISTILLERY = REGISTRATE
+    public static final MachineEntry<MultiblockMachineDefinition> ARCANE_DISTILLERY = REGISTRATE
             .multiblock("arcane_distillery", WorkableElectricMultiblockMachine::new)
             .langValue("§6Arcane Distillery")
             .recipeTypes(CosmicRecipeTypes.ARCANE_DISTILLERY, CosmicRecipeTypes.ARCANE_FOLDING)
@@ -48,7 +49,7 @@ public class ArcaneDistillery {
                     .slice("AAAAAAAAAAAAA", " AB   C   BA ", "  B       B  ", "  D       D  ", "  D       D  ", "  D       D  ", "  D       D  ", "  D       D  ", "  D       D  ", "  D       D  ", "  B       B  ", " AB   C   BA ", "AAAAAAAAAAAAA")
                     .slice(" AAAAAAAAAAA ", "  ABB C BBA  ", "    B   B    ", "    B   B    ", "             ", "             ", "             ", "             ", "             ", "    B   B    ", "    B   B    ", "  ABB C BBA  ", " AAAAAAAAAAA ")
                     .slice("  A  AAA  A  ", "     AQA     ", "     AAA     ", "             ", "             ", "             ", "             ", "             ", "             ", "             ", "     AAA     ", "     AAA     ", "  A  AAA  A  ")
-                    .where('Q', Predicates.controller(Predicates.blocks(definition.get())))
+                    .where('Q', Predicates.controller(Predicates.blocks(definition.getBlock())))
                     .where(' ', Predicates.any())
                     .where('A', blocks(OSCILLATING_GILDED_PTHANTERUM_CASING.get())
                             .or(autoAbilitiesNoEnergyIn(CosmicRecipeTypes.ARCANE_DISTILLERY))

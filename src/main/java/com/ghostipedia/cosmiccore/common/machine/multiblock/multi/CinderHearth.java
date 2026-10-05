@@ -11,6 +11,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 
 import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.EXPORT_EMBER;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
@@ -18,7 +19,7 @@ import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
 
 public class CinderHearth {
 
-    public final static MultiblockMachineDefinition CINDER_HEARTH = REGISTRATE
+    public final static MachineEntry<MultiblockMachineDefinition> CINDER_HEARTH = REGISTRATE
             .multiblock("cinder_hearth", RegressionPersistentWorkableElectricMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.CINDER_HEARTH)

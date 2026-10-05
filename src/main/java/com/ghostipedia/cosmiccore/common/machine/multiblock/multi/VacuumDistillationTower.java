@@ -34,14 +34,11 @@ public final class VacuumDistillationTower {
     private VacuumDistillationTower() {}
 
     public static void init() {
-        MultiblockMachineDefinition definition = GTMultiMachines.DISTILLATION_TOWER;
-        definition.setRecipeTypes(new GTRecipeType[] {
-                GTRecipeTypes.DISTILLATION_RECIPES,
-                CosmicRecipeTypes.VACUUM_DISTILLATION
-        });
-        if (CosmicRecipeTypes.VACUUM_DISTILLATION.getIconSupplier() == null) {
-            CosmicRecipeTypes.VACUUM_DISTILLATION.setIconSupplier(definition::asStack);
-        }
+        var definition = GTMultiMachines.DISTILLATION_TOWER;
+        com.ghostipedia.cosmiccore.common.compat.gtceu.MachineDefinitionOverrides.editMultiblock(definition,
+                properties -> properties.recipeTypes(new GTRecipeType[] {
+                        GTRecipeTypes.DISTILLATION_RECIPES.get(), CosmicRecipeTypes.VACUUM_DISTILLATION.get()
+                }));
         TieredMultiblockPatterns.registerConfigurations(definition, List.of(
                 new TieredMultiblockPatterns.PatternLabel(
                         "cosmiccore.multiblock.configuration.atmospheric",
@@ -49,13 +46,13 @@ public final class VacuumDistillationTower {
                 new TieredMultiblockPatterns.PatternLabel(
                         "cosmiccore.multiblock.configuration.vacuum",
                         "cosmiccore.multiblock.configuration.vacuum.short")),
-                () -> vacuumPattern(definition));
+                () -> vacuumPattern(definition.get()));
     }
 
     private static IBlockPattern vacuumPattern(MultiblockMachineDefinition definition) {
         MultiPredicate exportPredicate = abilities(PartAbility.EXPORT_FLUIDS_1X);
         if (GTCEu.Mods.isAE2Loaded()) {
-            exportPredicate = exportPredicate.or(blocks(GTAEMachines.FLUID_EXPORT_HATCH_ME.get()));
+            exportPredicate = exportPredicate.or(blocks(GTAEMachines.FLUID_EXPORT_HATCH_ME.getBlock()));
         }
         exportPredicate = exportPredicate.setMaxLayerLimited(1);
         MultiPredicate maintenance = autoAbilities(true, false, false).setMaxGlobalLimited(1);
