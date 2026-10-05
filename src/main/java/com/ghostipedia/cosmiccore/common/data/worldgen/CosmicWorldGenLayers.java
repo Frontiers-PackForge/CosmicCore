@@ -9,6 +9,7 @@ import com.gregtechceu.gtceu.api.data.worldgen.GTOreDefinition;
 import com.gregtechceu.gtceu.api.data.worldgen.IWorldGenLayer;
 import com.gregtechceu.gtceu.api.data.worldgen.SimpleWorldGenLayer;
 import com.gregtechceu.gtceu.api.data.worldgen.WorldGenLayers;
+import com.gregtechceu.gtceu.api.registry.GTRegistries;
 
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.IntProvider;
@@ -17,6 +18,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
 
 import java.util.Set;
+
+import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 
 public class CosmicWorldGenLayers {
 
@@ -39,8 +42,13 @@ public class CosmicWorldGenLayers {
                 () -> new TagMatchTest(CosmicBlockTags.HOLLOW_ORE_REPLACEABLES),
                 Set.of(MurkbloomServerLogic.HOLLOW_DIM));
 
-        ((SimpleWorldGenLayerLevelsAccessor) WorldGenLayers.STONE).cosmiccore$setLevels(Set.of());
-        ((SimpleWorldGenLayerLevelsAccessor) WorldGenLayers.DEEPSLATE).cosmiccore$setLevels(Set.of());
+        REGISTRATE.simple("overworld", GTRegistries.Keys.WORLD_GEN_LAYER, () -> OVERWORLD);
+        REGISTRATE.simple("hollow", GTRegistries.Keys.WORLD_GEN_LAYER, () -> HOLLOW);
+    }
+
+    public static void configure() {
+        ((SimpleWorldGenLayerLevelsAccessor) WorldGenLayers.STONE.value()).cosmiccore$setLevels(Set.of());
+        ((SimpleWorldGenLayerLevelsAccessor) WorldGenLayers.DEEPSLATE.value()).cosmiccore$setLevels(Set.of());
     }
 
     public static SimpleWorldGenLayer hollow() {
@@ -57,7 +65,7 @@ public class CosmicWorldGenLayers {
         init();
         if (OVERWORLD == null) return;
         IWorldGenLayer currentLayer = vein.layer();
-        if (currentLayer == WorldGenLayers.STONE || currentLayer == WorldGenLayers.DEEPSLATE) {
+        if (currentLayer == WorldGenLayers.STONE.value() || currentLayer == WorldGenLayers.DEEPSLATE.value()) {
             vein.layer(OVERWORLD);
             vein.clusterSize(scaleIntProvider(vein.clusterSize()));
         }

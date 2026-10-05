@@ -12,6 +12,7 @@ import com.gregtechceu.gtceu.api.multiblock.MultiPredicate;
 import com.gregtechceu.gtceu.api.multiblock.pattern.BlockPattern;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -40,7 +41,7 @@ import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createWor
  */
 public class StarLadderResearchHub {
 
-    public final static MultiblockMachineDefinition STAR_LADDER_RESEARCH_HUB = REGISTRATE
+    public final static MachineEntry<MultiblockMachineDefinition> STAR_LADDER_RESEARCH_HUB = REGISTRATE
             .multiblock("star_ladder_research_hub", StarLadderResearchHubMachine::new)
             .langValue("Star Ladder Research Hub")
             .tooltips(

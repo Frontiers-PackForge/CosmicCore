@@ -11,6 +11,7 @@ import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.common.data.*;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
@@ -21,7 +22,7 @@ import static com.gregtechceu.gtceu.common.data.GTMachines.ITEM_IMPORT_BUS;
 
 public class LARVA {
 
-    public final static MultiblockMachineDefinition LARVA = REGISTRATE
+    public final static MachineEntry<MultiblockMachineDefinition> LARVA = REGISTRATE
             .multiblock("larva", LarvaMachine::new)
             .langValue("Logistic Asteroid Reclamation and Valuing Assembly [LARVA]")
             .rotationState(RotationState.NON_Y_AXIS)

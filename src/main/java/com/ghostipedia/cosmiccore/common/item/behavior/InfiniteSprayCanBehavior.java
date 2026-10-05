@@ -103,7 +103,7 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
         } else if (first == null || !handleSpecialBlockEntities(first, limit, context)) {
             handleBlocks(pos, limit, context);
         }
-        GTSoundEntries.SPRAY_CAN_TOOL.play(level, null, player.position(), 1.0f, 1.0f);
+        GTSoundEntries.SPRAY_CAN_TOOL.get().play(level, null, player.position(), 1.0f, 1.0f);
         return InteractionResult.SUCCESS;
     }
 
@@ -122,7 +122,7 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
             player.displayClientMessage(Component.translatable("cosmiccore.sealant.already_sealed"), true);
             return InteractionResult.CONSUME;
         }
-        GTSoundEntries.SPRAY_CAN_TOOL.play(context.getLevel(), null, player.position(), 1.0f, 1.0f);
+        GTSoundEntries.SPRAY_CAN_TOOL.get().play(context.getLevel(), null, player.position(), 1.0f, 1.0f);
         player.displayClientMessage(Component.translatable("cosmiccore.sealant.applied", changed), true);
         return InteractionResult.CONSUME;
     }
@@ -147,7 +147,7 @@ public class InfiniteSprayCanBehavior implements IInteractionItem, IAddInformati
             return;
         }
         paintLine(positions, context);
-        GTSoundEntries.SPRAY_CAN_TOOL.play(context.getLevel(), null, player.position(), 1.0f, 1.0f);
+        GTSoundEntries.SPRAY_CAN_TOOL.get().play(context.getLevel(), null, player.position(), 1.0f, 1.0f);
     }
 
     public static void printColorToActionBar(Player player, ExtendedDyeColor color) {

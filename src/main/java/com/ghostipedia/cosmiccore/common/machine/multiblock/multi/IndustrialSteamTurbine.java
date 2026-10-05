@@ -13,6 +13,7 @@ import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 
 import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.IMPORT_EMBER;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
@@ -23,7 +24,7 @@ import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.ELECTRIC_OVERC
 
 public class IndustrialSteamTurbine {
 
-    public final static MultiblockMachineDefinition LARGE_EMBER_COMPRESSOR = REGISTRATE
+    public final static MachineEntry<MultiblockMachineDefinition> LARGE_EMBER_COMPRESSOR = REGISTRATE
             .multiblock("large_ember_boiler", WorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.ARCANE_CRUCIBLE)

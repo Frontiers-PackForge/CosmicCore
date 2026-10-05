@@ -12,7 +12,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RenderTooltipEvent;
 
-import brachy.modularui.drawable.ClientTooltipComponentIcon;
+import brachy.modularui.drawable.TooltipComponentIcon;
 import brachy.modularui.screen.event.RichTooltipEvent;
 import brachy.modularui.utils.TooltipLines;
 import com.mojang.datafixers.util.Either;
@@ -30,7 +30,7 @@ public final class FoodTooltipEvents {
 
     @SubscribeEvent
     public static void onGather(RenderTooltipEvent.GatherComponents event) {
-        if (event.getTooltipElements() instanceof TooltipLines) return;
+        if ((Object) event.getTooltipElements() instanceof TooltipLines) return;
 
         ItemStack stack = event.getItemStack();
         if (!CosmicFoodRegistry.isConsumable(stack)) return;
@@ -62,7 +62,7 @@ public final class FoodTooltipEvents {
         FoodTooltipComponent block = CosmicFoodRegistry.isVile(stack.getItem()) ? FoodTooltips.buildVile() :
                 FoodTooltips.build(stack, CosmicFoodRegistry.get(stack));
         event.getTooltip().moveCursorToEnd()
-                .addDrawableLine(new ClientTooltipComponentIcon(new FoodTooltipClientComponent(block)));
+                .addDrawableLine(new TooltipComponentIcon(new FoodTooltipClientComponent(block)));
     }
 
     private static void drawFrame(RenderTooltipEvent.Pre event) {

@@ -11,6 +11,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMa
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
@@ -21,7 +22,7 @@ import static com.gregtechceu.gtceu.common.data.GTBlocks.CASING_HSSE_STURDY;
 
 public class CHITIN {
 
-    public final static MultiblockMachineDefinition CHITIN = REGISTRATE
+    public final static MachineEntry<MultiblockMachineDefinition> CHITIN = REGISTRATE
             .multiblock("contained_habitat_for_insectoid_tectonic_integration_and_neutralization",
                     WorkableElectricMultiblockMachine::new)
             .langValue("§bKryosyn Cracking Chamber")

@@ -13,6 +13,7 @@ import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.IBlockPattern;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 import com.gregtechceu.gtceu.utils.GTUtil;
@@ -40,7 +41,7 @@ import static com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection.UP;
 
 public final class ConversionComplex {
 
-    public static final MultiblockMachineDefinition CONVERSION_COMPLEX = REGISTRATE
+    public static final MachineEntry<MultiblockMachineDefinition> CONVERSION_COMPLEX = REGISTRATE
             .multiblock("conversion_complex", ConversionComplexMachine::new)
             .langValue("Conversion Complex")
             .rotationState(RotationState.ALL)
@@ -100,11 +101,11 @@ public final class ConversionComplex {
                         "cosmiccore.multiblock.configuration.reformer.short"),
                 new TieredMultiblockPatterns.PatternLabel("cosmiccore.multiblock.configuration.coker",
                         "cosmiccore.multiblock.configuration.coker.short")),
-                () -> fccPattern(CONVERSION_COMPLEX),
-                () -> hydrotreaterPattern(CONVERSION_COMPLEX),
-                () -> hydrocrackerPattern(CONVERSION_COMPLEX),
-                () -> reformerPattern(CONVERSION_COMPLEX),
-                () -> cokerPattern(CONVERSION_COMPLEX));
+                () -> fccPattern(CONVERSION_COMPLEX.get()),
+                () -> hydrotreaterPattern(CONVERSION_COMPLEX.get()),
+                () -> hydrocrackerPattern(CONVERSION_COMPLEX.get()),
+                () -> reformerPattern(CONVERSION_COMPLEX.get()),
+                () -> cokerPattern(CONVERSION_COMPLEX.get()));
     }
 
     private static IBlockPattern corePattern(MultiblockMachineDefinition definition) {

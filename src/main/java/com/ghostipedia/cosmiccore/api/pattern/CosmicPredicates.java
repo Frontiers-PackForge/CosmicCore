@@ -18,9 +18,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Supplier;
 
 import static com.gregtechceu.gtceu.common.data.GTBlocks.*;
 
@@ -50,6 +52,11 @@ public class CosmicPredicates {
     // a second hatch feeds the duplicate. Multis declaring their own energy predicate must use this.
     public static MultiPredicate autoAbilitiesNoEnergyIn(GTRecipeType... recipeType) {
         return Predicates.autoAbilities(recipeType, false, true, true, true, true, true);
+    }
+
+    @SafeVarargs
+    public static MultiPredicate autoAbilitiesNoEnergyIn(Supplier<GTRecipeType>... recipeTypes) {
+        return autoAbilitiesNoEnergyIn(Arrays.stream(recipeTypes).map(Supplier::get).toArray(GTRecipeType[]::new));
     }
 
     public static MultiPredicate magnetCoils() {

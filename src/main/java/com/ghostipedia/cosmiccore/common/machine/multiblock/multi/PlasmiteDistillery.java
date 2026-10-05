@@ -14,6 +14,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMa
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
 import static com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates.autoAbilitiesNoEnergyIn;
@@ -26,7 +27,7 @@ import static com.gregtechceu.gtceu.common.data.GTBlocks.*;
 
 public class PlasmiteDistillery {
 
-    public final static MultiblockMachineDefinition PLASMITE_DISTILLERY = REGISTRATE
+    public final static MachineEntry<MultiblockMachineDefinition> PLASMITE_DISTILLERY = REGISTRATE
             .multiblock("plasmite_distillery",
                     WorkableElectricMultiblockMachine::new)
             .langValue("§9Plasmite Distillery")

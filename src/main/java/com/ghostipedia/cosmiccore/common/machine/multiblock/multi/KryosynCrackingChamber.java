@@ -11,6 +11,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMa
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
@@ -21,7 +22,7 @@ import static com.gregtechceu.gtceu.common.data.GTBlocks.CASING_HSSE_STURDY;
 
 public class KryosynCrackingChamber {
 
-    public final static MultiblockMachineDefinition KRYOSYN_CRACKING_CHAMBER = REGISTRATE
+    public final static MachineEntry<MultiblockMachineDefinition> KRYOSYN_CRACKING_CHAMBER = REGISTRATE
             .multiblock("kryosyn_cracking_chamber",
                     WorkableElectricMultiblockMachine::new)
             .langValue("§bKryosyn Cracking Chamber")

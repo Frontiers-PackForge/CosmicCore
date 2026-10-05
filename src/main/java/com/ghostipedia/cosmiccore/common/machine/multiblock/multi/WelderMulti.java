@@ -13,6 +13,7 @@ import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
@@ -26,7 +27,7 @@ import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createWor
 
 public class WelderMulti {
 
-    public final static MultiblockMachineDefinition SUBMERGED_WELDER = REGISTRATE
+    public final static MachineEntry<MultiblockMachineDefinition> SUBMERGED_WELDER = REGISTRATE
             .multiblock("submerged_welder",
                     WorkableElectricMultiblockMachine::new)
             .langValue("§3Submerged Welder")

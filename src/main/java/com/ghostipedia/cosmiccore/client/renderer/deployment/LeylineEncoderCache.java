@@ -52,7 +52,7 @@ public final class LeylineEncoderCache {
                     .map(MultiblockMachineDefinition.class::cast)
                     .sorted(Comparator.comparing(definition -> definition.getId().toString()))
                     .map(definition -> {
-                        Component title = new ItemStack(definition.getItem()).getHoverName();
+                        Component title = new ItemStack(definition.asItem()).getHoverName();
                         return new MachineRow(definition, title, normalize(title.getString()),
                                 normalize(definition.getId().toString()),
                                 Math.max(26, font.split(title, 115).size() * font.lineHeight + 8));

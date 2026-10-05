@@ -4,7 +4,6 @@ import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.PropertyKey;
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.WireProperties;
 import com.gregtechceu.gtceu.api.registry.GTRegistries;
-import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.utils.GTUtil;
 
 import net.minecraft.resources.ResourceLocation;
@@ -83,7 +82,7 @@ public final class ConductorAmpacityRules {
         int applied = 0;
         for (var entry : BASE_AMPERAGE_BY_MATERIAL.entrySet()) {
             Material material = GTRegistries.MATERIALS.get(ResourceLocation.parse(entry.getKey()));
-            if (material == null || material == GTMaterials.NULL || !material.hasProperty(PropertyKey.WIRE)) {
+            if (material == null || !material.hasProperty(PropertyKey.WIRE)) {
                 continue;
             }
             material.getProperty(PropertyKey.WIRE).setAmperage(entry.getValue());

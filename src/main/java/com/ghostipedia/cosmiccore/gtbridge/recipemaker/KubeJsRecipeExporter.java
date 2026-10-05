@@ -25,7 +25,7 @@ public final class KubeJsRecipeExporter {
     public static RecipeExportResult export(Player player, RecipeDraft draft, String recipeId) {
         if (draft.recipeType == null) return RecipeExportResult.copied("// no recipe type selected");
 
-        var typeId = draft.recipeType.registryName;
+        var typeId = draft.recipeType.id;
         KubeJsRecipeId.Resolution resolution = KubeJsRecipeId.resolveDraft(player, draft, recipeId);
         if (resolution.outcome() == KubeJsRecipeId.Outcome.FAILED) {
             return RecipeExportResult.resolved("", resolution);

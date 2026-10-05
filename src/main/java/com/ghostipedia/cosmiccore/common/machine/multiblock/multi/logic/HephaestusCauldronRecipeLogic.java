@@ -20,7 +20,7 @@ public final class HephaestusCauldronRecipeLogic extends RecipeLogic {
     @Override
     @OnlyIn(Dist.CLIENT)
     public void updateSound() {
-        var sound = GTSoundEntries.FIRE;
+        var sound = GTSoundEntries.FIRE.get();
         if (isWorking() && getRLMachine().shouldWorkingPlaySound()) {
             if (workingSound instanceof AutoReleasedSound soundEntry) {
                 if (soundEntry.soundEntry == sound && !soundEntry.isStopped()) return;

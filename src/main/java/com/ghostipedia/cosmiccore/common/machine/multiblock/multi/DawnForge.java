@@ -12,6 +12,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 
 import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.IMPORT_EMBER;
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
@@ -22,7 +23,7 @@ import static com.rekindled.embers.RegistryManager.DAWNSTONE_ANVIL;
 
 public class DawnForge {
 
-    public final static MultiblockMachineDefinition DAWN_FORGE = REGISTRATE
+    public final static MachineEntry<MultiblockMachineDefinition> DAWN_FORGE = REGISTRATE
             .multiblock("dawn_forge", WeakSteamParallelMultiBlockMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.DAWN_FORGE)

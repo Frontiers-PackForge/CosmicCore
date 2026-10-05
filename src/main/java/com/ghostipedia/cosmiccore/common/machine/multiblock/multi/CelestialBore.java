@@ -9,6 +9,7 @@ import com.gregtechceu.gtceu.api.data.RotationState;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 
@@ -20,7 +21,7 @@ import static com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection.*;
 
 public class CelestialBore {
 
-    public final static MultiblockMachineDefinition CELESTIAL_BORE = REGISTRATE.multiblock(
+    public final static MachineEntry<MultiblockMachineDefinition> CELESTIAL_BORE = REGISTRATE.multiblock(
             "vomahine_celestial_laser_bore", UniqueWorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.CELESTIAL_BORE)

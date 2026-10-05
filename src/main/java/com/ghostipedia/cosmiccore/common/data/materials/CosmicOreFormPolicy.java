@@ -32,7 +32,7 @@ public final class CosmicOreFormPolicy {
 
     public static boolean isUnusedGeneratedOreForm(Item item) {
         MaterialEntry entry = ChemicalHelper.getMaterialEntry(item);
-        if (entry.isEmpty()) return false;
+        if (entry == null) return false;
 
         TagPrefix prefix = entry.tagPrefix();
         Material material = entry.material();

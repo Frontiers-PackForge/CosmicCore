@@ -12,6 +12,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.multiblock.MultiPredicate;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 
 import net.minecraft.network.chat.Component;
 
@@ -30,7 +31,7 @@ import static com.gregtechceu.gtceu.common.data.GCYMBlocks.CASING_HIGH_TEMPERATU
 
 public final class AlloyBlastingKiln {
 
-    public static final MultiblockMachineDefinition MACHINE = REGISTRATE
+    public static final MachineEntry<MultiblockMachineDefinition> MACHINE = REGISTRATE
             .multiblock("alloy_blasting_kiln", AlloyBlastingKilnMachine::new)
             .langValue("Alloy Blasting Kiln")
             .rotationState(RotationState.NON_Y_AXIS)

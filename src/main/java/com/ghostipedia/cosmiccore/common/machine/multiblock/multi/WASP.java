@@ -12,6 +12,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMa
 import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.common.data.GCYMBlocks;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 
@@ -22,7 +23,7 @@ import static com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection.*;
 
 public class WASP {
 
-    public final static MultiblockMachineDefinition WASP = REGISTRATE
+    public final static MachineEntry<MultiblockMachineDefinition> WASP = REGISTRATE
             .multiblock("wasp", WorkableElectricMultiblockMachine::new)
             .langValue("Wide Asteroid Separation Platform [WASP]")
             .rotationState(RotationState.NON_Y_AXIS)

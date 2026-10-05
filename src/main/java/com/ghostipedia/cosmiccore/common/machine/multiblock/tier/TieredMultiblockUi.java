@@ -38,7 +38,7 @@ public final class TieredMultiblockUi {
                         tooltip.addLine(Component.translatable("cosmiccore.multiblock.structure_tier",
                                 value.getIntValue() + 1));
                     }
-                    if (definition == GTMultiMachines.ELECTRIC_BLAST_FURNACE && value.getIntValue() > 0) {
+                    if (definition == GTMultiMachines.ELECTRIC_BLAST_FURNACE.get() && value.getIntValue() > 0) {
                         tooltip.addLine(Component.translatable("cosmiccore.multiblock.ebf.streak",
                                 ElectricBlastFurnaceTierState.durationReductionPercent(streakSupplier.getAsInt())));
                         tooltip.addLine(Component.translatable("cosmiccore.multiblock.ebf.streak.rule"));

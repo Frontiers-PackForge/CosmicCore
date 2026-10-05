@@ -13,6 +13,7 @@ import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
 import static com.ghostipedia.cosmiccore.api.machine.part.CosmicPartAbility.IMPORT_SOUL;
@@ -28,7 +29,7 @@ import static com.klikli_dev.occultism.registry.OccultismBlocks.IESNIUM_BLOCK;
 
 public class HellFireFoundry {
 
-    public static final MultiblockMachineDefinition HELLFIRE_FOUNDRY = REGISTRATE
+    public static final MachineEntry<MultiblockMachineDefinition> HELLFIRE_FOUNDRY = REGISTRATE
             .multiblock("hellfire_foundry", WorkableElectricMultiblockMachine::new)
             .langValue("§cHellfire Foundry")
             .recipeType(CosmicRecipeTypes.HELLFIRE_FOUNDRY)
@@ -47,7 +48,7 @@ public class HellFireFoundry {
                     .slice(" A     A ", "  A   A  ", "ABBBBBBBA", "ABB   BBA", " B     B ", "         ", "         ")
                     .slice(" AA   AA ", "         ", "ABBBBBBBA", " BBBBBBB ", " BB   BB ", " B     B ", " C     C ")
                     .slice("         ", "         ", " AAAAAAA ", "  AAQAA  ", "         ", "         ", "         ")
-                    .where('Q', Predicates.controller(Predicates.blocks(definition.get())))
+                    .where('Q', Predicates.controller(Predicates.blocks(definition.getBlock())))
                     .where(' ', Predicates.any())
                     .where('A', blocks(BLANK_RUNE.get()))
                     .where('B', blocks(HIGHLY_CONDUCTIVE_FISSION_CASING.get()).setMinGlobalLimited(70)

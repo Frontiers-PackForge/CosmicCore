@@ -14,6 +14,7 @@ import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
@@ -28,7 +29,7 @@ import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.ELECTRIC_OVERC
 
 public class Polymerizer {
 
-    public static final MultiblockMachineDefinition POLYMERIZER = REGISTRATE
+    public static final MachineEntry<MultiblockMachineDefinition> POLYMERIZER = REGISTRATE
             .multiblock("polymerizer", WorkableElectricMultiblockMachine::new)
             .langValue("§aPolymerizer")
             .recipeType(CosmicRecipeTypes.POLYMERIZER)
@@ -45,7 +46,7 @@ public class Polymerizer {
                     .slice("AABBABBAA", "AD#####DA", "EF#####FE", "EFD###DFE", "EF#####FE", "AD#####DA", "AABBABBAA")
                     .slice("         ", "AABBABBAA", "AD#####DA", "ADD###DDA", "AD#####DA", "AABBABBAA", "         ")
                     .slice("X       X", "X       X", "AABBABBAA", "AABBQBBAA", "AABBABBAA", "         ", "         ")
-                    .where('Q', Predicates.controller(Predicates.blocks(definition.get())))
+                    .where('Q', Predicates.controller(Predicates.blocks(definition.getBlock())))
                     .where(' ', Predicates.any())
                     .where('#', Predicates.air())
                     .where('A', blocks(HIGH_TOLERANCE_RHENIUM_CASING.get()))

@@ -10,6 +10,7 @@ import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.*;
@@ -19,7 +20,7 @@ import static com.gregtechceu.gtceu.common.data.GCYMBlocks.*;
 
 public class StellarSmeltingModule {
 
-    public static final MultiblockMachineDefinition STELLAR_SMELTING_MODULE = REGISTRATE
+    public static final MachineEntry<MultiblockMachineDefinition> STELLAR_SMELTING_MODULE = REGISTRATE
             .multiblock("stellar_smelting_module", StellarBaseModule::new)
             .langValue("Ignition Complex : GRAND FORGE")
             .rotationState(RotationState.NON_Y_AXIS)

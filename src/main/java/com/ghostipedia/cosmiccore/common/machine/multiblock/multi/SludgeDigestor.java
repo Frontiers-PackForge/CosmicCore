@@ -11,6 +11,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMa
 import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
@@ -25,7 +26,7 @@ import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createWor
 
 public class SludgeDigestor {
 
-    public static final MultiblockMachineDefinition SLUDGE_DIGESTOR = REGISTRATE
+    public static final MachineEntry<MultiblockMachineDefinition> SLUDGE_DIGESTOR = REGISTRATE
             .multiblock("sludge_digestor", WorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.ALL)
             .appearanceBlock(LIGHTWEIGHT_DARK_STEEL_CASING)

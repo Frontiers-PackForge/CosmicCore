@@ -13,6 +13,7 @@ import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
 import static com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes.SOUL_FOUNDRY;
@@ -25,7 +26,7 @@ import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createWor
 
 public class SpiritCrucible {
 
-    public final static MultiblockMachineDefinition SPIRIT_CRUCIBLE = REGISTRATE
+    public final static MachineEntry<MultiblockMachineDefinition> SPIRIT_CRUCIBLE = REGISTRATE
             .multiblock("spirit_crucible", WorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeTypes(CosmicRecipeTypes.SPIRIT_CRUCIBLE, SOUL_FOUNDRY)

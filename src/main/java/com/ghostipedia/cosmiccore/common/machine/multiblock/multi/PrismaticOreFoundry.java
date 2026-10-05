@@ -13,6 +13,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMa
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.common.data.GCYMBlocks;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
@@ -27,7 +28,7 @@ import static com.gregtechceu.gtceu.common.data.GTBlocks.*;
 
 public class PrismaticOreFoundry {
 
-    public final static MultiblockMachineDefinition PRISMATIC_ORE_FOUNDRY = REGISTRATE
+    public final static MachineEntry<MultiblockMachineDefinition> PRISMATIC_ORE_FOUNDRY = REGISTRATE
             .multiblock("prismatic_ore_foundry",
                     WorkableElectricMultiblockMachine::new)
             .langValue("Prismatic Ore Foundry")

@@ -55,7 +55,7 @@ public abstract class GTPetrochemicalRecipeRetirementMixin {
         GTRecipeBuilder builder = (GTRecipeBuilder) (Object) this;
         if (!GTCEu.MOD_ID.equals(builder.id.getNamespace())) return;
         ResourceLocation savedId = builder.recipeType == null ? builder.id :
-                builder.id.withPrefix(builder.recipeType.registryName.getPath() + "/");
+                builder.id.withPrefix(builder.recipeType.id.getPath() + "/");
         if (SOURCE_AUTHORITY_RETIRED_RECIPE_IDS.contains(savedId) ||
                 RETIRED_RECIPE_IDS.contains(builder.id) ||
                 cosmiccore$containsFluid(builder.input, RETIRED_FLUIDS) ||

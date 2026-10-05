@@ -39,7 +39,7 @@ public final class KubeJsRecipeId {
     private KubeJsRecipeId() {}
 
     public static Resolution resolveDraft(Player player, RecipeDraft draft, String entered) {
-        String map = draft.recipeType.registryName.getPath();
+        String map = draft.recipeType.id.getPath();
         List<ResourceLocation> outputs = resources(draft.itemOutputs, draft.fluidOutputs);
         List<ResourceLocation> inputs = resources(draft.itemInputs, draft.fluidInputs);
         List<Integer> circuits = circuits(draft.itemInputs);

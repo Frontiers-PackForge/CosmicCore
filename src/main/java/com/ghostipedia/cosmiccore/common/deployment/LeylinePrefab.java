@@ -227,9 +227,9 @@ public final class LeylinePrefab {
         var machine = ResourceLocation.tryParse(descriptor(stack).getString("machine"));
         var definition = machine == null ? null : GTRegistries.MACHINES.get(machine);
         if (stack.is(CosmicItems.POWER_TOWER_DEPLOYMENT_PACKAGE.get()))
-            definition = com.ghostipedia.cosmiccore.common.data.CosmicMachines.POWER_TOWER;
+            definition = com.ghostipedia.cosmiccore.common.data.CosmicMachines.POWER_TOWER.get();
         return definition == null ? Component.translatable("cosmiccore.leyline.unknown_machine") :
-                new ItemStack(definition.getItem()).getHoverName();
+                new ItemStack(definition.asItem()).getHoverName();
     }
 
     public static LeylinePrefab fromStack(ItemStack stack, Level level) {

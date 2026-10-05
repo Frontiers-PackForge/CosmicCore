@@ -18,7 +18,8 @@ import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.BlockInfo;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
-import com.gregtechceu.gtceu.api.registry.registrate.MachineBuilder;
+import com.gregtechceu.gtceu.api.registry.registrate.builder.MachineBuilder;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.common.data.GTMaterialItems;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
@@ -53,12 +54,12 @@ import static com.gregtechceu.gtceu.utils.FormattingUtil.toEnglishName;
 public class CosmicMachinesUtils {
 
     // Verbaitm the LCE/ECE Code Logic used in GTCEU; Thanks Guys!
-    public static MultiblockMachineDefinition registerCosmicLargeCombustionEngine(String name, int tier,
-                                                                                  Supplier<? extends Block> casing,
-                                                                                  Supplier<? extends Block> gear,
-                                                                                  Supplier<? extends Block> intake,
-                                                                                  ResourceLocation casingTexture,
-                                                                                  ResourceLocation overlayModel) {
+    public static MachineEntry<MultiblockMachineDefinition> registerCosmicLargeCombustionEngine(String name, int tier,
+                                                                                                Supplier<? extends Block> casing,
+                                                                                                Supplier<? extends Block> gear,
+                                                                                                Supplier<? extends Block> intake,
+                                                                                                ResourceLocation casingTexture,
+                                                                                                ResourceLocation overlayModel) {
         return REGISTRATE.multiblock(name, holder -> new ExoticCombustionEngineMachine(holder, tier))
                 .rotationState(RotationState.ALL)
                 .recipeType(GTRecipeTypes.COMBUSTION_GENERATOR_FUELS)
@@ -105,13 +106,14 @@ public class CosmicMachinesUtils {
                 .register();
     }
 
-    public static MultiblockMachineDefinition registerLargeTurbineCosmic(
-                                                                         String name, int tier, GTRecipeType recipeType,
-                                                                         Supplier<? extends Block> casing,
-                                                                         Supplier<? extends Block> gear,
-                                                                         ResourceLocation casingTexture,
-                                                                         ResourceLocation overlayModel,
-                                                                         boolean needsMuffler) {
+    public static MachineEntry<MultiblockMachineDefinition> registerLargeTurbineCosmic(
+                                                                                       String name, int tier,
+                                                                                       Supplier<GTRecipeType> recipeType,
+                                                                                       Supplier<? extends Block> casing,
+                                                                                       Supplier<? extends Block> gear,
+                                                                                       ResourceLocation casingTexture,
+                                                                                       ResourceLocation overlayModel,
+                                                                                       boolean needsMuffler) {
         return REGISTRATE.multiblock(name, holder -> new CosmicLargeTurbineMachine(holder, tier))
                 .rotationState(RotationState.ALL)
                 .recipeType(recipeType)
@@ -156,11 +158,11 @@ public class CosmicMachinesUtils {
                 .register();
     }
 
-    public static MachineDefinition[] registerSimpleGenerator(String name,
-                                                              GTRecipeType recipeType,
-                                                              Int2IntFunction tankScalingFunction,
-                                                              float hazardStrengthPerOperation,
-                                                              int... tiers) {
+    public static MachineEntry<MachineDefinition>[] registerSimpleGenerator(String name,
+                                                                            Supplier<GTRecipeType> recipeType,
+                                                                            Int2IntFunction tankScalingFunction,
+                                                                            float hazardStrengthPerOperation,
+                                                                            int... tiers) {
         return CosmicMachinesUtils.registerTieredMachines(name,
                 (holder, tier) -> new SimpleGeneratorMachine(holder, tier, hazardStrengthPerOperation * tier,
                         tankScalingFunction),
@@ -183,18 +185,18 @@ public class CosmicMachinesUtils {
                 tiers);
     }
 
-    public static MachineDefinition[] registerTieredSingleBlockMachines(String name,
-                                                                        BiFunction<BlockEntityCreationInfo, Integer, MetaMachine> factory,
-                                                                        BiFunction<Integer, MachineBuilder<MachineDefinition, MetaMachine, ?>, MachineDefinition> builder,
-                                                                        int... tiers) {
+    public static MachineEntry<MachineDefinition>[] registerTieredSingleBlockMachines(String name,
+                                                                                      BiFunction<BlockEntityCreationInfo, Integer, MetaMachine> factory,
+                                                                                      BiFunction<Integer, MachineBuilder<MachineDefinition, MetaMachine, ?>, MachineEntry<MachineDefinition>> builder,
+                                                                                      int... tiers) {
         return registerTieredMachines(name, factory, builder, tiers);
     }
 
-    public static MachineDefinition[] registerTieredMachines(String name,
-                                                             BiFunction<BlockEntityCreationInfo, Integer, MetaMachine> factory,
-                                                             BiFunction<Integer, MachineBuilder<MachineDefinition, MetaMachine, ?>, MachineDefinition> builder,
-                                                             int... tiers) {
-        MachineDefinition[] definitions = new MachineDefinition[GTValues.TIER_COUNT];
+    public static MachineEntry<MachineDefinition>[] registerTieredMachines(String name,
+                                                                           BiFunction<BlockEntityCreationInfo, Integer, MetaMachine> factory,
+                                                                           BiFunction<Integer, MachineBuilder<MachineDefinition, MetaMachine, ?>, MachineEntry<MachineDefinition>> builder,
+                                                                           int... tiers) {
+        MachineEntry<MachineDefinition>[] definitions = new MachineEntry[GTValues.TIER_COUNT];
         for (int tier : tiers) {
             var register = REGISTRATE
                     .machine(GTValues.VN[tier].toLowerCase(Locale.ROOT) + "_" + name,
@@ -205,14 +207,14 @@ public class CosmicMachinesUtils {
         return definitions;
     }
 
-    public static Pair<MachineDefinition, MachineDefinition> registerSteamMachines(String name,
-                                                                                   BiFunction<BlockEntityCreationInfo, Boolean, MetaMachine> factory,
-                                                                                   BiFunction<Boolean, MachineBuilder<MachineDefinition, MetaMachine, ?>, MachineDefinition> builder) {
-        MachineDefinition lowTier = builder.apply(false,
+    public static Pair<MachineEntry<MachineDefinition>, MachineEntry<MachineDefinition>> registerSteamMachines(String name,
+                                                                                                               BiFunction<BlockEntityCreationInfo, Boolean, MetaMachine> factory,
+                                                                                                               BiFunction<Boolean, MachineBuilder<MachineDefinition, MetaMachine, ?>, MachineEntry<MachineDefinition>> builder) {
+        MachineEntry<MachineDefinition> lowTier = builder.apply(false,
                 REGISTRATE.machine("lp_%s".formatted(name), info -> factory.apply(info, false))
                         .langValue("I DO NOT EXIST")
                         .tier(0));
-        MachineDefinition highTier = builder.apply(true,
+        MachineEntry<MachineDefinition> highTier = builder.apply(true,
                 REGISTRATE.machine("hp_%s".formatted(name), info -> factory.apply(info, true))
                         .langValue("High Pressure " + FormattingUtil.toEnglishName(name))
                         .tier(1));
@@ -220,9 +222,10 @@ public class CosmicMachinesUtils {
     }
 
     /** Fluid hatch helper that uses our mod's REGISTRATE (keeps datagen happy). */
-    public static MachineDefinition[] registerFluidHatches(String name, String displayName, String tooltip,
-                                                           IO io, int initialCapacity, int slots,
-                                                           int[] tiers, PartAbility... abilities) {
+    public static MachineEntry<MachineDefinition>[] registerFluidHatches(String name, String displayName,
+                                                                         String tooltip,
+                                                                         IO io, int initialCapacity, int slots,
+                                                                         int[] tiers, PartAbility... abilities) {
         final String pipeOverlay;
         if (slots >= 9) {
             pipeOverlay = "overlay_pipe_9x";

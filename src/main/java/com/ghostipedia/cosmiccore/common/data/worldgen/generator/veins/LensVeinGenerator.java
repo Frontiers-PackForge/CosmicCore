@@ -142,8 +142,8 @@ public class LensVeinGenerator extends VeinGenerator {
     }
 
     @Override
-    public MapCodec<? extends VeinGenerator> codec() {
-        return CODEC;
+    public VeinGeneratorType<?> type() {
+        return com.ghostipedia.cosmiccore.common.data.worldgen.generator.CosmicVeinGenerators.LENS.get();
     }
 
     public LensVeinGenerator oreBlock(Material mat, int weight) {

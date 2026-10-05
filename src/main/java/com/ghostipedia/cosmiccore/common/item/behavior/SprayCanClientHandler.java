@@ -181,7 +181,7 @@ public class SprayCanClientHandler {
     @OnlyIn(Dist.CLIENT)
     public static void playShakeSound() {
         Minecraft.getInstance().getSoundManager().play(
-                SimpleSoundInstance.forUI(CosmicSounds.SHAKE_CAN.getMainEvent(), 1.0f, 1.0f));
+                SimpleSoundInstance.forUI(CosmicSounds.SHAKE_CAN.get().getMainEvent(), 1.0f, 1.0f));
     }
 
     private static InteractionHand findSprayCanHand(Player player) {

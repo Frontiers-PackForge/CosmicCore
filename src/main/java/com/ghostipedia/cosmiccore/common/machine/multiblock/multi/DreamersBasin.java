@@ -12,6 +12,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 
 import net.minecraft.network.chat.Component;
 
@@ -34,7 +35,7 @@ import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
  */
 public class DreamersBasin {
 
-    public static final MultiblockMachineDefinition DREAMERS_BASIN = REGISTRATE
+    public static final MachineEntry<MultiblockMachineDefinition> DREAMERS_BASIN = REGISTRATE
             .multiblock("dreamers_basin", DreamersBasinMachine::new)
             .langValue("Dreamer's Basin")
             .rotationState(RotationState.NON_Y_AXIS)

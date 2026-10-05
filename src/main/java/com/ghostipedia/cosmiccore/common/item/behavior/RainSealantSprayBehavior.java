@@ -46,7 +46,7 @@ public final class RainSealantSprayBehavior extends ColorSprayBehaviour {
             if (left == 0) player.setItemInHand(context.getHand(), GTItems.SPRAY_EMPTY.asStack());
             else setUsesLeft(stack, left);
         }
-        GTSoundEntries.SPRAY_CAN_TOOL.play(context.getLevel(), null, player.position(), 1.0f, 1.0f);
+        GTSoundEntries.SPRAY_CAN_TOOL.get().play(context.getLevel(), null, player.position(), 1.0f, 1.0f);
         player.displayClientMessage(Component.translatable("cosmiccore.sealant.applied", changed), true);
         return InteractionResult.CONSUME;
     }

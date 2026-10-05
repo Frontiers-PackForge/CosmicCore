@@ -19,6 +19,7 @@ import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 
@@ -111,7 +112,7 @@ public class StarLadderOld extends WorkableElectricMultiblockMachine implements 
     // .addTooltips(Component.translatable("gtceu.multiblock.pattern.error.coils"));
     // }
 
-    public static final MultiblockMachineDefinition STAR_LADDER = REGISTRATE
+    public static final MachineEntry<MultiblockMachineDefinition> STAR_LADDER = REGISTRATE
             .multiblock("star_ladder", StarLadderOld::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(GTRecipeTypes.DUMMY_RECIPES)
@@ -131,7 +132,7 @@ public class StarLadderOld extends WorkableElectricMultiblockMachine implements 
                             .or(Predicates.abilities(PartAbility.OUTPUT_LASER).setMaxGlobalLimited(1))
                             .or(Predicates.abilities(PartAbility.IMPORT_FLUIDS).setMaxGlobalLimited(16))
                             .or(Predicates.abilities(PartAbility.IMPORT_ITEMS).setMaxGlobalLimited(16)))
-                    .where('Q', blocks(CosmicModularMachines.STAR_LADDER_TEST_MODULE[GTValues.ZPM].get()))
+                    .where('Q', blocks(CosmicModularMachines.STAR_LADDER_TEST_MODULE[GTValues.ZPM].getBlock()))
                     // blocks(Arrays.stream(CosmicModularMachines.STAR_LADDER_TEST_MODULE).filter(Objects::nonNull).map(Supplier::get).toArray(IMachineBlock[]::new))
                     .build())
             .workableCasingModel(CosmicCore.id("block/casings/solid/vomahine_certified_chemically_resistant_casing"),

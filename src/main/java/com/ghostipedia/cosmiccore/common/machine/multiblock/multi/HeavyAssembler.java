@@ -12,6 +12,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMa
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.common.data.GCYMBlocks;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
@@ -25,7 +26,7 @@ import static com.gregtechceu.gtceu.common.data.GTBlocks.*;
 
 public class HeavyAssembler {
 
-    public final static MultiblockMachineDefinition HEAVY_ASSEMBLER = REGISTRATE
+    public final static MachineEntry<MultiblockMachineDefinition> HEAVY_ASSEMBLER = REGISTRATE
             .multiblock("heavy_assembler",
                     WorkableElectricMultiblockMachine::new)
             .langValue("§9Heavy Assembler")

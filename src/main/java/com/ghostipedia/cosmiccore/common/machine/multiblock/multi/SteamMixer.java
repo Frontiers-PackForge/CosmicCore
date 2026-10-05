@@ -12,6 +12,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
@@ -21,7 +22,7 @@ import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createWor
 
 public class SteamMixer {
 
-    public static final MultiblockMachineDefinition STEAM_MIXER = REGISTRATE
+    public static final MachineEntry<MultiblockMachineDefinition> STEAM_MIXER = REGISTRATE
             .multiblock("steam_mixing_vessel", WeakSteamParallelMultiBlockMachine::new)
             .rotationState(RotationState.ALL)
             .appearanceBlock(BRONZE_BRICKS_HULL)

@@ -1,7 +1,11 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.tier;
 
+import com.gregtechceu.gtceu.api.machine.MachineDefinition;
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.multiblock.pattern.IBlockPattern;
+import com.gregtechceu.gtceu.api.registry.GTRegistries;
+import com.gregtechceu.gtceu.api.registry.registrate.GTRegistrate;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 
 import com.google.common.base.Suppliers;
 
@@ -17,6 +21,25 @@ public final class TieredMultiblockPatterns {
     private static final Map<MultiblockMachineDefinition, List<PatternLabel>> LABELS = new IdentityHashMap<>();
 
     private TieredMultiblockPatterns() {}
+
+    @SafeVarargs
+    public static void register(MachineEntry<MultiblockMachineDefinition> entry,
+                                Supplier<IBlockPattern>... extraTiers) {
+        GTRegistrate.create(entry.getId().getNamespace())
+                .<MachineDefinition, MultiblockMachineDefinition>addRegisterCallback(
+                        entry.getId().getPath(), GTRegistries.Keys.MACHINE,
+                        definition -> register(definition, extraTiers));
+    }
+
+    @SafeVarargs
+    public static void registerConfigurations(MachineEntry<MultiblockMachineDefinition> entry,
+                                              List<PatternLabel> labels,
+                                              Supplier<IBlockPattern>... extraConfigurations) {
+        GTRegistrate.create(entry.getId().getNamespace())
+                .<MachineDefinition, MultiblockMachineDefinition>addRegisterCallback(
+                        entry.getId().getPath(), GTRegistries.Keys.MACHINE,
+                        definition -> registerConfigurations(definition, labels, extraConfigurations));
+    }
 
     @SafeVarargs
     public static void register(MultiblockMachineDefinition definition, Supplier<IBlockPattern>... extraTiers) {

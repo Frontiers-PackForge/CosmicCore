@@ -357,7 +357,7 @@ public final class LeylineEncoderUI {
                     validated.equals(cached.id()) &&
                     cached.name().equals(name.getStringValue().strip()) &&
                     cached.icon().equals(
-                            BuiltInRegistries.ITEM.getKey(icon.isEmpty() ? definition.getItem() : icon.getItem()));
+                            BuiltInRegistries.ITEM.getKey(icon.isEmpty() ? definition.asItem() : icon.getItem()));
         }
 
         private void submit(boolean encode) {
@@ -385,7 +385,7 @@ public final class LeylineEncoderUI {
 
         private LeylinePrefab current() {
             if (schema == null) throw new IllegalStateException();
-            var selectedIcon = BuiltInRegistries.ITEM.getKey(icon.isEmpty() ? definition.getItem() : icon.getItem());
+            var selectedIcon = BuiltInRegistries.ITEM.getKey(icon.isEmpty() ? definition.asItem() : icon.getItem());
             if (cached != null && cached.name().equals(name.getStringValue().strip()) &&
                     cached.icon().equals(selectedIcon))
                 return cached;
@@ -453,8 +453,8 @@ public final class LeylineEncoderUI {
                 }
             }
             captureFacingPreferences(schema, definition, facingPreferences);
-            name.setStringValue(saved == null ? definition.getItem().getDescription().getString() : saved.name());
-            icon = saved == null ? new ItemStack(definition.getItem()) :
+            name.setStringValue(saved == null ? definition.asItem().getDescription().getString() : saved.name());
+            icon = saved == null ? new ItemStack(definition.asItem()) :
                     new ItemStack(BuiltInRegistries.ITEM.get(saved.icon()));
             validated = null;
             blockCount = schema.getStructureBlocks().values().stream().filter(BlockInfo::nonAir).count();

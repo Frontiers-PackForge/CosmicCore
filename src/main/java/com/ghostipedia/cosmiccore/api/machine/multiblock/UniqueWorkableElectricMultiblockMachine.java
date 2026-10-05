@@ -1,12 +1,12 @@
 package com.ghostipedia.cosmiccore.api.machine.multiblock;
 
 import com.ghostipedia.cosmiccore.api.data.savedData.UniqueMultiblockSavedData;
+import com.ghostipedia.cosmiccore.utils.OwnershipUtils;
 
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeLogic;
 import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
-import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 
 import net.minecraft.server.level.ServerLevel;
 
@@ -28,6 +28,7 @@ public class UniqueWorkableElectricMultiblockMachine extends WorkableElectricMul
 
         if (getLevel() instanceof ServerLevel serverLevel) {
             var owner = getTeamUUID();
+            if (owner == null) return;
             var multiblockId = getDefinition().getId().toString();
             var uniqueMultiblockMapping = UniqueMultiblockSavedData.getOrCreate(serverLevel);
 
@@ -42,8 +43,7 @@ public class UniqueWorkableElectricMultiblockMachine extends WorkableElectricMul
     }
 
     protected UUID getTeamUUID() {
-        var team = ((FTBOwner) getOwner()).getPlayerTeam(getOwnerUUID());
-        return team != null ? team.getTeamId() : getOwnerUUID();
+        return OwnershipUtils.getTeamUUID(getOwner());
     }
 
     @Override
@@ -51,6 +51,7 @@ public class UniqueWorkableElectricMultiblockMachine extends WorkableElectricMul
         super.invalidateStructure(name);
         if (getLevel() instanceof ServerLevel serverLevel) {
             var owner = getTeamUUID();
+            if (owner == null) return;
             var uniqueMultiblockMapping = UniqueMultiblockSavedData.getOrCreate(serverLevel);
             uniqueMultiblockMapping.removeMultiblock(owner, getDefinition().getId().toString(), getDimension(),
                     getBlockPos());

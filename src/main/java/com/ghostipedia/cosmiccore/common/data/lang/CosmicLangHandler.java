@@ -2488,8 +2488,8 @@ public class CosmicLangHandler extends LangHandler {
                 "The ending houses a large stator to produce power, the dynamo output is limited by stator coil tier.");
         for (var recipeType : BuiltInRegistries.RECIPE_TYPE) {
             if (recipeType instanceof GTRecipeType gtRecipeType &&
-                    gtRecipeType.registryName.getNamespace().equals("gtceu")) {
-                provider.add(gtRecipeType.getTranslationKey(), toTitle(gtRecipeType.registryName.getPath()));
+                    gtRecipeType.id.getNamespace().equals("gtceu")) {
+                provider.add(gtRecipeType.getTranslationKey(), toTitle(gtRecipeType.id.getPath()));
             }
         }
         for (String id : COSMIC_RECIPE_TYPE_IDS) {

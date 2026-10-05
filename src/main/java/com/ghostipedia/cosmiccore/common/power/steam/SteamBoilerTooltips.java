@@ -1,6 +1,9 @@
 package com.ghostipedia.cosmiccore.common.power.steam;
 
+import com.ghostipedia.cosmiccore.common.compat.gtceu.MachineDefinitionOverrides;
+
 import com.gregtechceu.gtceu.api.machine.MachineDefinition;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.common.data.GTMachines;
 import com.gregtechceu.gtceu.common.data.machines.GTMultiMachines;
 import com.gregtechceu.gtceu.config.ConfigHolder;
@@ -31,33 +34,42 @@ public final class SteamBoilerTooltips {
                 config.tungstensteelBoilerMaxTemperature, config.steamPerWater);
     }
 
-    private static void replaceSmallBoilerTooltips(Pair<MachineDefinition, MachineDefinition> definitions,
+    private static void replaceSmallBoilerTooltips(Pair<MachineEntry<MachineDefinition>, MachineEntry<MachineDefinition>> definitions,
                                                    SteamBoilerRates.BoilerType type) {
-        definitions.first().setTooltipBuilder((stack, tooltip) -> {
-            tooltip.add(Component.translatable("cosmiccore.tooltip.steam_boiler.maximum_steam_output",
-                    SteamBoilerRates.maximumOutputPerTick(type, false)));
-            tooltip.add(Component.translatable("cosmiccore.tooltip.steam_boiler.temperature_scaling"));
+        MachineDefinitionOverrides.edit(definitions.first(), properties -> {
+            properties.tooltips().clear();
+            properties.tooltipBuilder((stack, tooltip) -> {
+                tooltip.add(Component.translatable("cosmiccore.tooltip.steam_boiler.maximum_steam_output",
+                        SteamBoilerRates.maximumOutputPerTick(type, false)));
+                tooltip.add(Component.translatable("cosmiccore.tooltip.steam_boiler.temperature_scaling"));
+            });
         });
-        definitions.second().setTooltipBuilder((stack, tooltip) -> {
-            tooltip.add(Component.translatable("cosmiccore.tooltip.steam_boiler.maximum_pressurized_output",
-                    SteamBoilerRates.maximumOutputPerTick(type, true)));
-            tooltip.add(Component.translatable("cosmiccore.tooltip.steam_boiler.steam_equivalent",
-                    SteamBoilerRates.steamEquivalentPerTick(type, true)));
-            tooltip.add(Component.translatable("cosmiccore.tooltip.steam_boiler.temperature_scaling"));
+        MachineDefinitionOverrides.edit(definitions.second(), properties -> {
+            properties.tooltips().clear();
+            properties.tooltipBuilder((stack, tooltip) -> {
+                tooltip.add(Component.translatable("cosmiccore.tooltip.steam_boiler.maximum_pressurized_output",
+                        SteamBoilerRates.maximumOutputPerTick(type, true)));
+                tooltip.add(Component.translatable("cosmiccore.tooltip.steam_boiler.steam_equivalent",
+                        SteamBoilerRates.steamEquivalentPerTick(type, true)));
+                tooltip.add(Component.translatable("cosmiccore.tooltip.steam_boiler.temperature_scaling"));
+            });
         });
     }
 
-    private static void appendLargeBoilerTooltips(MachineDefinition definition, int maximumTemperature,
+    private static void appendLargeBoilerTooltips(MachineEntry<?> definition, int maximumTemperature,
                                                   int steamPerWater) {
-        BiConsumer<net.minecraft.world.item.ItemStack, java.util.List<Component>> existing = definition
-                .getTooltipBuilder();
         int output = SteamBoilerRates.maximumLargeBoilerOutputPerTick(maximumTemperature, steamPerWater);
-        definition.setTooltipBuilder((stack, tooltip) -> {
-            existing.accept(stack, tooltip);
-            tooltip.add(Component.translatable("cosmiccore.tooltip.steam_boiler.maximum_pressurized_output", output));
-            tooltip.add(Component.translatable("cosmiccore.tooltip.steam_boiler.steam_equivalent",
-                    output * HPBoilerRates.COMPACT_RATE));
-            tooltip.add(Component.translatable("cosmiccore.tooltip.large_boiler.output_scaling"));
+        MachineDefinitionOverrides.edit(definition, properties -> {
+            BiConsumer<net.minecraft.world.item.ItemStack, java.util.List<Component>> existing = properties
+                    .tooltipBuilder();
+            properties.tooltipBuilder((stack, tooltip) -> {
+                if (existing != null) existing.accept(stack, tooltip);
+                tooltip.add(
+                        Component.translatable("cosmiccore.tooltip.steam_boiler.maximum_pressurized_output", output));
+                tooltip.add(Component.translatable("cosmiccore.tooltip.steam_boiler.steam_equivalent",
+                        output * HPBoilerRates.COMPACT_RATE));
+                tooltip.add(Component.translatable("cosmiccore.tooltip.large_boiler.output_scaling"));
+            });
         });
     }
 }

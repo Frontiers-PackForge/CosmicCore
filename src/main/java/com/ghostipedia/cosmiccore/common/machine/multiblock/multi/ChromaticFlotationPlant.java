@@ -11,6 +11,7 @@ import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.common.data.GCYMBlocks;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
@@ -26,7 +27,7 @@ import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.ELECTRIC_OVERC
 
 public class ChromaticFlotationPlant {
 
-    public final static MultiblockMachineDefinition CHROMATIC_FLOTATION_PLANT = REGISTRATE
+    public final static MachineEntry<MultiblockMachineDefinition> CHROMATIC_FLOTATION_PLANT = REGISTRATE
             .multiblock("chromatic_flotation_plant", WorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.CHROMATIC_FLOTATION_PLANT)

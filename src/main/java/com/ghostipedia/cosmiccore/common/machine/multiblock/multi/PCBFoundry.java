@@ -14,6 +14,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.common.data.*;
 
 import static com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates.autoAbilitiesNoEnergyIn;
@@ -24,7 +25,7 @@ import static com.gregtechceu.gtceu.api.multiblock.Predicates.blocks;
 
 public class PCBFoundry {
 
-    public final static MultiblockMachineDefinition PCB_FOUNDRY = REGISTRATE
+    public final static MachineEntry<MultiblockMachineDefinition> PCB_FOUNDRY = REGISTRATE
             .multiblock("pcb_foundry",
                     PCBFoundryMachine::new)
             .langValue("§ePCB Foundry")

@@ -15,6 +15,7 @@ import com.gregtechceu.gtceu.api.machine.property.GTMachineModelProperties;
 import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeLogic;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.common.data.GTMachines;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
@@ -37,7 +38,7 @@ import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createWor
 
 public final class MEComputationArray {
 
-    public static final MultiblockMachineDefinition MACHINE = REGISTRATE
+    public static final MachineEntry<MultiblockMachineDefinition> MACHINE = REGISTRATE
             .multiblock("me_computation_array", MEComputationArrayMachine::new)
             .langValue("Low-Power Computation Array")
             .rotationState(RotationState.NON_Y_AXIS)
@@ -92,7 +93,7 @@ public final class MEComputationArray {
 
     private static MachineDefinition[] standardEnergyInputHatches() {
         return Arrays.stream(GTValues.tiersBetween(MEComputationArrayTuning.MINIMUM_ENERGY_HATCH_TIER, GTValues.MAX))
-                .mapToObj(tier -> GTMachines.ENERGY_INPUT_HATCH[tier])
+                .mapToObj(tier -> GTMachines.ENERGY_INPUT_HATCH[tier].get())
                 .toArray(MachineDefinition[]::new);
     }
 

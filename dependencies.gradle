@@ -1,6 +1,7 @@
 dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.10.2")
+    testRuntimeOnly("io.github.llamalad7:mixinextras-common:0.5.3")
 
     compileOnly(libs.jetbrains.annotations)
     compileOnly annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-common:0.3.7-beta.1")

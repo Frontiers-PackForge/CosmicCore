@@ -340,7 +340,7 @@ public class LarvaMachine extends WorkableElectricMultiblockMachine {
             }
 
             var builder = GTRecipeBuilder
-                    .of(CosmicCore.id("larva_recipe"), CosmicRecipeTypes.BEES)
+                    .of(CosmicCore.id("larva_recipe"), CosmicRecipeTypes.BEES.get())
                     .EUt(GTValues.VA[GTValues.ZPM])
                     .duration(20 * 60);
 

@@ -14,6 +14,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMa
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
 import static com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates.autoAbilitiesNoEnergyIn;
@@ -24,7 +25,7 @@ import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createWor
 
 public class EssenceReactor {
 
-    public static final MultiblockMachineDefinition ESSENCE_REACTOR = REGISTRATE
+    public static final MachineEntry<MultiblockMachineDefinition> ESSENCE_REACTOR = REGISTRATE
             .multiblock("essence_reactor", WorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .appearanceBlock(SOUL_STAINED_STEEL_ALU_CASING)

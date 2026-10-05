@@ -10,9 +10,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Arrays;
@@ -33,11 +31,6 @@ public abstract class SimpleFluidFilterStateFixMixin {
     @Shadow
     @Final
     private CustomFluidTank[] fluidStorageSlots;
-
-    @ModifyConstant(method = "<init>()V", constant = @Constant(intValue = 64000))
-    private int cosmiccore$allowConfiguredAmounts(int original) {
-        return cosmiccore$MAX_FLUID_AMOUNT;
-    }
 
     @Inject(method = { "<init>()V", "<init>(ZZLjava/util/List;)V" }, at = @At("RETURN"), require = 2)
     private void cosmiccore$initializeAmountLimit(CallbackInfo ci) {

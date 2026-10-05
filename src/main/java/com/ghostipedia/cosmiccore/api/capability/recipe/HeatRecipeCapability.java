@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.api.capability.recipe;
 
 import com.ghostipedia.cosmiccore.api.recipe.lookup.MapHeatIngredient;
 
+import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.capability.recipe.RecipeCapability;
 import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
 import com.gregtechceu.gtceu.api.recipe.content.SerializerLong;
@@ -16,7 +17,7 @@ public class HeatRecipeCapability extends RecipeCapability<Long> {
     public final static HeatRecipeCapability CAP = new HeatRecipeCapability();
 
     protected HeatRecipeCapability() {
-        super("thermia", 0x5E2129FF, true, 11, SerializerLong.INSTANCE);
+        super(GTCEu.id("thermia"), 0x5E2129FF, true, 11, SerializerLong.INSTANCE);
     }
 
     @Override

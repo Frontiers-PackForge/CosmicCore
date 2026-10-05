@@ -12,6 +12,7 @@ import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
@@ -24,7 +25,7 @@ import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.ELECTRIC_OVERC
 
 public class ManaEtchingFactory {
 
-    public final static MultiblockMachineDefinition MANA_ETCHING_FACTORY = REGISTRATE
+    public final static MachineEntry<MultiblockMachineDefinition> MANA_ETCHING_FACTORY = REGISTRATE
             .multiblock("mana_etching_factory", WorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.MANA_ETCHING_FACTORY)

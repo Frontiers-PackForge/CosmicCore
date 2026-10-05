@@ -12,6 +12,7 @@ import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
 import static com.ghostipedia.cosmiccore.api.registries.CosmicRegistration.REGISTRATE;
@@ -22,7 +23,7 @@ import static com.gregtechceu.gtceu.api.multiblock.Predicates.blocks;
 
 public class CryogenicsChamber {
 
-    public final static MultiblockMachineDefinition CRYOGENICS_CHAMBER = REGISTRATE
+    public final static MachineEntry<MultiblockMachineDefinition> CRYOGENICS_CHAMBER = REGISTRATE
             .multiblock("cryogenics_chamber",
                     WorkableElectricMultiblockMachine::new)
             .langValue("§bCryogenics Chamber")

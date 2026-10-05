@@ -12,6 +12,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMa
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
@@ -24,7 +25,7 @@ import static com.gregtechceu.gtceu.api.multiblock.Predicates.*;
 
 public class VileFissionReactor {
 
-    public final static MultiblockMachineDefinition VILE_FISSION_REACTOR = REGISTRATE
+    public final static MachineEntry<MultiblockMachineDefinition> VILE_FISSION_REACTOR = REGISTRATE
             .multiblock("vile_fission",
                     WorkableElectricMultiblockMachine::new)
             .langValue("§cFestering Fission Reactor")

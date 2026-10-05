@@ -14,6 +14,7 @@ import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
@@ -27,7 +28,7 @@ import static com.gregtechceu.gtceu.common.data.GTRecipeModifiers.ELECTRIC_OVERC
 
 public class LargeSpoolingMachine {
 
-    public final static MultiblockMachineDefinition LARGE_SPOOLING_MACHINE = REGISTRATE
+    public final static MachineEntry<MultiblockMachineDefinition> LARGE_SPOOLING_MACHINE = REGISTRATE
             .multiblock("large_spooling_machine", WorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.SPOOLING_MACHINE)

@@ -16,6 +16,7 @@ import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 
 import net.minecraft.world.level.block.Blocks;
 
@@ -30,7 +31,7 @@ import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createWor
 
 public class VoraxReactor {
 
-    public final static MultiblockMachineDefinition VORAX_REACTOR = REGISTRATE
+    public final static MachineEntry<MultiblockMachineDefinition> VORAX_REACTOR = REGISTRATE
             .multiblock("vorax_reactor", VoraxReactorMachine::new)
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.VORAX)

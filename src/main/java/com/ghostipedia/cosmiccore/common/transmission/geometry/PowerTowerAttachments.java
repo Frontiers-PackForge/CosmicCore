@@ -42,7 +42,7 @@ public final class PowerTowerAttachments {
     }
 
     public static PowerTowerNode preview(BlockPos controller, Direction front, UUID owner) {
-        var pattern = (BlockPattern) CosmicMachines.POWER_TOWER.getStructurePatterns()
+        var pattern = (BlockPattern) CosmicMachines.POWER_TOWER.get().getStructurePatterns()
                 .get(MultiblockControllerMachine.DEFAULT_STRUCTURE).get();
         var points = resolve(pattern, controller, front, Direction.UP, false);
         var center = points.stream().reduce(Vec3.ZERO, Vec3::add).scale(1.0 / points.size());

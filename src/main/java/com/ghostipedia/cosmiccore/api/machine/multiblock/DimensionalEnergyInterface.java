@@ -35,7 +35,7 @@ public class DimensionalEnergyInterface extends MuiWorkableMultiblockMachine {
     protected long passiveDrain;
 
     @SaveField
-    protected IEnergyContainer energyBuffer;
+    protected final NotifiableEnergyContainer energyBuffer;
 
     // Stats tracked for UI display
     private long netInLastSec;
@@ -48,6 +48,8 @@ public class DimensionalEnergyInterface extends MuiWorkableMultiblockMachine {
 
     public DimensionalEnergyInterface(BlockEntityCreationInfo info) {
         super(info);
+        this.energyBuffer = attachTrait(new NotifiableEnergyContainer(0, Long.MAX_VALUE, Long.MAX_VALUE,
+                Long.MAX_VALUE, Long.MAX_VALUE));
         this.tickSubscription = new ConditionalSubscriptionHandler(this, this::transferEnergyTick, this::isActive);
         this.localDisplay = true;
     }
@@ -118,7 +120,8 @@ public class DimensionalEnergyInterface extends MuiWorkableMultiblockMachine {
             }
             this.inputHatches = null;
             this.outputHatches = null;
-            this.energyBuffer = null;
+            this.energyBuffer.setEnergyStored(0);
+            this.energyBuffer.resetBasicInfo(0, Long.MAX_VALUE, Long.MAX_VALUE, Long.MAX_VALUE, Long.MAX_VALUE);
             this.passiveDrain = 0;
             this.netInLastSec = 0;
             this.averageInLastSec = 0;
@@ -142,10 +145,8 @@ public class DimensionalEnergyInterface extends MuiWorkableMultiblockMachine {
         bufferSize += (getPassiveDrainPerTick() * 8 * 2) * ticks_between_save_data_operations;
         if (bufferSize < 0L)
             throw new RuntimeException("DimensionalEnergyCapacitor: Calculated buffer size is too big.");
-        // 8.0.0: NotifiableEnergyContainer ctor no longer takes the machine; attach as a trait
-        // (mirrors the old `new NotifiableEnergyContainer(this, ...)` which registered it on construction).
-        this.energyBuffer = attachTrait(new NotifiableEnergyContainer(bufferSize, Long.MAX_VALUE, Long.MAX_VALUE,
-                Long.MAX_VALUE, Long.MAX_VALUE));
+        this.energyBuffer.resetBasicInfo(bufferSize, Long.MAX_VALUE, Long.MAX_VALUE,
+                Long.MAX_VALUE, Long.MAX_VALUE);
     }
 
     public long getPassiveDrainPerTick() {

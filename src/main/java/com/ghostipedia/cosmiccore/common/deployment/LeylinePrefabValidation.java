@@ -92,8 +92,12 @@ public final class LeylinePrefabValidation {
             } else {
                 errors.add(Component.translatable("cosmiccore.leyline.invalid_at",
                         error.getPos() == null ? "?" : error.getPos().toShortString()));
-                error.getCandidates().stream().flatMap(Collection::stream).limit(4)
-                        .forEach(candidate -> errors.add(candidate.getItemStackForm().getHoverName()));
+                if (error instanceof com.gregtechceu.gtceu.api.multiblock.error.SimplePatternError simple) {
+                    simple.getCandidates().stream().flatMap(Collection::stream).limit(4)
+                            .forEach(candidate -> errors.add(candidate.getItemStackForm().getHoverName()));
+                } else if (error instanceof com.gregtechceu.gtceu.api.multiblock.error.BlockMatchingError blocks) {
+                    blocks.getBlocks().stream().limit(4).forEach(block -> errors.add(block.getName()));
+                }
             }
         }
         return new Result(valid, List.copyOf(errors));

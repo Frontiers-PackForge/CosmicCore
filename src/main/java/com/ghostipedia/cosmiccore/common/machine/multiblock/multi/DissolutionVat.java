@@ -11,6 +11,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMa
 import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.recipe.OverclockingLogic;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
 import com.gregtechceu.gtceu.common.data.GTRecipeModifiers;
 
 import net.minecraft.world.level.block.Blocks;
@@ -26,7 +27,7 @@ import static com.gregtechceu.gtceu.common.data.models.GTMachineModels.createWor
 
 public class DissolutionVat {
 
-    public static final MultiblockMachineDefinition DISSOLUTION_VAT = REGISTRATE
+    public static final MachineEntry<MultiblockMachineDefinition> DISSOLUTION_VAT = REGISTRATE
             .multiblock("dissolution_vat", WorkableElectricMultiblockMachine::new)
             .rotationState(RotationState.ALL)
             .appearanceBlock(LIGHTWEIGHT_DARK_STEEL_CASING)
