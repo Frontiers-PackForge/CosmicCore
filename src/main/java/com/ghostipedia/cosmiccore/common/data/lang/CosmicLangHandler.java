@@ -49,6 +49,14 @@ public class CosmicLangHandler extends LangHandler {
     }
 
     public static void init(RegistrateLangProvider provider) {
+        provider.add("gamerule.cosmiccoreStartingOreSurveyRadius", "Starting ore survey");
+        provider.add("gamerule.cosmiccoreStartingOreSurveyRadius.description",
+                "Reveal ore fields around each player's first spawn in a large radius. Defaults to 1000, with a min of 0 and a max of 5000.");
+        provider.add("cosmiccore.survey.initial.radius", "%s blocks");
+        provider.add("cosmiccore.survey.initial.tooltip",
+                "Reveal nearby ore fields on your map when you first join this world, will not repeat scan on deaht or relog.");
+        provider.add("cosmiccore.survey.initial.complete",
+                "Starting survey discovered %s ore fields within %s blocks of your spawn.");
         provider.add("key.cosmiccore.production_statistics", "Open Production Statistics");
         provider.add("key.categories.cosmiccore.production_statistics", "CosmicCore: Production Statistics");
         provider.add("gui.cosmiccore.production_statistics.title", "Production Statistics");

@@ -363,7 +363,7 @@ public class CosmicRecipeTypes {
 
     public static final GTRecipeType SPOOLING_MACHINE = GTRecipeTypes
             .register(CosmicCore.id("spooling_machine"), ELECTRIC)
-            .setMaxIOSize(2, 2, 1, 0)
+            .setMaxIOSize(3, 2, 1, 0)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW));
     public static final GTRecipeType ORBITAL_FORGE_EBF = GTRecipeTypes
             .register(CosmicCore.id("orbital_forge"), GTRecipeTypes.MULTIBLOCK)
