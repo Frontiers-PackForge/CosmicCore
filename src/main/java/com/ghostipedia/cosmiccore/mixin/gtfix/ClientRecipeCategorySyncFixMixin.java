@@ -1,4 +1,4 @@
-package com.ghostipedia.cosmiccore.mixin.gttweak.lifecycle;
+package com.ghostipedia.cosmiccore.mixin.gtfix;
 
 import com.ghostipedia.cosmiccore.common.recipe.GTRecipeReloadLifecycle;
 
@@ -21,7 +21,8 @@ public abstract class ClientRecipeCategorySyncFixMixin {
     @Inject(method = "handleUpdateRecipes",
             at = @At(value = "INVOKE",
                      target = "Lnet/neoforged/neoforge/client/ClientHooks;onRecipesUpdated(Lnet/minecraft/world/item/crafting/RecipeManager;)V",
-                     shift = At.Shift.BEFORE))
+                     shift = At.Shift.BEFORE),
+            order = 1000)
     private void cosmiccore$rebuildGtRecipeCategories(ClientboundUpdateRecipesPacket packet, CallbackInfo ci) {
         GTRecipeReloadLifecycle.rebuildCategories(getRecipeManager().getRecipes());
     }
