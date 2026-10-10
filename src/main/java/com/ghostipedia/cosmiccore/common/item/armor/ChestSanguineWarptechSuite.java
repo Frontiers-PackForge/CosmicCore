@@ -11,7 +11,6 @@ import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
 import com.gregtechceu.gtceu.api.capability.IElectricItem;
 import com.gregtechceu.gtceu.api.item.armor.ArmorUtils;
 import com.gregtechceu.gtceu.common.item.armor.IJetpack;
-import com.gregtechceu.gtceu.common.item.armor.QuarkTechSuite;
 import com.gregtechceu.gtceu.core.IFireImmuneEntity;
 import com.gregtechceu.gtceu.utils.GTUtil;
 import com.gregtechceu.gtceu.utils.input.SyncedKeyMappings;
@@ -45,7 +44,7 @@ import it.unimi.dsi.fastutil.ints.IntList;
 
 import java.util.List;
 
-public class ChestSanguineWarptechSuite extends QuarkTechSuite implements IJetpack {
+public class ChestSanguineWarptechSuite extends SanguineArmorLogic implements IJetpack {
 
     public static final String SANGUINE_SHIELD_NBT_KEY = CosmicCore.MOD_ID + ":sanguine_shield";
     public static final int SANGUINE_SHIELD_DRAIN_PER_SECOND = 10;
@@ -89,9 +88,9 @@ public class ChestSanguineWarptechSuite extends QuarkTechSuite implements IJetpa
         }
         if (tag.contains("enabled")) {
             Component status = (tag.getBoolean("enabled") ?
-                    Component.translatable("metaarmor.hud.status.enabled") :
-                    Component.translatable("metaarmor.hud.status.disabled"));
-            Component result = Component.translatable("metaarmor.hud.engine_enabled", status);
+                    Component.translatable("cosmiccore.armor.legacy.hud.status.enabled") :
+                    Component.translatable("cosmiccore.armor.legacy.hud.status.disabled"));
+            Component result = Component.translatable("cosmiccore.armor.legacy.hud.engine_enabled", status);
             this.HUD.newString(result);
         }
     }
@@ -126,15 +125,15 @@ public class ChestSanguineWarptechSuite extends QuarkTechSuite implements IJetpa
             if (SyncedKeyMappings.ARMOR_CHARGING.isKeyDown(player)) {
                 canShare = !canShare;
                 if (canShare && cont.getCharge() == 0) { // Only allow for charging to be enabled if charge is nonzero
-                    messageKey = "metaarmor.qts.share.error";
+                    messageKey = "cosmiccore.armor.legacy.qts.share.error";
                     canShare = false;
                 } else {
-                    messageKey = "metaarmor.qts.share." + (canShare ? "enable" : "disable");
+                    messageKey = "cosmiccore.armor.legacy.qts.share." + (canShare ? "enable" : "disable");
                 }
                 data.putBoolean("canShare", canShare);
             } else if (SyncedKeyMappings.JETPACK_ENABLE.isKeyDown(player)) {
                 jetpackEnabled = !jetpackEnabled;
-                messageKey = "metaarmor.jetpack.flight." + (jetpackEnabled ? "enable" : "disable");
+                messageKey = "cosmiccore.armor.legacy.jetpack.flight." + (jetpackEnabled ? "enable" : "disable");
                 data.putBoolean("enabled", jetpackEnabled);
             }
 

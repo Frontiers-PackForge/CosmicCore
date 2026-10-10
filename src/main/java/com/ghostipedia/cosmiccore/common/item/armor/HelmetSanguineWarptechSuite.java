@@ -2,8 +2,6 @@ package com.ghostipedia.cosmiccore.common.item.armor;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 
-import com.gregtechceu.gtceu.common.item.armor.QuarkTechSuite;
-
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -15,7 +13,7 @@ import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-public class HelmetSanguineWarptechSuite extends QuarkTechSuite {
+public class HelmetSanguineWarptechSuite extends SanguineArmorLogic {
 
     public HelmetSanguineWarptechSuite(ArmorItem.Type slot, int energyPerUse, long capacity, int tier) {
         super(slot, energyPerUse, capacity, tier);

@@ -17,7 +17,7 @@ public abstract class ChemicalHelperMaterialLookupLockMixin {
 
     @WrapMethod(method = "getMaterialEntry(Lnet/minecraft/world/level/ItemLike;)Lcom/gregtechceu/gtceu/api/data/chemical/material/stack/MaterialEntry;",
                 remap = false)
-    static MaterialEntry cosmiccore$lockItemLookup(ItemLike item, Operation<MaterialEntry> original) {
+    private static MaterialEntry cosmiccore$lockItemLookup(ItemLike item, Operation<MaterialEntry> original) {
         synchronized (ItemMaterialData.class) {
             return original.call(item);
         }
@@ -25,7 +25,7 @@ public abstract class ChemicalHelperMaterialLookupLockMixin {
 
     @WrapMethod(method = "getMaterialEntry(Lnet/minecraft/tags/TagKey;)Lcom/gregtechceu/gtceu/api/data/chemical/material/stack/MaterialEntry;",
                 remap = false)
-    static MaterialEntry cosmiccore$lockTagLookup(TagKey<Item> tag, Operation<MaterialEntry> original) {
+    private static MaterialEntry cosmiccore$lockTagLookup(TagKey<Item> tag, Operation<MaterialEntry> original) {
         synchronized (ItemMaterialData.class) {
             return original.call(tag);
         }

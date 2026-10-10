@@ -49,6 +49,33 @@ public class CosmicLangHandler extends LangHandler {
     }
 
     public static void init(RegistrateLangProvider provider) {
+        provider.add("cosmiccore.armor.legacy.hud.engine_enabled", "Engine Enabled: %s");
+        provider.add("cosmiccore.armor.legacy.hud.status.disabled", "§cOFF");
+        provider.add("cosmiccore.armor.legacy.hud.status.enabled", "§aON");
+        provider.add("cosmiccore.armor.legacy.jetpack.flight.disable", "Jetpack: Flight Disabled");
+        provider.add("cosmiccore.armor.legacy.jetpack.flight.enable", "Jetpack: Flight Enabled");
+        provider.add("cosmiccore.armor.legacy.message.nightvision.disabled", "§bNightVision: §cOff");
+        provider.add("cosmiccore.armor.legacy.message.nightvision.enabled", "§bNightVision: §aOn");
+        provider.add("cosmiccore.armor.legacy.message.step_assist.disabled", "§bStep-Assist: §cOff");
+        provider.add("cosmiccore.armor.legacy.message.step_assist.enabled", "§bStep-Assist: §aOn");
+        provider.add("cosmiccore.armor.legacy.qts.boosted_jump.disabled", "QuarkTech™ Suite: Jump Boost Disabled");
+        provider.add("cosmiccore.armor.legacy.qts.boosted_jump.enabled", "QuarkTech™ Suite: Jump Boost Enabled");
+        provider.add("cosmiccore.armor.legacy.qts.nightvision.disabled", "QuarkTech™ Suite: NightVision Disabled");
+        provider.add("cosmiccore.armor.legacy.qts.nightvision.enabled", "QuarkTech™ Suite: NightVision Enabled");
+        provider.add("cosmiccore.armor.legacy.qts.nightvision.error", "QuarkTech™ Suite: §cNot enough power!");
+        provider.add("cosmiccore.armor.legacy.qts.share.disable", "QuarkTech™ Suite: Charging Disabled");
+        provider.add("cosmiccore.armor.legacy.qts.share.enable", "QuarkTech™ Suite: Charging Enabled");
+        provider.add("cosmiccore.armor.legacy.qts.share.error", "QuarkTech™ Suite: §cNot enough power for charging!");
+        provider.add("cosmiccore.armor.legacy.qts.step_assist.disabled", "QuarkTech™ Suite: StepAssist Disabled");
+        provider.add("cosmiccore.armor.legacy.qts.step_assist.enabled", "QuarkTech™ Suite: StepAssist Enabled");
+        provider.add("cosmiccore.armor.legacy.tooltip.autoeat", "Replenishes Food Bar by Using Food from Inventory");
+        provider.add("cosmiccore.armor.legacy.tooltip.breath", "Replenishes Underwater Breath Bar");
+        provider.add("cosmiccore.armor.legacy.tooltip.burning", "Nullifies Burning");
+        provider.add("cosmiccore.armor.legacy.tooltip.falldamage", "Nullifies Fall Damage");
+        provider.add("cosmiccore.armor.legacy.tooltip.freezing", "Prevents Freezing");
+        provider.add("cosmiccore.armor.legacy.tooltip.jump", "Increases Jump Height and Distance");
+        provider.add("cosmiccore.armor.legacy.tooltip.potions", "Nullifies Harmful Effects");
+        provider.add("cosmiccore.armor.legacy.tooltip.speed", "Increases Running Speed");
         provider.add("gamerule.cosmiccoreStartingOreSurveyRadius", "Starting ore survey");
         provider.add("gamerule.cosmiccoreStartingOreSurveyRadius.description",
                 "Reveal ore fields around each player's first spawn in a large radius. Defaults to 1000, with a min of 0 and a max of 5000.");

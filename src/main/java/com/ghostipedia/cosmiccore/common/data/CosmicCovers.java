@@ -23,22 +23,22 @@ public final class CosmicCovers {
     public static final Holder<CoverDefinition> STEAM_CONVEYOR = register("conveyor.steam",
             (definition, coverable, side) -> new ConveyorCover(definition, coverable, side, GTValues.ULV,
                     STEAM_ITEM_TRANSFER_RATE),
-            stockRenderer(GTCovers.CONVEYORS[0]));
+            stockRenderer(GTCovers.CONVEYORS[GTValues.LV]));
 
     public static final Holder<CoverDefinition> STEAM_PUMP = register("pump.steam",
             (definition, coverable, side) -> new PumpCover(definition, coverable, side, GTValues.ULV,
                     STEAM_FLUID_TRANSFER_RATE),
-            stockRenderer(GTCovers.PUMPS[0]));
+            stockRenderer(GTCovers.PUMPS[GTValues.LV]));
 
     public static final Holder<CoverDefinition> STEAM_ROBOT_ARM = register("robot_arm.steam",
             (definition, coverable, side) -> new RobotArmCover(definition, coverable, side, GTValues.ULV,
                     STEAM_ITEM_TRANSFER_RATE),
-            stockRenderer(GTCovers.ROBOT_ARMS[0]));
+            stockRenderer(GTCovers.ROBOT_ARMS[GTValues.LV]));
 
     public static final Holder<CoverDefinition> STEAM_FLUID_REGULATOR = register("fluid_regulator.steam",
             (definition, coverable, side) -> new FluidRegulatorCover(definition, coverable, side, GTValues.ULV,
                     STEAM_FLUID_TRANSFER_RATE),
-            stockRenderer(GTCovers.FLUID_REGULATORS[0]));
+            stockRenderer(GTCovers.FLUID_REGULATORS[GTValues.LV]));
 
     private CosmicCovers() {}
 

@@ -1,6 +1,6 @@
 package com.ghostipedia.cosmiccore.client.compat.modularui;
 
-import com.ghostipedia.cosmiccore.mixin.gtfix.accessor.RenderSystemAccessor;
+import com.ghostipedia.cosmiccore.mixin.modularui.RenderSystemAccessor;
 
 import net.minecraft.client.renderer.ShaderInstance;
 import net.neoforged.neoforge.client.GlStateBackup;
