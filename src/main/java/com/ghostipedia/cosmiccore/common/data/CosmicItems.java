@@ -42,7 +42,6 @@ import com.gregtechceu.gtceu.api.item.component.ICustomDescriptionId;
 import com.gregtechceu.gtceu.api.item.component.IItemComponent;
 import com.gregtechceu.gtceu.api.item.component.ThermalFluidStats;
 import com.gregtechceu.gtceu.common.data.GTItems;
-import com.gregtechceu.gtceu.common.item.armor.GTArmorMaterials;
 import com.gregtechceu.gtceu.common.item.behavior.ItemFluidContainer;
 import com.gregtechceu.gtceu.common.item.behavior.TooltipBehavior;
 import com.gregtechceu.gtceu.common.registry.GTRegistration;
@@ -1968,7 +1967,7 @@ public class CosmicItems {
     // pineapple up the ass of whatever mojang employee thought these were **OKAY TO CODE**
 
     public static ItemEntry<ArmorComponentItem> SANGUINE_WARPTECH_HELMET = REGISTRATE.item("sanguine_warptech_helmet",
-            (p) -> new ArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.HELMET, p)
+            (p) -> new ArmorComponentItem(CosmicArmorMaterials.SANGUINE, ArmorItem.Type.HELMET, p)
                     .setArmorLogic(new HelmetSanguineWarptechSuite(ArmorItem.Type.HELMET,
                             8192,
                             100_000_000L * (long) Math.max(1,
@@ -1981,7 +1980,7 @@ public class CosmicItems {
 
     public static ItemEntry<ArmorComponentItem> SANGUINE_WARPTECH_CHESTPLATE = REGISTRATE
             .item("sanguine_warptech_chestplate",
-                    (p) -> new ArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.CHESTPLATE, p)
+                    (p) -> new ArmorComponentItem(CosmicArmorMaterials.SANGUINE, ArmorItem.Type.CHESTPLATE, p)
                             .setArmorLogic(new ChestSanguineWarptechSuite(8192,
                                     10_000_000_000L * (long) Math.max(1,
                                             Math.pow(4, ConfigHolder.INSTANCE.tools.voltageTierAdvQuarkTech - 6)),
@@ -1994,7 +1993,7 @@ public class CosmicItems {
             .register();
     public static ItemEntry<ArmorComponentItem> SANGUINE_WARPTECH_LEGGINGS = REGISTRATE
             .item("sanguine_warptech_leggings",
-                    (p) -> new ArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.LEGGINGS, p)
+                    (p) -> new ArmorComponentItem(CosmicArmorMaterials.SANGUINE, ArmorItem.Type.LEGGINGS, p)
                             .setArmorLogic(new SanguineWarptechSuite(ArmorItem.Type.LEGGINGS,
                                     8192,
                                     100_000_000L * (long) Math.max(1,
@@ -2006,7 +2005,7 @@ public class CosmicItems {
             .register();
 
     public static ItemEntry<ArmorComponentItem> SANGUINE_WARPTECH_BOOTS = REGISTRATE.item("sanguine_warptech_boots",
-            (p) -> new ArmorComponentItem(GTArmorMaterials.ARMOR, ArmorItem.Type.BOOTS, p)
+            (p) -> new ArmorComponentItem(CosmicArmorMaterials.SANGUINE, ArmorItem.Type.BOOTS, p)
                     .setArmorLogic(new SanguineWarptechSuite(ArmorItem.Type.BOOTS,
                             8192,
                             100_000_000L * (long) Math.max(1,

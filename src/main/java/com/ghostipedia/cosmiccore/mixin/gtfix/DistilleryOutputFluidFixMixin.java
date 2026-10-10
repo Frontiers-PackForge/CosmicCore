@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 public abstract class DistilleryOutputFluidFixMixin {
 
     @ModifyArg(
-               method = "lambda$static$80(Lcom/gregtechceu/gtceu/data/recipe/builder/GTRecipeBuilder;Lnet/minecraft/data/recipes/RecipeOutput;)V",
+               method = "lambda$static$84(Lcom/gregtechceu/gtceu/data/recipe/builder/GTRecipeBuilder;Lnet/minecraft/data/recipes/RecipeOutput;)V",
                at = @At(
                         value = "INVOKE",
                         target = "Lnet/neoforged/neoforge/fluids/crafting/SizedFluidIngredient;<init>(Lnet/neoforged/neoforge/fluids/crafting/FluidIngredient;I)V",

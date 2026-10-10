@@ -3,7 +3,7 @@ package com.ghostipedia.cosmiccore.integration.emi;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.ITieredMultiblockPreview;
 import com.ghostipedia.cosmiccore.client.renderer.deployment.LeylineEncoderCache;
 import com.ghostipedia.cosmiccore.mixin.CosmicCoreMixinPlugin;
-import com.ghostipedia.cosmiccore.mixin.gtfix.emi.accessor.MultiblockSchemaInfoAccessor;
+import com.ghostipedia.cosmiccore.mixin.gttweak.emi.MultiblockSchemaInfoAccessor;
 
 import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition;
 import com.gregtechceu.gtceu.api.mui.MultiblockSchemaInfo;

@@ -22,6 +22,15 @@ public final class CosmicArmorMaterials {
 
     private CosmicArmorMaterials() {}
 
+    public static final Holder<ArmorMaterial> SANGUINE = Holder.direct(new ArmorMaterial(
+            Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
+                map.put(ArmorItem.Type.BOOTS, 0);
+                map.put(ArmorItem.Type.LEGGINGS, 0);
+                map.put(ArmorItem.Type.CHESTPLATE, 0);
+                map.put(ArmorItem.Type.HELMET, 0);
+            }), 0, SoundEvents.ARMOR_EQUIP_GENERIC, () -> Ingredient.EMPTY,
+            List.of(new ArmorMaterial.Layer(CosmicCore.id("sanguine"))), 5.0F, 0.0F));
+
     private static final TagKey<Item> STEEL_INGOTS = TagKey.create(
             Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "ingots/steel"));
 

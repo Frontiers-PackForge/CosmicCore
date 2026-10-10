@@ -16,15 +16,15 @@ public abstract class ItemMaterialDataLookupLockMixin {
 
     @WrapMethod(method = "registerMaterialEntry(Ljava/util/function/Supplier;Lcom/gregtechceu/gtceu/api/data/chemical/material/stack/MaterialEntry;)V",
                 remap = false)
-    static void cosmiccore$lockRegistration(Supplier<? extends ItemLike> supplier, MaterialEntry entry,
-                                            Operation<Void> original) {
+    private static void cosmiccore$lockRegistration(Supplier<? extends ItemLike> supplier, MaterialEntry entry,
+                                                    Operation<Void> original) {
         synchronized (ItemMaterialData.class) {
             original.call(supplier, entry);
         }
     }
 
     @WrapMethod(method = "reinitializeMaterialData()V", remap = false)
-    static void cosmiccore$lockReinitialization(Operation<Void> original) {
+    private static void cosmiccore$lockReinitialization(Operation<Void> original) {
         synchronized (ItemMaterialData.class) {
             original.call();
         }
