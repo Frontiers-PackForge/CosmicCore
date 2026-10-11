@@ -8,6 +8,7 @@ import com.ghostipedia.cosmiccore.utils.ItemData;
 import com.ghostipedia.nebulaeae2.compute.api.IComputeService;
 
 import com.gregtechceu.gtceu.api.item.IComponentItem;
+import com.gregtechceu.gtceu.api.item.armor.ArmorUtils;
 import com.gregtechceu.gtceu.api.item.component.IAddInformation;
 import com.gregtechceu.gtceu.api.item.component.IInteractionItem;
 import com.gregtechceu.gtceu.api.item.component.IItemHUDProvider;
@@ -126,7 +127,7 @@ public class WirelessPDABehavior implements IItemHUDProvider, IInteractionItem, 
     }
 
     @Override
-    public void drawHUD(ItemStack stack, GuiGraphics guiGraphics) {
+    public void drawHUD(ItemStack stack, ArmorUtils.ModularHUD hud, GuiGraphics guiGraphics) {
         if (!clientData.synced()) return;
         Minecraft mc = Minecraft.getInstance();
         String headerKey = clientData.local() ?

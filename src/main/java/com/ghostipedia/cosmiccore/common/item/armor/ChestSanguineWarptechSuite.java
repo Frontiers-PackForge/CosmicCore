@@ -59,11 +59,9 @@ public class ChestSanguineWarptechSuite extends SanguineArmorLogic implements IJ
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawHUD(ItemStack item, GuiGraphics guiGraphics) {
-        addCapacityHUD(item, this.HUD);
-        addSanguineHUD(item, this.HUD);
-        this.HUD.draw(guiGraphics);
-        this.HUD.reset();
+    public void drawHUD(ItemStack item, ArmorUtils.ModularHUD hud, GuiGraphics guiGraphics) {
+        addCapacityHUD(item, hud);
+        addSanguineHUD(item, hud);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -79,11 +77,11 @@ public class ChestSanguineWarptechSuite extends SanguineArmorLogic implements IJ
         CompoundTag tag = ItemData.readTag(stack);
         if (tag.contains("currentLP")) {
             long currentLP = tag.getLong("currentLP");
-            hud.newString(Component.translatable("cosmiccore.armor.sanguinewarptech.hud.LP", currentLP));
+            hud.newLine(Component.translatable("cosmiccore.armor.sanguinewarptech.hud.LP", currentLP));
         }
         if (tag.contains("isSanguineShieldOn")) {
             boolean isSanguineShieldOn = tag.getBoolean("isSanguineShieldOn");
-            hud.newString(Component.translatable("cosmiccore.armor.sanguinewarptech.hud.shieldstate",
+            hud.newLine(Component.translatable("cosmiccore.armor.sanguinewarptech.hud.shieldstate",
                     (isSanguineShieldOn ? "§aON" : "§cOFF")));
         }
         if (tag.contains("enabled")) {
@@ -91,7 +89,7 @@ public class ChestSanguineWarptechSuite extends SanguineArmorLogic implements IJ
                     Component.translatable("cosmiccore.armor.legacy.hud.status.enabled") :
                     Component.translatable("cosmiccore.armor.legacy.hud.status.disabled"));
             Component result = Component.translatable("cosmiccore.armor.legacy.hud.engine_enabled", status);
-            this.HUD.newString(result);
+            hud.newLine(result);
         }
     }
 

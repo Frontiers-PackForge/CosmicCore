@@ -24,7 +24,7 @@ public final class TwelvefoldConductorRegistration {
             return;
         }
         wirePrefix = new TagPrefix(GTCEu.id("wire_gt_twelve"))
-                .itemTable(() -> GTMaterialBlocks.CABLE_BLOCKS)
+                .customLookupTable(() -> GTMaterialBlocks.CABLE_BLOCKS)
                 .langValue("12x %s Wire")
                 .miningToolTag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WIRE_CUTTER)
                 .materialAmount(GTValues.M * 6)
@@ -32,7 +32,7 @@ public final class TwelvefoldConductorRegistration {
                 .unificationEnabled(true)
                 .enableRecycling();
         cablePrefix = new TagPrefix(GTCEu.id("cable_gt_twelve"))
-                .itemTable(() -> GTMaterialBlocks.CABLE_BLOCKS)
+                .customLookupTable(() -> GTMaterialBlocks.CABLE_BLOCKS)
                 .langValue("12x %s Cable")
                 .miningToolTag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WIRE_CUTTER)
                 .materialAmount(GTValues.M * 6)

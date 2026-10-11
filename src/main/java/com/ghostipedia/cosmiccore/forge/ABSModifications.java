@@ -11,7 +11,6 @@ import com.gregtechceu.gtceu.api.data.chemical.material.properties.PropertyKey;
 import com.gregtechceu.gtceu.api.data.chemical.material.stack.MaterialStack;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.fluids.FluidBuilder;
-import com.gregtechceu.gtceu.api.fluids.FluidState;
 import com.gregtechceu.gtceu.api.fluids.store.FluidStorageKeys;
 import com.gregtechceu.gtceu.api.registry.GTRegistries;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
@@ -55,23 +54,21 @@ public class ABSModifications {
         Material hslaSteel = GTMaterials.HSLASteel;
         AlloyBlastLifecyclePolicy.RecipeShape hslaShape = recipeShape(hslaSteel);
         if (!canGenerateAlloyBlastRecipe(hslaSteel) ||
-                hslaSteel.getFluidBuilder(FluidStorageKeys.MOLTEN) == null ||
+                hslaSteel.getFluidBuilder(FluidStorageKeys.LIQUID) == null ||
                 hslaShape.itemInputs() != 4 || hslaShape.fluidInputs() != 0 ||
                 hslaShape.outputUnits() != 5 || hslaShape.circuitMeta() != 4) {
             throw new IllegalStateException("HSLA Steel alloy blast lifecycle is incomplete: " + hslaShape);
         }
 
         int generatedRecipes = 0;
-        int freezerRecipes = 0;
         for (Material candidate : GTRegistries.MATERIALS) {
             if (!canGenerateAlloyBlastRecipe(candidate)) continue;
             generatedRecipes++;
             if (candidate.getProperty(PropertyKey.BLAST).getGasTier() != null) generatedRecipes++;
-            freezerRecipes++;
         }
         CosmicCore.LOGGER.info(
-                "Restored {} GTM alloy blast material properties {}; projected {} generated Alloy Blasting Kiln recipes and {} molten-to-ingot vacuum freezer recipes; HSLA Steel and Watertight Steel enabled: {}, {}",
-                restoredMaterials.size(), restoredMaterials, generatedRecipes, freezerRecipes,
+                "Restored {} GTM alloy blast material properties {}; projected {} generated Alloy Blasting Kiln recipes using GTM liquid casting; HSLA Steel and Watertight Steel enabled: {}, {}",
+                restoredMaterials.size(), restoredMaterials, generatedRecipes,
                 canGenerateAlloyBlastRecipe(hslaSteel), canGenerateAlloyBlastRecipe(GTMaterials.WatertightSteel));
     }
 
@@ -84,11 +81,10 @@ public class ABSModifications {
             return false;
         }
         material.setProperty(PropertyKey.ALLOY_BLAST, new AlloyBlastProperty());
-        FluidBuilder moltenBuilder = new FluidBuilder().state(FluidState.LIQUID);
+        FluidBuilder liquidBuilder = material.getFluidBuilder(FluidStorageKeys.LIQUID);
         Integer temperature = AlloyBlastLifecyclePolicy.casingMoltenTemperatureOverride(
                 material.getName(), material.getBlastTemperature());
-        if (temperature != null) moltenBuilder.temperature(temperature);
-        material.getProperty(PropertyKey.FLUID).enqueueRegistration(FluidStorageKeys.MOLTEN, moltenBuilder);
+        if (temperature != null && liquidBuilder != null) liquidBuilder.temperature(temperature);
         return true;
     }
 
