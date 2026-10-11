@@ -1,9 +1,7 @@
 package com.ghostipedia.cosmiccore.mixin.gtfix;
 
 import com.gregtechceu.gtceu.api.multiblock.predicates.PredicateBuilder;
-import com.gregtechceu.gtceu.api.multiblock.util.BlockInfo;
 
-import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
@@ -17,15 +15,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = PredicateBuilder.class, remap = false)
 public abstract class PredicateBuilderMissingTagMixin {
 
-    @Inject(method = "blockTag", at = @At("RETURN"))
+    @Inject(method = "blockTag", at = @At("HEAD"), cancellable = true, require = 1)
     private void cosmiccore$allowMissingBlockTag(TagKey<Block> tag, CallbackInfoReturnable<PredicateBuilder> cir) {
-        cir.getReturnValue().candidatesSupplier(() -> BuiltInRegistries.BLOCK.getTag(tag).stream()
-                .flatMap(holders -> holders.stream()).map(Holder::value).map(BlockInfo::fromBlock).toList());
+        if (BuiltInRegistries.BLOCK.getTag(tag).isEmpty()) {
+            cir.setReturnValue((PredicateBuilder) (Object) this);
+        }
     }
 
-    @Inject(method = "fluidTag", at = @At("RETURN"))
+    @Inject(method = "fluidTag", at = @At("HEAD"), cancellable = true, require = 1)
     private void cosmiccore$allowMissingFluidTag(TagKey<Fluid> tag, CallbackInfoReturnable<PredicateBuilder> cir) {
-        cir.getReturnValue().candidatesSupplier(() -> BuiltInRegistries.FLUID.getTag(tag).stream()
-                .flatMap(holders -> holders.stream()).map(Holder::value).map(BlockInfo::fromFluid).toList());
+        if (BuiltInRegistries.FLUID.getTag(tag).isEmpty()) {
+            cir.setReturnValue((PredicateBuilder) (Object) this);
+        }
     }
 }

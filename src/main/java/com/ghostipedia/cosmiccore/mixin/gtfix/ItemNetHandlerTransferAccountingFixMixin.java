@@ -36,7 +36,7 @@ public abstract class ItemNetHandlerTransferAccountingFixMixin {
     private int cosmiccore$simulatedTransferTotal;
 
     @WrapOperation(
-                   method = "insertItem(ILnet/minecraft/world/item/ItemStack;Z)Lnet/minecraft/world/item/ItemStack;",
+                   method = "handleInsert",
                    at = @At(
                             value = "INVOKE",
                             target = "Lit/unimi/dsi/fastutil/objects/Object2IntOpenHashMap;putAll(Ljava/util/Map;)V"),

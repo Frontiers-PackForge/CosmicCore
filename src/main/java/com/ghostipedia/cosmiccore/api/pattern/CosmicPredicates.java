@@ -84,7 +84,7 @@ public class CosmicPredicates {
     public static MultiPredicate blockById(ResourceLocation blockId) {
         return Predicates.builder("Block " + blockId)
                 .predicate(ctx -> blockId.equals(BuiltInRegistries.BLOCK.getKey(ctx.state().getBlock())))
-                .candidatesSupplier(() -> BuiltInRegistries.BLOCK.getOptional(blockId)
+                .candidates(BuiltInRegistries.BLOCK.getOptional(blockId)
                         .map(block -> List.of(BlockInfo.fromBlock(block)))
                         .orElse(List.of()))
                 .contents(builder -> builder.append(blockId))

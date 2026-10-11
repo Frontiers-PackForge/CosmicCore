@@ -45,7 +45,6 @@ public class CosmicItemTagsLoader {
         create(provider, CosmicItemTags.PRESSURE_RATED_3,
                 GTItems.NANO_HELMET,
                 GTItems.NANO_CHESTPLATE,
-                GTItems.NANO_CHESTPLATE_ADVANCED,
                 GTItems.NANO_LEGGINGS,
                 GTItems.NANO_BOOTS);
         provider.addTag(CosmicItemTags.PRESSURE_RATED_4);

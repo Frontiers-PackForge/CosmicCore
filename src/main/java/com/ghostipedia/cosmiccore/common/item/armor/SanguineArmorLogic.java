@@ -1,6 +1,5 @@
 package com.ghostipedia.cosmiccore.common.item.armor;
 
-import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
 import com.gregtechceu.gtceu.api.capability.IElectricItem;
 import com.gregtechceu.gtceu.api.item.armor.ArmorLogicSuite;
@@ -49,9 +48,6 @@ public abstract class SanguineArmorLogic extends ArmorLogicSuite {
     private static final byte JUMPING_TIMER = 10;
     private static final double LEGGING_ACCEL = 0.085D;
 
-    @OnlyIn(Dist.CLIENT)
-    protected ArmorUtils.ModularHUD HUD;
-
     protected SanguineArmorLogic(ArmorItem.Type slot, int energyPerUse, long capacity, int tier) {
         super(energyPerUse, capacity, tier, slot);
         potionRemovalCost.put(MobEffects.POISON, 10000);
@@ -61,9 +57,6 @@ public abstract class SanguineArmorLogic extends ArmorLogicSuite {
 
         potionRemovalCost.put(MobEffects.MOVEMENT_SLOWDOWN, 9000);
         potionRemovalCost.put(MobEffects.UNLUCK, 5000);
-        if (GTCEu.isClientSide() && this.shouldDrawHUD()) {
-            HUD = new ArmorUtils.ModularHUD();
-        }
     }
 
     @Override
@@ -78,8 +71,7 @@ public abstract class SanguineArmorLogic extends ArmorLogicSuite {
         byte runningTimer = data.runningTimer();
         byte boostedJumpTimer = data.boostedJumpTimer();
 
-        if (!player.getItemBySlot(EquipmentSlot.CHEST).is(GTItems.QUANTUM_CHESTPLATE.get()) &&
-                !player.getItemBySlot(EquipmentSlot.CHEST).is(GTItems.QUANTUM_CHESTPLATE_ADVANCED.get())) {
+        if (!player.getItemBySlot(EquipmentSlot.CHEST).is(GTItems.QUANTUM_CHESTPLATE.get())) {
             if (!level.isClientSide) ((IFireImmuneEntity) player).gtceu$setFireImmune(false);
         }
 
@@ -306,10 +298,8 @@ public abstract class SanguineArmorLogic extends ArmorLogicSuite {
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawHUD(ItemStack item, GuiGraphics guiGraphics) {
-        addCapacityHUD(item, this.HUD);
-        this.HUD.draw(guiGraphics);
-        this.HUD.reset();
+    public void drawHUD(ItemStack item, ArmorUtils.ModularHUD hud, GuiGraphics guiGraphics) {
+        addCapacityHUD(item, hud);
     }
 
     @Override

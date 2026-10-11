@@ -10,6 +10,7 @@ import com.ghostipedia.cosmiccore.common.murkbloom.MurkbloomServerLogic;
 import com.ghostipedia.cosmiccore.common.murkbloom.PressureRules;
 
 import com.gregtechceu.gtceu.api.item.ComponentItem;
+import com.gregtechceu.gtceu.api.item.armor.ArmorUtils;
 import com.gregtechceu.gtceu.api.item.component.IItemComponent;
 import com.gregtechceu.gtceu.api.item.component.IItemHUDProvider;
 
@@ -309,13 +310,15 @@ public class CosmicHudGuiOverlay implements LayeredDraw.Layer {
     }
 
     private static void renderHUDWirelessPDA(@NotNull ItemStack stack, GuiGraphics guiGraphics) {
+        ArmorUtils.ModularHUD hud = new ArmorUtils.ModularHUD();
         if (stack.getItem() instanceof ComponentItem valueItem) {
             for (IItemComponent behaviour : valueItem.getComponents()) {
                 if (behaviour instanceof IItemHUDProvider provider) {
-                    IItemHUDProvider.tryDrawHud(provider, stack, guiGraphics);
+                    IItemHUDProvider.tryDrawHud(provider, stack, hud, guiGraphics);
                 }
             }
         }
+        hud.draw(guiGraphics);
     }
 
     private static void renderTimeBudgetBar(GuiGraphics gg, int sw, int sh) {

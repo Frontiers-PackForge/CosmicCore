@@ -1,9 +1,8 @@
 {
     "values": [
-        "gtceu:nanomuscle_helmet",
-        "gtceu:nanomuscle_chestplate",
-        "gtceu:advanced_nanomuscle_chestplate",
-        "gtceu:nanomuscle_leggings",
-        "gtceu:nanomuscle_boots"
+        "gtceu:nano_fiber_helmet",
+        "gtceu:nano_fiber_chestplate",
+        "gtceu:nano_fiber_leggings",
+        "gtceu:nano_fiber_boots"
     ]
 }
