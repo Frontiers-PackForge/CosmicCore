@@ -14,7 +14,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Arrays;
-import java.util.List;
 
 @Mixin(value = SimpleFluidFilter.class, remap = false)
 public abstract class SimpleFluidFilterStateFixMixin {
@@ -32,18 +31,14 @@ public abstract class SimpleFluidFilterStateFixMixin {
     @Final
     private CustomFluidTank[] fluidStorageSlots;
 
-    @Inject(method = { "<init>()V", "<init>(ZZLjava/util/List;)V" }, at = @At("RETURN"), require = 2)
-    private void cosmiccore$initializeAmountLimit(CallbackInfo ci) {
+    @Inject(method = "initFluidStorageSlots", at = @At("HEAD"), cancellable = true)
+    private void cosmiccore$restoreFluidSlots(CallbackInfo ci) {
         maxStackSize = cosmiccore$MAX_FLUID_AMOUNT;
-    }
-
-    @Inject(method = "<init>(ZZLjava/util/List;)V", at = @At("TAIL"))
-    private void cosmiccore$restoreFluidSlots(boolean isBlacklist, boolean ignoreComponents,
-                                              List<FluidStack> decodedMatches, CallbackInfo ci) {
+        FluidStack[] decodedMatches = matches;
         matches = new FluidStack[fluidStorageSlots.length];
         Arrays.fill(matches, FluidStack.EMPTY);
-        for (int i = 0; i < Math.min(decodedMatches.size(), matches.length); i++) {
-            matches[i] = decodedMatches.get(i).copy();
+        for (int i = 0; i < Math.min(decodedMatches.length, matches.length); i++) {
+            matches[i] = decodedMatches[i].copy();
         }
         for (int i = 0; i < fluidStorageSlots.length; i++) {
             int slot = i;
@@ -54,5 +49,6 @@ public abstract class SimpleFluidFilterStateFixMixin {
                 ((SimpleFluidFilter) (Object) this).updateAndSaveFilter();
             });
         }
+        ci.cancel();
     }
 }
