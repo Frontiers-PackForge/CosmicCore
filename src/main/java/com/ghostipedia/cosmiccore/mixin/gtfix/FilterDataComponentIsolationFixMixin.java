@@ -16,8 +16,8 @@ public abstract class FilterDataComponentIsolationFixMixin {
                            method = "loadFilter",
                            at = @At(
                                     value = "INVOKE",
-                                    target = "Lnet/minecraft/world/item/ItemStack;getOrDefault(Lnet/minecraft/core/component/DataComponentType;Ljava/lang/Object;)Ljava/lang/Object;"))
-    private static Object cosmiccore$detachMutableFilterComponent(Object component) {
-        return component instanceof Filter<?> filter ? FilterCopies.detached(filter) : component;
+                                    target = "Lcom/gregtechceu/gtceu/api/cover/filter/Filter;createCopy()Lcom/gregtechceu/gtceu/api/cover/filter/Filter;"))
+    private static Filter<?> cosmiccore$detachMutableFilterComponent(Filter<?> filter) {
+        return FilterCopies.detached(filter);
     }
 }
