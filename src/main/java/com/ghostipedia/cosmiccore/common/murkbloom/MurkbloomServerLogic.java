@@ -21,6 +21,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
@@ -332,12 +333,12 @@ public final class MurkbloomServerLogic {
                     !ToolHelper.getAoEDefinition(player.getMainHandItem()).isZero()) {
                 return;
             }
-            double muted = NOISE_BREAK * StealthCoating.toolMultiplier(player.getMainHandItem());
+            double muted = NOISE_BREAK * StealthCoating.toolMultiplier(player);
             impulse(player, muted, false, KIND_BREAK);
         }
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onBlockPlace(BlockEvent.EntityPlaceEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
             impulse(player, NOISE_PLACE, false, KIND_PLACE);

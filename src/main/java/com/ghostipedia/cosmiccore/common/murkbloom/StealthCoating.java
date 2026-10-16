@@ -1,5 +1,7 @@
 package com.ghostipedia.cosmiccore.common.murkbloom;
 
+import com.ghostipedia.cosmiccore.common.armor.AbyssModule;
+import com.ghostipedia.cosmiccore.common.armor.ArmorModuleHelper;
 import com.ghostipedia.cosmiccore.common.data.CosmicEffects;
 import com.ghostipedia.cosmiccore.utils.ItemData;
 
@@ -57,7 +59,16 @@ public final class StealthCoating {
     }
 
     public static double armorMultiplier(Player player) {
-        return Math.pow(5, -armorTierSum(player) / 4.0);
+        return Math.pow(5, -moduleTier(player));
+    }
+
+    public static int moduleTier(Player player) {
+        return ArmorModuleHelper.tier(player, EquipmentSlot.CHEST,
+                AbyssModule.Role.STEALTH);
+    }
+
+    public static double toolMultiplier(Player player) {
+        return TOOL_MULT[moduleTier(player)];
     }
 
     public static double effectMultiplier(LivingEntity entity) {

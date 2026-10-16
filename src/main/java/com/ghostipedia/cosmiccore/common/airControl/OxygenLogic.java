@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.common.airControl;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.airControl.RebreatherHelper.RebreatherType;
+import com.ghostipedia.cosmiccore.common.armor.InstalledOxygen;
 import com.ghostipedia.cosmiccore.common.data.CosmicAttachmentTypes;
 import com.ghostipedia.cosmiccore.common.item.behavior.OxygenSupplyTankBehavior;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
@@ -12,6 +13,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -262,16 +264,10 @@ public final class OxygenLogic {
     private static int drainFromOxygenSources(ServerPlayer player, int requestTicks, RebreatherType rebreather) {
         if (requestTicks <= 0) return 0;
 
-        int remaining = requestTicks;
-
         // TODO(stellaris): re-add space-suit oxygen drain when the AA/Botarium fluid-suit system is reworked (bead
         // cosmiccore-42.13)
-        if (rebreather == RebreatherType.PRESSURIZED) {
-            remaining = drainFromCuriosBackSlot(player, remaining);
-            remaining = drainFromBacktank(player, remaining);
-        }
-
-        return requestTicks - remaining;
+        return drainFromTanks(player.getItemBySlot(EquipmentSlot.CHEST), backSlotStacks(player), requestTicks,
+                rebreather);
     }
 
     private static int drainFromBacktank(ServerPlayer player, int requestTicks) {
@@ -300,14 +296,25 @@ public final class OxygenLogic {
      * Drain from oxygen tanks in Curios back slot.
      */
     private static int drainFromCuriosBackSlot(ServerPlayer player, int requestTicks) {
+        return drainFromCuriosBackSlot(backSlotStacks(player), requestTicks);
+    }
+
+    private static int drainFromCuriosBackSlot(List<ItemStack> tanks, int requestTicks) {
         if (requestTicks <= 0) return 0;
 
         int remaining = requestTicks;
-        for (ItemStack stack : backSlotStacks(player)) {
+        for (ItemStack stack : tanks) {
             if (remaining <= 0) break;
             remaining = drainFromStack(stack, remaining);
         }
         return remaining;
+    }
+
+    public static int drainFromTanks(ItemStack chest, List<ItemStack> backTanks, int requestTicks,
+                                     RebreatherType rebreather) {
+        if (requestTicks <= 0 || rebreather != RebreatherType.PRESSURIZED) return 0;
+        int remaining = requestTicks - InstalledOxygen.drain(chest, requestTicks);
+        return requestTicks - drainFromCuriosBackSlot(backTanks, remaining);
     }
 
     public static List<ItemStack> backSlotStacks(Player player) {
@@ -326,8 +333,12 @@ public final class OxygenLogic {
     }
 
     public static long curioTankTicksRemaining(Player player) {
-        long total = 0;
-        for (ItemStack stack : backSlotStacks(player)) {
+        return tankTicksRemaining(ItemStack.EMPTY, backSlotStacks(player));
+    }
+
+    public static long tankTicksRemaining(ItemStack chest, List<ItemStack> backTanks) {
+        long total = InstalledOxygen.remaining(chest);
+        for (ItemStack stack : backTanks) {
             if (stack.getCapability(OXYGEN_SUPPLY) != null) {
                 total += OxygenSupplyTankBehavior.remainingTicks(stack);
             }
@@ -337,15 +348,8 @@ public final class OxygenLogic {
 
     private static long computeTankSeconds(ServerPlayer player) {
         double perSecond = NO_AIR_DRAIN_PER_TICK * 20.0;
-        double seconds = curioTankTicksRemaining(player) / perSecond;
-        int createAir = 0;
-        for (ItemStack tank : BacktankUtil.getAllWithAir(player)) {
-            createAir += BacktankUtil.getAir(tank);
-        }
-        if (createAir > 0) {
-            seconds += RebreatherHelper.hasCreateDivingHelmet(player) ? createAir : createAir / perSecond;
-        }
-        return (long) seconds;
+        return (long) (tankTicksRemaining(player.getItemBySlot(EquipmentSlot.CHEST),
+                backSlotStacks(player)) / perSecond);
     }
 
     /**

@@ -25,7 +25,6 @@ import net.neoforged.neoforge.event.entity.EntityMountEvent;
 import net.neoforged.neoforge.event.entity.EntityTeleportEvent;
 import net.neoforged.neoforge.event.entity.EntityTravelToDimensionEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
-import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
@@ -197,14 +196,6 @@ public final class HollowAnticheese {
         event.setCanceled(true);
         MurkbloomServerLogic.impulse(player, NOISE_MOUNT, false, MurkbloomServerLogic.KIND_HIT);
         player.displayClientMessage(Component.translatable("cosmiccore.abyss.no_mount"), true);
-    }
-
-    @SubscribeEvent
-    public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
-        if (event.getLevel().isClientSide) return;
-        if (event.getEntity() instanceof ServerPlayer player) {
-            MurkbloomServerLogic.impulse(player, NOISE_INTERACT, false, MurkbloomServerLogic.KIND_PLACE);
-        }
     }
 
     private static void returnVehicleToShelf(Entity vehicle) {

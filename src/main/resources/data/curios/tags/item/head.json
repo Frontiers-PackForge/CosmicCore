@@ -1,8 +1,7 @@
 {
   "values": [
+    "cosmiccore:simple_rebreather_module",
     "cosmiccore:space_radio",
-    "cosmiccore:simple_rebreather",
-    "cosmiccore:pressurized_rebreather",
     "cosmiccore:wireless_pda"
   ]
 }

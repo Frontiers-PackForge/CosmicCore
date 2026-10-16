@@ -30,23 +30,9 @@ public class CosmicItemTagsLoader {
         create(provider, ItemTags.FOOT_ARMOR, travelerBoots());
         create(provider, ItemTags.FOOT_ARMOR_ENCHANTABLE, travelerBoots());
         create(provider, ItemTags.TRIMMABLE_ARMOR, travelerBoots());
-        create(provider, CosmicItemTags.PRESSURE_RATED_1,
-                optional("create", "netherite_diving_helmet"),
-                optional("create", "netherite_backtank"),
-                optional("create", "netherite_diving_boots"),
-                required("minecraft", "netherite_leggings"),
-                required("minecraft", "netherite_boots"));
-        create(provider, CosmicItemTags.PRESSURE_RATED_2,
-                CosmicItems.SHADEBLOOM_DIVING_HELMET,
-                CosmicItems.SHADEBLOOM_CHESTPLATE,
-                CosmicItems.SHADEBLOOM_LEGGINGS,
-                CosmicItems.SHADEBLOOM_BOOTS,
-                CosmicItems.SHADEBLOOM_DIVING_BOOTS);
-        create(provider, CosmicItemTags.PRESSURE_RATED_3,
-                GTItems.NANO_HELMET,
-                GTItems.NANO_CHESTPLATE,
-                GTItems.NANO_LEGGINGS,
-                GTItems.NANO_BOOTS);
+        provider.addTag(CosmicItemTags.PRESSURE_RATED_1);
+        provider.addTag(CosmicItemTags.PRESSURE_RATED_2);
+        provider.addTag(CosmicItemTags.PRESSURE_RATED_3);
         provider.addTag(CosmicItemTags.PRESSURE_RATED_4);
         // TODO(stellaris): re-add AA ModItemTags (SPACE_SUITS / FREEZE_RESISTANT_ARMOR / HEAT_RESISTANT_ARMOR)
         // post-Ad-Astra

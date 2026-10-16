@@ -1,5 +1,7 @@
 package com.ghostipedia.cosmiccore.common.murkbloom;
 
+import com.ghostipedia.cosmiccore.common.armor.AbyssModule;
+import com.ghostipedia.cosmiccore.common.armor.ArmorModuleHelper;
 import com.ghostipedia.cosmiccore.common.data.tag.item.CosmicItemTags;
 import com.ghostipedia.cosmiccore.common.data.worldgen.abyss.AbyssRegions;
 
@@ -30,12 +32,8 @@ public final class PressureRules {
     }
 
     public static int gearRating(LivingEntity entity) {
-        int rating = Integer.MAX_VALUE;
-        for (EquipmentSlot slot : ARMOR_SLOTS) {
-            rating = Math.min(rating, pieceRating(entity.getItemBySlot(slot)));
-            if (rating == 0) return 0;
-        }
-        return rating;
+        return ArmorModuleHelper.tier(entity, EquipmentSlot.CHEST,
+                AbyssModule.Role.PRESSURE);
     }
 
     private static int pieceRating(ItemStack stack) {

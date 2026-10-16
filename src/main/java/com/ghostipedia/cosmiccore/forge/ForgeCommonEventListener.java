@@ -210,7 +210,7 @@ public class ForgeCommonEventListener {
             player.fallDistance = 0;
             return;
         }
-        if (!TravelerBootsLogic.isWearing(player)) return;
+        if (!TravelerBootsLogic.protectsFromFall(player)) return;
         event.setCanceled(true);
         player.fallDistance = 0;
     }

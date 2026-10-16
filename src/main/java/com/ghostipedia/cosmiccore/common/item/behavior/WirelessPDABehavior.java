@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.common.item.behavior;
 
 import com.ghostipedia.cosmiccore.api.data.wireless.WirelessEnergySavedData;
+import com.ghostipedia.cosmiccore.common.armor.ArmorModuleHelper;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.PowerCapacitorMachine;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.network.packet.SyncWirelessPDAHudPacket;
@@ -11,7 +12,6 @@ import com.gregtechceu.gtceu.api.item.IComponentItem;
 import com.gregtechceu.gtceu.api.item.armor.ArmorUtils;
 import com.gregtechceu.gtceu.api.item.component.IAddInformation;
 import com.gregtechceu.gtceu.api.item.component.IInteractionItem;
-import com.gregtechceu.gtceu.api.item.component.IItemHUDProvider;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.common.machine.owner.FTBOwner;
 import com.gregtechceu.gtceu.common.machine.owner.MachineOwner;
@@ -47,7 +47,7 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.UUID;
 
-public class WirelessPDABehavior implements IItemHUDProvider, IInteractionItem, IAddInformation {
+public class WirelessPDABehavior implements IInteractionItem, IAddInformation {
 
     private static final String TAG_LOCAL_MONITOR = "LocalPowerCapacitor";
     private static final String TAG_ME_CONTROLLER = "MEController";
@@ -55,13 +55,17 @@ public class WirelessPDABehavior implements IItemHUDProvider, IInteractionItem, 
 
     @Override
     public InteractionResult useOn(UseOnContext context) {
+        return useOn(context, context.getItemInHand());
+    }
+
+    public InteractionResult useOn(UseOnContext context, ItemStack item) {
         var player = context.getPlayer();
         if (player == null || !player.isShiftKeyDown()) return InteractionResult.PASS;
         var level = context.getLevel();
         var pos = context.getClickedPos();
         if (MetaMachine.getMachine(level, pos) instanceof PowerCapacitorMachine) {
             if (!level.isClientSide) {
-                bind(context.getItemInHand(), TAG_LOCAL_MONITOR, GlobalPos.of(level.dimension(), pos));
+                bind(item, TAG_LOCAL_MONITOR, GlobalPos.of(level.dimension(), pos));
                 player.displayClientMessage(
                         Component.translatable("cosmiccore.wireless_pda.bound.power", pos.toShortString())
                                 .withStyle(ChatFormatting.GREEN),
@@ -71,7 +75,7 @@ public class WirelessPDABehavior implements IItemHUDProvider, IInteractionItem, 
         }
         if (level.getBlockEntity(pos) instanceof ControllerBlockEntity) {
             if (!level.isClientSide) {
-                bind(context.getItemInHand(), TAG_ME_CONTROLLER, GlobalPos.of(level.dimension(), pos));
+                bind(item, TAG_ME_CONTROLLER, GlobalPos.of(level.dimension(), pos));
                 player.displayClientMessage(
                         Component.translatable("cosmiccore.wireless_pda.bound.compute", pos.toShortString())
                                 .withStyle(ChatFormatting.GREEN),
@@ -126,10 +130,9 @@ public class WirelessPDABehavior implements IItemHUDProvider, IInteractionItem, 
         }
     }
 
-    @Override
     public void drawHUD(ItemStack stack, ArmorUtils.ModularHUD hud, GuiGraphics guiGraphics) {
-        if (!clientData.synced()) return;
         Minecraft mc = Minecraft.getInstance();
+        if (mc.level == null || !hasSyncedHud(stack, mc.level.dimension())) return;
         String headerKey = clientData.local() ?
                 "cosmiccore.wireless_pda.hud.local" : "cosmiccore.wireless_pda.hud.dimensional";
         int localHudOffset = clientData.local() ? 10 : 0;
@@ -175,14 +178,14 @@ public class WirelessPDABehavior implements IItemHUDProvider, IInteractionItem, 
 
     public static void syncHud(ServerPlayer player) {
         if (player.tickCount % 20 != 0) return;
-        ItemStack stack = CosmicCuriosUtils.getPDACurio(player);
+        ItemStack stack = ArmorModuleHelper.activePDA(player);
         if (stack.isEmpty()) return;
         GlobalPos linkedPower = linkedPosition(stack, TAG_LOCAL_MONITOR);
         GlobalPos linkedCompute = linkedPosition(stack, TAG_ME_CONTROLLER);
         PowerTelemetry power = linkedPower == null ? readWirelessPower(player) : readLocalPower(player, linkedPower);
         ComputeTelemetry compute = linkedCompute == null ? ComputeTelemetry.unlinked() :
                 readCompute(player, linkedCompute);
-        CCoreNetwork.sendToPlayer(player, new SyncWirelessPDAHudPacket(
+        CCoreNetwork.sendToPlayer(player, new SyncWirelessPDAHudPacket(hudSourceKey(stack, player.level().dimension()),
                 power.local(), power.available(), power.stored(), power.capacity(), power.input(), power.output(),
                 compute.linked(), compute.available(), compute.used(), compute.capacity()));
     }
@@ -198,11 +201,21 @@ public class WirelessPDABehavior implements IItemHUDProvider, IInteractionItem, 
                 wirelessData.getEnergyOutput(owner));
     }
 
-    public static void setClientData(boolean local, boolean available, BigInteger stored, BigInteger capacity,
+    public static void setClientData(String sourceKey, boolean local, boolean available, BigInteger stored,
+                                     BigInteger capacity,
                                      long input, long output, boolean computeLinked, boolean computeAvailable,
                                      long computeUsed, long computeCapacity) {
-        clientData = new HudData(true, local, available, stored, capacity, input, output, computeLinked,
+        clientData = new HudData(true, sourceKey, local, available, stored, capacity, input, output, computeLinked,
                 computeAvailable, computeUsed, computeCapacity);
+    }
+
+    public static String hudSourceKey(ItemStack stack, ResourceKey<Level> dimension) {
+        return dimension.location() + "|" + linkedPosition(stack, TAG_LOCAL_MONITOR) + "|" +
+                linkedPosition(stack, TAG_ME_CONTROLLER);
+    }
+
+    public static boolean hasSyncedHud(ItemStack stack, ResourceKey<Level> dimension) {
+        return isPDA(stack) && clientData.synced() && clientData.sourceKey().equals(hudSourceKey(stack, dimension));
     }
 
     private static PowerTelemetry readLocalPower(ServerPlayer player, GlobalPos linked) {
@@ -253,21 +266,27 @@ public class WirelessPDABehavior implements IItemHUDProvider, IInteractionItem, 
         return GlobalPos.of(ResourceKey.create(Registries.DIMENSION, dimension), BlockPos.of(tag.getLong("Position")));
     }
 
-    private static boolean isPDA(@NotNull ItemStack stack) {
-        if (stack.getItem() instanceof IComponentItem metaItem) {
-            for (var behavior : metaItem.getComponents()) {
-                if (behavior instanceof WirelessPDABehavior) return true;
-            }
-        }
-        return false;
+    public static boolean isPDA(@NotNull ItemStack stack) {
+        return behavior(stack) != null;
     }
 
-    private record HudData(boolean synced, boolean local, boolean available, BigInteger stored, BigInteger capacity,
+    @Nullable
+    public static WirelessPDABehavior behavior(ItemStack stack) {
+        if (stack.getItem() instanceof IComponentItem metaItem) {
+            for (var behavior : metaItem.getComponents()) {
+                if (behavior instanceof WirelessPDABehavior pda) return pda;
+            }
+        }
+        return null;
+    }
+
+    private record HudData(boolean synced, String sourceKey, boolean local, boolean available, BigInteger stored,
+                           BigInteger capacity,
                            long input, long output, boolean computeLinked, boolean computeAvailable, long computeUsed,
                            long computeCapacity) {
 
         private static HudData empty() {
-            return new HudData(false, false, false, BigInteger.ZERO, BigInteger.ZERO, 0, 0, false, false, 0, 0);
+            return new HudData(false, "", false, false, BigInteger.ZERO, BigInteger.ZERO, 0, 0, false, false, 0, 0);
         }
     }
 

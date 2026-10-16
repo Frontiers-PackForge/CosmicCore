@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.common.item.armor.boots;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.common.armor.ArmorModuleHelper;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -42,6 +43,11 @@ public final class TravelerBootsLogic {
 
     public static boolean isWearing(Player player) {
         return player.getItemBySlot(EquipmentSlot.FEET).getItem() instanceof TravelerBootsItem;
+    }
+
+    public static boolean protectsFromFall(Player player) {
+        return ArmorModuleHelper.protectsFromFall(
+                player.getItemBySlot(EquipmentSlot.FEET));
     }
 
     private static void clearLegacyModifiers(Player player) {

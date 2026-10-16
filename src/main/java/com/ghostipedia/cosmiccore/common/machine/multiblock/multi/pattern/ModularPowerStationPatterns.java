@@ -77,7 +77,8 @@ public final class ModularPowerStationPatterns {
                         CosmicBlocks.MEDIUM_VOLTAGE_STATOR_HOUSING.get(),
                         CosmicBlocks.HIGH_VOLTAGE_STATOR_HOUSING.get(),
                         CosmicBlocks.EXTREME_VOLTAGE_STATOR_HOUSING.get()))
-                .where('E', abilities(PartAbility.OUTPUT_ENERGY).setExactLimit(1).setPreviewCount(1))
+                .where('E', abilities(PartAbility.OUTPUT_ENERGY, PartAbility.SUBSTATION_OUTPUT_ENERGY)
+                        .setExactLimit(1).setPreviewCount(1))
                 .where(' ', any())
                 .build();
     }
