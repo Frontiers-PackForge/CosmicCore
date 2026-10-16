@@ -1,6 +1,6 @@
 {
     "parent": "minecraft:item/generated",
     "textures": {
-        "layer0": "cosmiccore:item/pressurized_rebreather"
+        "layer0": "cosmiccore:item/stealth_module_1"
     }
 }

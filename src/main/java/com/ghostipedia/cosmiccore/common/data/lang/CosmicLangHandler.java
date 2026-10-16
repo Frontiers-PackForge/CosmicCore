@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.common.data.lang;
 
 import com.ghostipedia.cosmiccore.common.data.worldgen.field.OreFieldPlacement;
+import com.ghostipedia.cosmiccore.common.murkbloom.StealthCoating;
 
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
@@ -9,6 +10,8 @@ import com.gregtechceu.gtceu.data.lang.LangHandler;
 import net.minecraft.core.registries.BuiltInRegistries;
 
 import com.tterrag.registrate.providers.RegistrateLangProvider;
+
+import static com.ghostipedia.cosmiccore.common.data.worldgen.abyss.AbyssRegions.LAYER_EDGES;
 
 public class CosmicLangHandler extends LangHandler {
 
@@ -49,6 +52,34 @@ public class CosmicLangHandler extends LangHandler {
     }
 
     public static void init(RegistrateLangProvider provider) {
+        provider.add("cosmiccore.armor.legacy_air_supplier",
+                "Retired air supplier. Remove it in the Equipment Foundry to reclaim, but it cannot be installed again.");
+        provider.add("cosmiccore.armor.legacy_fluid_storage",
+                "Retired armor tank. Remove it in the Equipment Foundry to reclaim, but it cannot be installed again.");
+        provider.add("cosmiccore.armor.legacy_fluid_contents", "Recoverable contents: %s mB of %s");
+        for (int tier = 1; tier <= 3; tier++) {
+            String numeral = StealthCoating.numeral(tier);
+            provider.add("module.cosmiccore.stealth_module_" + tier, "Stealth Module " + numeral);
+            provider.add("module.cosmiccore.stealth_module_" + tier + ".description",
+                    "Suppresses Hollowed Abyss noise and mining noise from every tool while installed.");
+            provider.add("module.cosmiccore.pressure_module_" + tier, "Pressure Module " + numeral);
+            provider.add("module.cosmiccore.pressure_module_" + tier + ".description",
+                    "Grants pressure rating " + tier + ". " +
+                            "Protects against pressure down to Y = " +
+                            LAYER_EDGES[tier] + ".");
+        }
+        provider.add("module.cosmiccore.simple_rebreather_module", "Simple Rebreather");
+        provider.add("module.cosmiccore.simple_rebreather_module.description",
+                "Remove and equip in a head Curio slot for thin-air protection.");
+        provider.add("module.cosmiccore.advanced_rebreather_module", "Pressurized Rebreather Module");
+        provider.add("module.cosmiccore.advanced_rebreather_module.description",
+                "Protects against thin air and supplies oxygen from installed or equipped back-slot tanks while enabled and worn.");
+        provider.add("module.cosmiccore.bronze_oxygen_tank_module", "Bronze Oxygen Tank");
+        provider.add("module.cosmiccore.bronze_oxygen_tank_module.description",
+                "Holds enough oxygen for 8m 20s of breathing time.");
+        provider.add("module.cosmiccore.steel_oxygen_tank_module", "Steel Oxygen Tank");
+        provider.add("module.cosmiccore.steel_oxygen_tank_module.description",
+                "Holds enough oxygen for 31m 15s of breathing time.");
         provider.add("cosmiccore.armor.legacy.hud.engine_enabled", "Engine Enabled: %s");
         provider.add("cosmiccore.armor.legacy.hud.status.disabled", "§cOFF");
         provider.add("cosmiccore.armor.legacy.hud.status.enabled", "§aON");
@@ -1380,9 +1411,9 @@ public class CosmicLangHandler extends LangHandler {
         // generic machine tooltips
         provider.add("item.cosmiccore.space_radio.tooltip", "§6Lets you hear sounds in space!");
         provider.add("item.cosmiccore.simple_rebreather.tooltip",
-                "§7Prevents oxygen loss in §bThin Air§7 environments.");
+                "§7Equip in a head Curio slot to prevent oxygen loss in §bThin Air§7. Does not enable tank breathing.");
         provider.add("item.cosmiccore.pressurized_rebreather.tooltip",
-                "§6Enables oxygen tank usage. Works in §cNo Air§6 environments.");
+                "§6Install in a modular helmet for thin-air protection and oxygen tank breathing underwater or in §cNo Air§6.");
         provider.add("item.cosmiccore.palms_of_the_globestrider.tooltip",
                 "§bAir-strafe, bunny-hop, and dash while worn.");
         provider.add("cosmiccore.universal.tooltip.lube_info.0",
@@ -2330,7 +2361,8 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.emi.biomeld_vivarium.charge", "Bloomwyrm Charge: %s");
         provider.add("cosmiccore.tooltip.oxygen_tank.fill", "Oxygen: %s / %s mB");
         provider.add("cosmiccore.tooltip.oxygen_tank.runtime", "No-Air breathing time: %s");
-        provider.add("cosmiccore.tooltip.oxygen_tank.rebreather", "Requires Pressurized Rebreather or Diving Helmet");
+        provider.add("cosmiccore.tooltip.oxygen_tank.rebreather",
+                "Equip in a back Curio slot or install in a modular chestplate. Requires an enabled Pressurized Rebreather Module in the worn helmet.");
         // Food system and the Hearth
         provider.add("cosmiccore.food.sickened", "Your stomach turns. Your meals are slipping away.");
         provider.add("cosmiccore.food.family.defined", "Special");
@@ -2384,7 +2416,7 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.abyss.swarm_title", "The Murkbloom Swarms");
         provider.add("cosmiccore.abyss.swarm_subtitle", "Stop disturbing the water and hide!");
         provider.add("effect.cosmiccore.stealth", "Stealth");
-        provider.add("cosmiccore.tooltip.stealth_coated", "Stealth Coating %s");
+        provider.add("cosmiccore.tooltip.stealth_coated", "Stealth Module %s");
         provider.add("cosmiccore.tooltip.stealth_coating.use_1", "Sew onto armor or tools at a Sewing Table.");
         provider.add("cosmiccore.tooltip.stealth_coating.use_2",
                 "Greatly Reduces Sound Creation in the Abyss, reduced effect on armors.");
@@ -2474,11 +2506,11 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.multiblock.modular_power_station.tooltip.0",
                 "Attach §eDrive Modules§f (1-4) and a Stator Module to create a suitable power plant.");
         provider.add("cosmiccore.multiblock.modular_power_station.tooltip.1",
-                "§7Each stage boosts max power generation by 4 Amps.");
+                "§7Each stage adds 16A of maximum generation, up to 64A.");
         provider.add("cosmiccore.multiblock.modular_power_station.tooltip.2",
                 "§fTurbine assemblies accept Steam and Gas Turbine fuels through one hardware-selected mode.");
         provider.add("cosmiccore.multiblock.modular_power_station.tooltip.3",
-                "§7Dynamo Tier is limited by stator tier.");
+                "§7Dynamo voltage must match the stator tier. Supports ordinary and substation dynamos, including 64A.");
         provider.add("cosmiccore.multiblock.modular_power_station.drive", "Drive: %s");
         provider.add("cosmiccore.multiblock.modular_power_station.stages", "Drive Stages: %s / 4");
         provider.add("cosmiccore.multiblock.modular_power_station.stator", "Stator: %s (%s V)");
@@ -2508,7 +2540,7 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.ponder.shared.modular_power_station.text_2",
                 "Each drive module adds one integral slice with a shared Part-work wall");
         provider.add("cosmiccore.ponder.shared.modular_power_station.text_3",
-                "Up to four of these slices may be added, each adding an additional 4A of maximum power output.");
+                "Up to four slices may be added. Each adds 16A of maximum power output, up to 64A.");
         provider.add("cosmiccore.ponder.shared.modular_power_station.text_4",
                 "Modular Power Stations Must have all generator slices share the same integral parts, no mixing turbine and combustion modules!");
         provider.add("cosmiccore.ponder.shared.modular_power_station.text_5",

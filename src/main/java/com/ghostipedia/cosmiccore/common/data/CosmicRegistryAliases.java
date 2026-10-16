@@ -67,6 +67,11 @@ public final class CosmicRegistryAliases {
             ABYSS_RENAMES.forEach((from, to) -> addAlias(registry, from, to));
         }
         if (event.getRegistryKey().equals(Registries.ITEM)) {
+            Map.of("stealth_coating_1", "stealth_module_1", "stealth_coating_2", "stealth_module_2",
+                    "stealth_coating_3", "stealth_module_3", "bronze_supply_tank", "bronze_oxygen_tank_module",
+                    "steel_supply_tank", "steel_oxygen_tank_module", "simple_rebreather", "simple_rebreather_module",
+                    "pressurized_rebreather", "advanced_rebreather_module")
+                    .forEach((from, to) -> addAlias(registry, CosmicCore.id(from), CosmicCore.id(to)));
             BUZZSAW_MATERIALS.forEach(material -> addAlias(registry,
                     gt(material + "_buzz_saw_blade"), gt(material + "_buzzsaw_blade")));
         }

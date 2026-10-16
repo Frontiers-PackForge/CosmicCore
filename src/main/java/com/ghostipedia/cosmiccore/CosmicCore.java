@@ -134,6 +134,7 @@ public class CosmicCore {
         CosmicBlocks.init();
         CosmicBlockEntities.init();
         CosmicCovers.init();
+        CosmicModules.init();
         CosmicItems.init();
         CosmicCoverItems.init();
         CosmicBotanyItemRegistration.init();

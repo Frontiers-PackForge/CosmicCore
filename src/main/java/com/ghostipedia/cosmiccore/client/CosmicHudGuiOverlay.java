@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.client;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.client.murkbloom.MurkbloomClientState;
+import com.ghostipedia.cosmiccore.common.armor.ArmorModuleHelper;
 import com.ghostipedia.cosmiccore.common.food.CosmicFoodData;
 import com.ghostipedia.cosmiccore.common.food.FoodBar;
 import com.ghostipedia.cosmiccore.common.food.FoodMemory;
@@ -9,10 +10,7 @@ import com.ghostipedia.cosmiccore.common.item.behavior.WirelessPDABehavior;
 import com.ghostipedia.cosmiccore.common.murkbloom.MurkbloomServerLogic;
 import com.ghostipedia.cosmiccore.common.murkbloom.PressureRules;
 
-import com.gregtechceu.gtceu.api.item.ComponentItem;
 import com.gregtechceu.gtceu.api.item.armor.ArmorUtils;
-import com.gregtechceu.gtceu.api.item.component.IItemComponent;
-import com.gregtechceu.gtceu.api.item.component.IItemHUDProvider;
 
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
@@ -137,7 +135,7 @@ public class CosmicHudGuiOverlay implements LayeredDraw.Layer {
         if (mc.level != null && !mc.gui.getDebugOverlay().showDebugScreen() && !mc.options.hideGui) {
             int screenWidth = guiGraphics.guiWidth();
             int screenHeight = guiGraphics.guiHeight();
-            renderHUDWirelessPDA(WirelessPDABehavior.CosmicCuriosUtils.getPDACurio(mc.player), guiGraphics);
+            renderHUDWirelessPDA(ArmorModuleHelper.activePDA(mc.player), guiGraphics);
             renderTimeBudgetBar(guiGraphics, screenWidth, screenHeight);
             renderOxygenBar(guiGraphics, screenWidth, screenHeight);
             renderFoodSlots(guiGraphics, screenWidth, screenHeight);
@@ -311,13 +309,8 @@ public class CosmicHudGuiOverlay implements LayeredDraw.Layer {
 
     private static void renderHUDWirelessPDA(@NotNull ItemStack stack, GuiGraphics guiGraphics) {
         ArmorUtils.ModularHUD hud = new ArmorUtils.ModularHUD();
-        if (stack.getItem() instanceof ComponentItem valueItem) {
-            for (IItemComponent behaviour : valueItem.getComponents()) {
-                if (behaviour instanceof IItemHUDProvider provider) {
-                    IItemHUDProvider.tryDrawHud(provider, stack, hud, guiGraphics);
-                }
-            }
-        }
+        WirelessPDABehavior behavior = WirelessPDABehavior.behavior(stack);
+        if (behavior != null) behavior.drawHUD(stack, hud, guiGraphics);
         hud.draw(guiGraphics);
     }
 

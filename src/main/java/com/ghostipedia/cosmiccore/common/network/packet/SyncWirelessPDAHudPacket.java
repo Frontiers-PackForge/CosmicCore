@@ -12,7 +12,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
 
-public record SyncWirelessPDAHudPacket(boolean local, boolean available, BigInteger stored, BigInteger capacity,
+public record SyncWirelessPDAHudPacket(String sourceKey, boolean local, boolean available, BigInteger stored,
+                                       BigInteger capacity,
                                        long input, long output, boolean computeLinked, boolean computeAvailable,
                                        long computeUsed, long computeCapacity)
         implements CustomPacketPayload {
@@ -22,12 +23,13 @@ public record SyncWirelessPDAHudPacket(boolean local, boolean available, BigInte
             .ofMember(SyncWirelessPDAHudPacket::encode, SyncWirelessPDAHudPacket::new);
 
     public SyncWirelessPDAHudPacket(FriendlyByteBuf buf) {
-        this(buf.readBoolean(), buf.readBoolean(), new BigInteger(buf.readByteArray()),
+        this(buf.readUtf(), buf.readBoolean(), buf.readBoolean(), new BigInteger(buf.readByteArray()),
                 new BigInteger(buf.readByteArray()), buf.readVarLong(), buf.readVarLong(), buf.readBoolean(),
                 buf.readBoolean(), buf.readVarLong(), buf.readVarLong());
     }
 
     public void encode(FriendlyByteBuf buf) {
+        buf.writeUtf(sourceKey);
         buf.writeBoolean(local);
         buf.writeBoolean(available);
         buf.writeByteArray(stored.toByteArray());
@@ -41,8 +43,9 @@ public record SyncWirelessPDAHudPacket(boolean local, boolean available, BigInte
     }
 
     public void execute(IPayloadContext context) {
-        context.enqueueWork(() -> WirelessPDABehavior.setClientData(local, available, stored, capacity, input, output,
-                computeLinked, computeAvailable, computeUsed, computeCapacity));
+        context.enqueueWork(
+                () -> WirelessPDABehavior.setClientData(sourceKey, local, available, stored, capacity, input, output,
+                        computeLinked, computeAvailable, computeUsed, computeCapacity));
     }
 
     @Override

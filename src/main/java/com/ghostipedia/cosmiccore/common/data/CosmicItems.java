@@ -15,7 +15,6 @@ import com.ghostipedia.cosmiccore.common.item.OxygenTankItem;
 import com.ghostipedia.cosmiccore.common.item.PowerTowerCoilItem;
 import com.ghostipedia.cosmiccore.common.item.RateCalculatorItem;
 import com.ghostipedia.cosmiccore.common.item.SoulNetworkReaderItem;
-import com.ghostipedia.cosmiccore.common.item.StealthCoatingItem;
 import com.ghostipedia.cosmiccore.common.item.armor.ChestSanguineWarptechSuite;
 import com.ghostipedia.cosmiccore.common.item.armor.HelmetSanguineWarptechSuite;
 import com.ghostipedia.cosmiccore.common.item.armor.SanguineWarptechSuite;
@@ -348,23 +347,30 @@ public class CosmicItems {
             "depleted_orange_recovery_catalyst", "Depleted Orange Recovery Catalyst",
             CosmicCore.id("item/depleted_orange_recovery_catalyst"));
 
-    public static final ItemEntry<StealthCoatingItem> STEALTH_COATING_1 = REGISTRATE
-            .item("stealth_coating_1", p -> new StealthCoatingItem(p.stacksTo(16), 1))
-            .lang("Stealth Coating I")
-            .model(NonNullBiConsumer.noop())
+    public static final ItemEntry<ComponentItem> STEALTH_COATING_1 = REGISTRATE
+            .item("stealth_module_1", ComponentItem::new)
+            .lang("Stealth Module I")
+            .model((ctx, prov) -> prov.generated(ctx, CosmicCore.id("item/stealth_module_1")))
             .register();
 
-    public static final ItemEntry<StealthCoatingItem> STEALTH_COATING_2 = REGISTRATE
-            .item("stealth_coating_2", p -> new StealthCoatingItem(p.stacksTo(16), 2))
-            .lang("Stealth Coating II")
-            .model(NonNullBiConsumer.noop())
+    public static final ItemEntry<ComponentItem> STEALTH_COATING_2 = REGISTRATE
+            .item("stealth_module_2", ComponentItem::new)
+            .lang("Stealth Module II")
+            .model((ctx, prov) -> prov.generated(ctx, CosmicCore.id("item/stealth_module_2")))
             .register();
 
-    public static final ItemEntry<StealthCoatingItem> STEALTH_COATING_3 = REGISTRATE
-            .item("stealth_coating_3", p -> new StealthCoatingItem(p.stacksTo(16), 3))
-            .lang("Stealth Coating III")
-            .model(NonNullBiConsumer.noop())
+    public static final ItemEntry<ComponentItem> STEALTH_COATING_3 = REGISTRATE
+            .item("stealth_module_3", ComponentItem::new)
+            .lang("Stealth Module III")
+            .model((ctx, prov) -> prov.generated(ctx, CosmicCore.id("item/stealth_module_3")))
             .register();
+
+    public static final ItemEntry<ComponentItem> PRESSURE_MODULE_1 = registerChainItem("pressure_module_1",
+            "Pressure Module I", CosmicCore.id("item/pressure_module_1"));
+    public static final ItemEntry<ComponentItem> PRESSURE_MODULE_2 = registerChainItem("pressure_module_2",
+            "Pressure Module II", CosmicCore.id("item/pressure_module_2"));
+    public static final ItemEntry<ComponentItem> PRESSURE_MODULE_3 = registerChainItem("pressure_module_3",
+            "Pressure Module III", CosmicCore.id("item/pressure_module_3"));
 
     /*
      * SHELVED (cosmiccore-42.14): Malum 1.8.2 reworked the spirit-type system
@@ -1517,8 +1523,9 @@ public class CosmicItems {
             .register();
 
     public static ItemEntry<ComponentItem> SIMPLE_REBREATHER = REGISTRATE
-            .item("simple_rebreather", ComponentItem::new)
+            .item("simple_rebreather_module", ComponentItem::new)
             .lang("Simple Rebreather")
+            .model((ctx, prov) -> prov.generated(ctx, CosmicCore.id("item/simple_rebreather_module")))
             .properties(p -> p.stacksTo(1).fireResistant())
             .onRegister(attach(new TooltipBehavior(list -> {
                 list.add(Component.translatable("item.cosmiccore.simple_rebreather.tooltip"));
@@ -1526,11 +1533,11 @@ public class CosmicItems {
             .register();
 
     public static ItemEntry<ComponentItem> PRESSURIZED_REBREATHER = REGISTRATE
-            .item("pressurized_rebreather", ComponentItem::new)
-            .lang("Pressurized Rebreather")
+            .item("advanced_rebreather_module", ComponentItem::new)
+            .lang("Pressurized Rebreather Module")
+            .model((ctx, prov) -> prov.generated(ctx, CosmicCore.id("item/advanced_rebreather_module")))
             .properties(p -> p.stacksTo(1).fireResistant())
             .onRegister(attach(new TooltipBehavior(list -> {
-                list.add(Component.translatable("item.cosmiccore.simple_rebreather.tooltip"));
                 list.add(Component.translatable("item.cosmiccore.pressurized_rebreather.tooltip"));
             })))
             .register();
@@ -2882,19 +2889,19 @@ public class CosmicItems {
     // -------------------------------------------------------------------------
 
     public static final ItemEntry<OxygenTankItem> OXYGEN_SUPPLY_TANK_BRONZE = REGISTRATE
-            .item("bronze_supply_tank", OxygenTankItem::new)
-            .lang("Bronze Supply Tank")
+            .item("bronze_oxygen_tank_module", OxygenTankItem::new)
+            .lang("Bronze Oxygen Tank")
             .properties(p -> p.stacksTo(1))
             .onRegister(attach(new OxygenSupplyTankBehavior(1000, 10)))
-            .defaultModel()
+            .model((ctx, prov) -> prov.generated(ctx, CosmicCore.id("item/bronze_oxygen_tank_module")))
             .register();
 
     public static final ItemEntry<OxygenTankItem> OXYGEN_SUPPLY_TANK_STEEL = REGISTRATE
-            .item("steel_supply_tank", OxygenTankItem::new)
-            .lang("Steel Supply Tank")
+            .item("steel_oxygen_tank_module", OxygenTankItem::new)
+            .lang("Steel Oxygen Tank")
             .properties(p -> p.stacksTo(1))
             .onRegister(attach(new OxygenSupplyTankBehavior(2500, 15)))
-            .defaultModel()
+            .model((ctx, prov) -> prov.generated(ctx, CosmicCore.id("item/steel_oxygen_tank_module")))
             .register();
 
     public static ICustomDescriptionId cellName() {

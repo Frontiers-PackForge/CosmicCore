@@ -31,6 +31,7 @@ import com.gregtechceu.gtceu.utils.FormattingUtil;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.Block;
@@ -45,6 +46,8 @@ import brachy.modularui.drawable.Icon;
 import brachy.modularui.factory.PosGuiData;
 import brachy.modularui.screen.UISettings;
 import brachy.modularui.utils.Alignment;
+import brachy.modularui.utils.serialization.network.ByteBufAdapters;
+import brachy.modularui.value.sync.GenericSyncValue;
 import brachy.modularui.value.sync.IntSyncValue;
 import brachy.modularui.value.sync.PanelSyncManager;
 import brachy.modularui.widget.ParentWidget;
@@ -60,7 +63,8 @@ import java.util.Locale;
 
 public class ModularPowerStationMachine extends WorkableElectricMultiblockMachine {
 
-    public static final int AMPERAGE_PER_STAGE = 4;
+    public static final int AMPERAGE_PER_STAGE = 16;
+    public static final int MAXIMUM_AMPERAGE = 64;
     public static final int MAXIMUM_STAGES = 4;
 
     @SyncToClient
@@ -154,7 +158,11 @@ public class ModularPowerStationMachine extends WorkableElectricMultiblockMachin
                 getOutputPercent(), FormattingUtil.formatNumbers(getOperatingOutputLimit()),
                 String.format(Locale.ROOT, "%,.1f", getOperatingAmperage()))
                 .withStyle(ChatFormatting.WHITE)).asWidget());
-        widgets.add(Text.dynamic(this::fuelConsumptionLine).asWidget());
+        var fuelRate = GenericSyncValue.<RegistryFriendlyByteBuf, Component>builder(Component.class)
+                .getter(this::fuelConsumptionLine).adapter(ByteBufAdapters.COMPONENT)
+                .copy(Component::copy).equalsDefault().build();
+        syncManager.syncValue("modularPowerStationFuelRate", fuelRate);
+        widgets.add(Text.dynamic(fuelRate::getValue).asWidget());
         widgets.add(GTMultiblockTextUtil.addProgressLine(this, syncManager));
         widgets.add(GTMultiblockTextUtil.addWorkingStatusLine(this, syncManager));
         widgets.addAll(getDefinition().getAdditionalDisplay().apply(this, syncManager));
@@ -438,7 +446,9 @@ public class ModularPowerStationMachine extends WorkableElectricMultiblockMachin
         assemblyStatus = status.ordinal();
         IEnergyContainer dynamo = getDynamoEnergyContainer();
         ratedAmperage = status == AssemblyStatus.READY && dynamo != null ?
-                Math.min((long) stages * AMPERAGE_PER_STAGE, dynamo.getOutputAmperage()) : 0;
+                Math.min(Math.min((long) stages * AMPERAGE_PER_STAGE, MAXIMUM_AMPERAGE),
+                        dynamo.getOutputAmperage()) :
+                0;
         if (!isRemote()) {
             getSyncDataHolder().markClientSyncFieldDirty("driveType");
             getSyncDataHolder().markClientSyncFieldDirty("stageCount");

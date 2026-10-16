@@ -1,5 +1,7 @@
 package com.ghostipedia.cosmiccore.common.airControl;
 
+import com.ghostipedia.cosmiccore.common.armor.AbyssModule;
+import com.ghostipedia.cosmiccore.common.armor.ArmorModuleHelper;
 import com.ghostipedia.cosmiccore.common.data.CosmicItems;
 
 import net.minecraft.world.entity.EquipmentSlot;
@@ -46,16 +48,14 @@ public final class RebreatherHelper {
         if (player == null) return RebreatherType.NONE;
 
         // Check for pressurized first (better)
-        if (hasCurioItem(player, "head", CosmicItems.PRESSURIZED_REBREATHER.asItem())) {
-            return RebreatherType.PRESSURIZED;
-        }
-
-        if (hasCreateDivingHelmet(player)) {
+        int tier = ArmorModuleHelper.tier(player, EquipmentSlot.HEAD,
+                AbyssModule.Role.REBREATHER);
+        if (tier >= 2) {
             return RebreatherType.PRESSURIZED;
         }
 
         // Check for simple
-        if (hasCurioItem(player, "head", CosmicItems.SIMPLE_REBREATHER.asItem())) {
+        if (tier == 1 || hasCurioItem(player, "head", CosmicItems.SIMPLE_REBREATHER.get())) {
             return RebreatherType.SIMPLE;
         }
 
