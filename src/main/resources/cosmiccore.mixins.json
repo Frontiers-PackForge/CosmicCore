@@ -9,6 +9,7 @@
   },
   "plugin": "com.ghostipedia.cosmiccore.mixin.CosmicCoreMixinPlugin",
   "client": [
+    "gtfix.QuantumChestItemOriginFixMixin",
     "immediatelyfast.NestedItemBatchingMixin",
     "client.StartingOreSurveyWorldTabMixin",
     "gttweak.leyline.CampusDisplayTextMixin",
