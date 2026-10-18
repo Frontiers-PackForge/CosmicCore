@@ -25,6 +25,7 @@ public final class GravityDebugCommand {
                 .then(Commands.literal("reset").executes(context -> reset(context.getSource())))
                 .then(Commands.literal("normal").executes(context -> reset(context.getSource())));
         for (Direction down : Direction.values()) {
+            if (!GravityManager.isEnabled()) break;
             root.then(Commands.literal(down.getSerializedName())
                     .executes(context -> set(context.getSource(), down)));
         }

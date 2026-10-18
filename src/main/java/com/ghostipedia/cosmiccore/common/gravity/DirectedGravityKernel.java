@@ -24,7 +24,7 @@ public final class DirectedGravityKernel {
 
     public static boolean canActivate(Player player) {
         Objects.requireNonNull(player);
-        return !player.isPassenger() && !player.isSpectator() && !player.isSleeping() &&
+        return GravityManager.isEnabled() && !player.isPassenger() && !player.isSpectator() && !player.isSleeping() &&
                 !player.isDeadOrDying() && !player.isNoGravity() && !player.getAbilities().flying &&
                 !player.isFallFlying() &&
                 !player.isSwimming() && !player.isInWater() && !player.isInLava() && !player.isInFluidType();

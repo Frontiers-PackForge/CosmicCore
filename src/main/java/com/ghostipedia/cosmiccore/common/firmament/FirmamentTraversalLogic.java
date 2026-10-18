@@ -7,6 +7,7 @@ import com.ghostipedia.cosmiccore.api.gravity.GravityMode;
 import com.ghostipedia.cosmiccore.common.data.CosmicAttachmentTypes;
 import com.ghostipedia.cosmiccore.common.data.worldgen.firmament.FirmamentMiddleBandLayout;
 import com.ghostipedia.cosmiccore.common.dimension.FirmamentDimension;
+import com.ghostipedia.cosmiccore.common.gravity.GravityManager;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.network.packet.FirmamentTideHudPacket;
 
@@ -88,7 +89,8 @@ public final class FirmamentTraversalLogic {
             ANOMALY_STATES.put(serverPlayer, state);
         }
         double anomalyWeight = state.approach(targetWeight);
-        boolean freeDriftAvailable = FirmamentSpaceGravityCompat.isAvailable();
+        boolean freeDriftAvailable = GravityManager.isEnabled() &&
+                FirmamentSpaceGravityCompat.isAvailable();
 
         if (managedFrame && !freeDriftAvailable) {
             manageSpaceGravity(serverPlayer, false);

@@ -1,6 +1,8 @@
 package com.ghostipedia.cosmiccore.mixin.spacegravity;
 
 import com.ghostipedia.cosmiccore.common.firmament.FirmamentFreeDriftSteering;
+import com.ghostipedia.cosmiccore.common.firmament.FirmamentSpaceGravityCompat;
+import com.ghostipedia.cosmiccore.common.gravity.GravityManager;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
@@ -11,10 +13,20 @@ import com.spacegravity.spacegravity.SpaceGravityState;
 import com.spacegravity.spacegravity.ZeroGravityInputState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = SpaceGravityState.class, remap = false)
 public final class SpaceGravityStateMixin {
+
+    @Inject(method = "enableRuntime", at = @At("HEAD"), cancellable = true, require = 1)
+    private static void cosmiccore$disableGravity(ServerPlayer player, CallbackInfo callback) {
+        if (!GravityManager.isEnabled()) {
+            FirmamentSpaceGravityCompat.setRuntimeEnabled(player, false);
+            callback.cancel();
+        }
+    }
 
     @WrapOperation(
                    method = "handleClientInput",

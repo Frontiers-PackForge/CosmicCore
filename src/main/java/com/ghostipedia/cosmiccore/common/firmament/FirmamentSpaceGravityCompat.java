@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.common.firmament;
 
 import com.ghostipedia.cosmiccore.api.gravity.GravityApi;
 import com.ghostipedia.cosmiccore.common.dimension.FirmamentDimension;
+import com.ghostipedia.cosmiccore.common.gravity.GravityManager;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -29,7 +30,7 @@ public final class FirmamentSpaceGravityCompat {
     }
 
     public static void registerPushSurfaceProvider() {
-        if (!isAvailable() || providerRegistered) return;
+        if (!GravityManager.isEnabled() || !isAvailable() || providerRegistered) return;
         Loaded.registerPushSurfaceProvider();
         providerRegistered = true;
     }
@@ -41,7 +42,7 @@ public final class FirmamentSpaceGravityCompat {
     public static void setRuntimeEnabled(ServerPlayer player, boolean enabled) {
         if (!isAvailable()) return;
         clearAuthorityState(player);
-        SpaceGravityApi.setSpaceEngineRuntimeEnabled(player, enabled);
+        SpaceGravityApi.setSpaceEngineRuntimeEnabled(player, enabled && GravityManager.isEnabled());
     }
 
     public static void clearAuthorityState(ServerPlayer player) {

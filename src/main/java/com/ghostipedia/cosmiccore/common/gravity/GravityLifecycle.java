@@ -19,6 +19,9 @@ public final class GravityLifecycle {
     public static void onPlayerTick(PlayerTickEvent.Pre event) {
         Player player = event.getEntity();
         GravityFrame frame = GravityManager.getFrame(player);
+        if (!GravityManager.isEnabled() && frame.mode() != GravityMode.NORMAL &&
+                player instanceof ServerPlayer serverPlayer && GravityManager.reset(serverPlayer))
+            return;
         GravityRuntimeState runtime = GravityManager.runtime(player);
         boolean canActivate = DirectedGravityKernel.canActivate(player);
         if (frame.mode() == GravityMode.DIRECTED && !canActivate) {
