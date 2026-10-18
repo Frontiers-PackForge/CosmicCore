@@ -16,6 +16,12 @@ public final class GravityManager {
 
     private GravityManager() {}
 
+    // TODO: Finish Gravity System for 0.9, or something, idk... This bool just shuts it off globally on the modpack
+    // Side for now.
+    public static boolean isEnabled() {
+        return false;
+    }
+
     public static GravityFrame getFrame(Player player) {
         GravityFrame frame = Objects.requireNonNull(player)
                 .getExistingDataOrNull(CosmicAttachmentTypes.GRAVITY_FRAME);
@@ -25,6 +31,7 @@ public final class GravityManager {
     public static boolean setFrame(ServerPlayer player, GravityFrame requestedFrame) {
         Objects.requireNonNull(player);
         Objects.requireNonNull(requestedFrame);
+        if (!isEnabled() && requestedFrame.mode() != GravityMode.NORMAL) return false;
         if (requestedFrame.mode() == GravityMode.DIRECTED && !DirectedGravityKernel.canActivate(player)) return false;
         GravityFrame currentFrame = getFrame(player);
         if (currentFrame.sameTarget(requestedFrame)) return true;
@@ -69,11 +76,11 @@ public final class GravityManager {
     }
 
     public static boolean isNormal(Player player) {
-        return getFrame(player).mode() == GravityMode.NORMAL;
+        return !isEnabled() || getFrame(player).mode() == GravityMode.NORMAL;
     }
 
     public static boolean isFreeDrift(Player player) {
-        return getFrame(player).mode() == GravityMode.FREE_DRIFT;
+        return isEnabled() && getFrame(player).mode() == GravityMode.FREE_DRIFT;
     }
 
     public static GravityRuntimeState runtime(Player player) {
