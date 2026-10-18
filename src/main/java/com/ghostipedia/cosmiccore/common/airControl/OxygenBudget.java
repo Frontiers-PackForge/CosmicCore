@@ -2,96 +2,85 @@ package com.ghostipedia.cosmiccore.common.airControl;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.util.INBTSerializable;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.function.IntUnaryOperator;
 
-public class OxygenBudget implements IOxygen, INBTSerializable<CompoundTag> {
+import static com.ghostipedia.cosmiccore.common.airControl.OxygenConfig.*;
+
+public final class OxygenBudget implements INBTSerializable<CompoundTag> {
+
+    private long oxygenTicks = MAX_OXYGEN_TICKS;
+    private double fractionalTicks;
+
+    public long getOxygenTicks() {
+        return oxygenTicks;
+    }
+
+    public void setOxygenTicks(long ticks) {
+        setRemaining(ticks);
+    }
+
+    public void restoreOxygenTicks(long ticks) {
+        if (ticks > 0) setRemaining(oxygenTicks + fractionalTicks + ticks);
+    }
+
+    private void setRemaining(double ticks) {
+        double remaining = Math.clamp(ticks, 0, MAX_OXYGEN_TICKS);
+        oxygenTicks = (long) remaining;
+        fractionalTicks = remaining - oxygenTicks;
+    }
+
+    public void reset() {
+        oxygenTicks = MAX_OXYGEN_TICKS;
+        fractionalTicks = 0;
+    }
+
+    public boolean tick(double drainPerTick, double recoveryPerTick, IntUnaryOperator supply) {
+        double remaining = oxygenTicks + fractionalTicks;
+        if (drainPerTick <= 0 && recoveryPerTick > 0) {
+            setRemaining(remaining + recoveryPerTick);
+            return false;
+        }
+
+        double demand = Math.max(0, drainPerTick);
+        double refill = Math.min(TANK_TOPUP_TICKS_PER_TICK, MAX_OXYGEN_TICKS - remaining);
+        int requested = (int) (demand + refill);
+        int supplied = requested > 0 ? Math.clamp(supply.applyAsInt(requested), 0, requested) : 0;
+        double next = remaining + supplied - demand;
+        setRemaining(next);
+        return demand > 0 && next <= 0 && supplied < demand;
+    }
 
     @Override
     public CompoundTag serializeNBT(HolderLookup.Provider provider) {
-        CompoundTag tag = saveTag();
-        return tag != null ? tag : new CompoundTag();
+        CompoundTag tag = new CompoundTag();
+        tag.putLong("oxygenTicks", oxygenTicks);
+        tag.putDouble("fractionalTicks", fractionalTicks);
+        return tag;
     }
 
     @Override
-    public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
-        if (nbt != null) {
-            loadTag(nbt);
+    public void deserializeNBT(HolderLookup.Provider provider, CompoundTag tag) {
+        reset();
+        if (tag.contains("oxygenTicks", Tag.TAG_ANY_NUMERIC)) {
+            double fraction = tag.getDouble("fractionalTicks");
+            if (!Double.isFinite(fraction) || Math.abs(fraction) >= 1) fraction = 0;
+            setRemaining(tag.getLong("oxygenTicks") + fraction);
+            return;
         }
-    }
 
-    private final Map<ResourceLocation, Long> oxygenTicksByDimension = new HashMap<>();
-    private final Map<ResourceLocation, Boolean> consumingByDimension = new HashMap<>();
-    private final Map<ResourceLocation, Double> regenBufferByDimension = new HashMap<>();
-
-    @Override
-    public long getOxygenTicks(ResourceKey<Level> dimension) {
-        return oxygenTicksByDimension.getOrDefault(dimension.location(), -1L);
-    }
-
-    @Override
-    public void setOxygenTicks(ResourceKey<Level> dimension, long ticks) {
-        oxygenTicksByDimension.put(dimension.location(), ticks);
-    }
-
-    @Override
-    public boolean isConsuming(ResourceKey<Level> dimension) {
-        return consumingByDimension.getOrDefault(dimension.location(), false);
-    }
-
-    @Override
-    public void setConsuming(ResourceKey<Level> dimension, boolean consuming) {
-        consumingByDimension.put(dimension.location(), consuming);
-    }
-
-    @Override
-    public double getRegenBuffer(ResourceKey<Level> dimension) {
-        return regenBufferByDimension.getOrDefault(dimension.location(), 0.0);
-    }
-
-    @Override
-    public void setRegenBuffer(ResourceKey<Level> dimension, double buffer) {
-        regenBufferByDimension.put(dimension.location(), buffer);
-    }
-
-    // ---- NBT persistence ----
-
-    public CompoundTag saveTag() {
-        CompoundTag root = new CompoundTag();
-        ListTag list = new ListTag();
-
-        for (var entry : oxygenTicksByDimension.entrySet()) {
-            ResourceLocation dim = entry.getKey();
-            CompoundTag tag = new CompoundTag();
-            tag.putString("dimension", dim.toString());
-            tag.putLong("oxygenTicks", entry.getValue());
-            tag.putBoolean("consuming", consumingByDimension.getOrDefault(dim, false));
-            tag.putDouble("regenBuffer", regenBufferByDimension.getOrDefault(dim, 0.0));
-            list.add(tag);
+        double fullestReserve = -1;
+        for (Tag entry : tag.getList("entries", Tag.TAG_COMPOUND)) {
+            CompoundTag legacy = (CompoundTag) entry;
+            if (!legacy.contains("oxygenTicks", Tag.TAG_ANY_NUMERIC) || legacy.getLong("oxygenTicks") < 0) continue;
+            double buffer = legacy.getDouble("regenBuffer");
+            double fraction = buffer > 0 ? buffer * 20 : buffer;
+            if (!Double.isFinite(fraction) || Math.abs(fraction) >= 1) fraction = 0;
+            double remaining = Math.clamp(legacy.getLong("oxygenTicks") + fraction, 0, MAX_OXYGEN_TICKS);
+            fullestReserve = Math.max(fullestReserve, remaining);
         }
-        root.put("entries", list);
-        return root;
-    }
-
-    public void loadTag(CompoundTag root) {
-        oxygenTicksByDimension.clear();
-        consumingByDimension.clear();
-        regenBufferByDimension.clear();
-
-        ListTag list = root.getList("entries", Tag.TAG_COMPOUND);
-        for (Tag element : list) {
-            CompoundTag tag = (CompoundTag) element;
-            ResourceLocation dim = ResourceLocation.parse(tag.getString("dimension"));
-            oxygenTicksByDimension.put(dim, tag.getLong("oxygenTicks"));
-            consumingByDimension.put(dim, tag.getBoolean("consuming"));
-            regenBufferByDimension.put(dim, tag.getDouble("regenBuffer"));
-        }
+        if (fullestReserve >= 0) setRemaining(fullestReserve);
     }
 }

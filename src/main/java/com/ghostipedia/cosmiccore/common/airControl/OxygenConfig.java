@@ -1,7 +1,5 @@
 package com.ghostipedia.cosmiccore.common.airControl;
 
-import net.minecraft.world.entity.player.Player;
-
 /**
  * Configuration constants for the oxygen system.
  */
@@ -15,10 +13,6 @@ public final class OxygenConfig {
 
     /** Base maximum oxygen capacity in ticks (90 seconds) */
     public static final long MAX_OXYGEN_TICKS = 20L * 90;
-
-    public static long getMaxOxygenTicks(Player player) {
-        return MAX_OXYGEN_TICKS;
-    }
 
     /** Seconds remaining at which to show warnings */
     public static final int[] WARNING_SECONDS = { 60, 30, 15, 10, 5 };
@@ -35,9 +29,6 @@ public final class OxygenConfig {
 
     /** THIN air consumes oxygen at half the canonical NO_AIR rate. */
     public static final double THIN_AIR_DRAIN_PER_TICK = NO_AIR_DRAIN_PER_TICK * 0.5;
-
-    /** How many oxygen ticks per mB consumed from space suits (higher = suits last longer) */
-    public static final int SPACE_SUIT_TICKS_PER_MB = 5;
 
     // -------------------------------------------------------------------------
     // HUD Sync
