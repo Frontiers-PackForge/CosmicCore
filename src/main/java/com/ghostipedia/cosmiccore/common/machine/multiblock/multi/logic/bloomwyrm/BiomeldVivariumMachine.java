@@ -3,8 +3,10 @@ package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.bloomwy
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.capability.recipe.CosmicRecipeCapabilities;
 import com.ghostipedia.cosmiccore.api.capability.souls.SoulType;
+import com.ghostipedia.cosmiccore.api.data.savedData.LinkedMultiblockSavedData;
 import com.ghostipedia.cosmiccore.api.machine.trait.NotifiableSoulContainer;
 import com.ghostipedia.cosmiccore.api.recipe.ingredient.SoulStack;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.LinkedMultiblockHelper;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.part.SpawnerHatchPartMachine;
 import com.ghostipedia.cosmiccore.common.vitae.CultivationProfile;
 import com.ghostipedia.cosmiccore.common.vitae.CultivationProfileManager;
@@ -14,15 +16,22 @@ import com.ghostipedia.cosmiccore.gtbridge.CosmicRecipeTypes;
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
+import com.gregtechceu.gtceu.api.machine.MetaMachine;
+import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.trait.notifiable.NotifiableFluidTank;
+import com.gregtechceu.gtceu.api.multiblock.MultiblockWorldSavedData;
+import com.gregtechceu.gtceu.api.multiblock.pattern.PatternState;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
+import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
 import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
 import com.gregtechceu.gtceu.data.recipe.builder.GTRecipeBuilder;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -40,20 +49,22 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
-public final class BiomeldVivariumMachine extends BloomwyrmUnitMachine {
+public final class BiomeldVivariumMachine extends WorkableElectricMultiblockMachine {
 
     private static final ResourceLocation VITAE_FLUID = ResourceLocation.fromNamespaceAndPath(
             "neovitae", "essentia_vitae_source");
     private static final ResourceLocation EXPERIENCE_FLUID = ResourceLocation.fromNamespaceAndPath(
             "enderio", "xp_juice");
     private static final int EXPERIENCE_FLUID_PER_POINT = 20;
-    private static final String VITAE_BYPRODUCT = "vivarium_vitae";
-    private static final String SPIRITUS_BYPRODUCT = "vivarium_spiritus";
+    static final String VITAE_BYPRODUCT = "vivarium_vitae";
+    static final String SPIRITUS_BYPRODUCT = "vivarium_spiritus";
 
     @SaveField
     private int mode;
     @SaveField
     private long cultivationSequence;
+    @SaveField
+    private boolean standaloneRefreshed;
 
     public BiomeldVivariumMachine(BlockEntityCreationInfo info) {
         super(info, new BiomeldVivariumRecipeLogic());
@@ -61,13 +72,44 @@ public final class BiomeldVivariumMachine extends BloomwyrmUnitMachine {
     }
 
     @Override
-    public boolean supportsParallelControl() {
-        return false;
+    public void onLoad() {
+        super.onLoad();
+        if (!standaloneRefreshed) scheduleForNextServerTick(this::refreshStandalone);
     }
 
-    @Override
-    public boolean usesHeartCycleAllocation() {
-        return false;
+    public boolean isStandaloneRefreshed() {
+        return standaloneRefreshed;
+    }
+
+    private void refreshStandalone() {
+        if (standaloneRefreshed || !(getLevel() instanceof ServerLevel level) || isRemoved()) return;
+        GlobalPos position = GlobalPos.of(level.dimension(), getBlockPos());
+        var partners = LinkedMultiblockSavedData.getOrCreate(level).removeAllLinks(position);
+        LinkedMultiblockHelper.releaseAllTickets(level.getServer(), position);
+        for (GlobalPos partner : partners) {
+            var machine = LinkedMultiblockHelper.getLinkedMachine(level.getServer(), partner);
+            if (machine instanceof BloomwyrmHeartMachine heart) {
+                heart.markAllocationComplete(getBlockPos());
+                heart.processLinkNotifications();
+            }
+        }
+        invalidateStructure();
+        MultiblockWorldSavedData.getOrCreate(level).removeMapping(getDefaultPatternState());
+        invalidateStructureCaches();
+        getDefaultPatternState().setState(PatternState.CheckState.UNINITIALIZED);
+        getDefaultPatternState().setShouldUpdate(true);
+        getRecipeLogic().getChanceCaches().clear();
+        getRecipeLogic().getConsumedInputs().clear();
+        standaloneRefreshed = true;
+        setChanged();
+        checkAndFormStructure();
+    }
+
+    public static ModifierFunction recipeModifier(MetaMachine machine, GTRecipe recipe) {
+        if (!(machine instanceof BiomeldVivariumMachine vivarium)) return ModifierFunction.NULL;
+        long voltage = vivarium.getEnergyContainer().getHighestInputVoltage();
+        if (recipe.getInputEUt().voltage() > voltage) return ModifierFunction.NULL;
+        return original -> VivariumYieldOverclock.apply(original, voltage);
     }
 
     public Mode getMode() {
@@ -79,7 +121,7 @@ public final class BiomeldVivariumMachine extends BloomwyrmUnitMachine {
     }
 
     public void setModeOrdinal(int mode) {
-        if (hasAllocation() || getRecipeLogic().isActive()) return;
+        if (getRecipeLogic().isActive()) return;
         this.mode = Math.floorMod(mode, Mode.values().length);
         getRecipeLogic().markLastRecipeDirty();
     }
@@ -104,9 +146,7 @@ public final class BiomeldVivariumMachine extends BloomwyrmUnitMachine {
                 CosmicRecipeTypes.BIOMELD_VIVARIUM.get())
                 .inputFluids(nutrient.get())
                 .EUt(profile.tier().eut())
-                .duration(profile.tier().duration())
-                .addData(BloomwyrmRecipeKeys.CHARGE_INPUT, profile.tier().bloomwyrmCharge())
-                .addData(BloomwyrmRecipeKeys.MAX_PARALLEL, 1);
+                .duration(profile.tier().duration());
 
         RandomSource random = RandomSource.create(cultivationSeed(entity.get()));
         if (getMode() == Mode.EXPERIENCE) {

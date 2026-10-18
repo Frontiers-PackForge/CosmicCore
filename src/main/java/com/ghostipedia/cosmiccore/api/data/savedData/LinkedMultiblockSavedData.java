@@ -156,6 +156,30 @@ public class LinkedMultiblockSavedData extends SavedData {
         setDirty();
     }
 
+    public Set<GlobalPos> removeAllLinks(GlobalPos pos) {
+        Set<GlobalPos> partners = new HashSet<>();
+        boolean changed = false;
+        for (var owners = links.values().iterator(); owners.hasNext();) {
+            var ownerLinks = owners.next();
+            var ownLinks = ownerLinks.remove(pos);
+            if (ownLinks != null) {
+                ownLinks.forEach(link -> partners.add(link.target()));
+                changed = true;
+            }
+            for (var entries = ownerLinks.entrySet().iterator(); entries.hasNext();) {
+                var entry = entries.next();
+                if (entry.getValue().removeIf(link -> link.target().equals(pos))) {
+                    partners.add(entry.getKey());
+                    changed = true;
+                }
+                if (entry.getValue().isEmpty()) entries.remove();
+            }
+            if (ownerLinks.isEmpty()) owners.remove();
+        }
+        if (changed) setDirty();
+        return partners;
+    }
+
     // ==================== Queries ====================
 
     /**

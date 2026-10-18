@@ -116,8 +116,7 @@ public final class BiomeldVivariumEmiRecipe implements EmiRecipe {
                 profile.spiritus().units(profile.tier())), 4, footerY, 0x404040, false);
 
         widgets.addText(Component.translatable(
-                "cosmiccore.emi.biomeld_vivarium.charge",
-                profile.tier().bloomwyrmCharge()), 4, footerY + 14, 0x404040, false);
+                "cosmiccore.emi.biomeld_vivarium.yield_oc"), 4, footerY + 14, 0x404040, false);
         widgets.addText(Component.translatable(
                 "cosmiccore.emi.biomeld_vivarium.requirements",
                 profile.tier().getSerializedName().toUpperCase(Locale.ROOT),

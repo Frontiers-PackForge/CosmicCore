@@ -2359,6 +2359,7 @@ public class CosmicLangHandler extends LangHandler {
                 "Essentia Vitae: %s mB (Anima with output Quintessentia Hatch; excess voided)");
         provider.add("cosmiccore.emi.biomeld_vivarium.spiritus", "Spiritus: +%s units");
         provider.add("cosmiccore.emi.biomeld_vivarium.charge", "Bloomwyrm Charge: %s");
+        provider.add("cosmiccore.emi.biomeld_vivarium.yield_oc", "OC: 4x EU/t, 2x yield, same time");
         provider.add("cosmiccore.tooltip.oxygen_tank.fill", "Oxygen: %s / %s mB");
         provider.add("cosmiccore.tooltip.oxygen_tank.runtime", "No-Air breathing time: %s");
         provider.add("cosmiccore.tooltip.oxygen_tank.rebreather",
@@ -2441,6 +2442,8 @@ public class CosmicLangHandler extends LangHandler {
                 "§7Produces drops, spirits, and Vitae. An optional output Quintessentia Hatch stores Vitae as Anima and collects Spiritus. Excess byproducts are voided.");
         provider.add("cosmiccore.machine.biomeld_vivarium.tooltip.2",
                 "§7Experience Mode will convert all materials to xp.");
+        provider.add("cosmiccore.machine.biomeld_vivarium.tooltip.3",
+                "Each overclock uses 4x EU/t for 2x yield without increasing inputs");
         provider.add("cosmiccore.biomeld_vivarium.mode_control", "Cultivation Mode");
         provider.add("cosmiccore.biomeld_vivarium.mode.material", "Mode: Material Cultivation");
         provider.add("cosmiccore.biomeld_vivarium.mode.experience", "Mode: Experience Squeezer");
