@@ -4,6 +4,8 @@ dependencies {
     testRuntimeOnly("io.github.llamalad7:mixinextras-common:0.5.3")
 
     compileOnly(libs.jetbrains.annotations)
+    //Immediately Fast
+    compileOnly("maven.modrinth:5ZwdcRci:B2MHnfkW") { transitive = false }
     compileOnly annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-common:0.3.7-beta.1")
     mixinSquaredRuntime("com.github.bawnorton.mixinsquared:mixinsquared-neoforge:0.3.7-beta.1")
     //This should be obvious.

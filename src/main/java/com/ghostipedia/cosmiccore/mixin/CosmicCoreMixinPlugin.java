@@ -63,6 +63,8 @@ public class CosmicCoreMixinPlugin implements IMixinConfigPlugin {
                 Map.entry(".aero.", AERONAUTICS_MARKER),
                 Map.entry(".malum.", "com/sammy/malum/client/renderer/renderpass/ParallelWorldRenderer.class"),
                 Map.entry(".iris.", "net/irisshaders/iris/api/v0/IrisApi.class"),
+                Map.entry(".immediatelyfast.",
+                        "net/raphimc/immediatelyfast/feature/batching/HudBatchingBufferSource.class"),
                 Map.entry(".sodium.",
                         "net/caffeinemc/mods/sodium/client/render/chunk/terrain/material/DefaultMaterials.class"),
                 Map.entry(".simulated.",
