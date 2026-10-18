@@ -54,6 +54,7 @@ public class CosmicHudGuiOverlay implements LayeredDraw.Layer {
     private static boolean oxygenShow = true;
     private static double lastRateTicksPerSecond = Double.NaN;
     private static long tankSecondsLeft = 0;
+    private static boolean oxygenSuffocating;
 
     // Track displayed value to prevent visual jitter (bar only moves in direction of rate)
     private static long displayedOxygen = -1;
@@ -68,12 +69,14 @@ public class CosmicHudGuiOverlay implements LayeredDraw.Layer {
         timeMaxTicks = max;
     }
 
-    public static void setOxygenBar(long left, long max, boolean show, double ratePerSecond, long tankSeconds) {
+    public static void setOxygenBar(long left, long max, boolean show, double ratePerSecond, long tankSeconds,
+                                    boolean suffocating) {
         oxygenTicksLeft = left;
         oxygenMaxTicks = max;
         oxygenShow = show;
         lastRateTicksPerSecond = ratePerSecond;
         tankSecondsLeft = tankSeconds;
+        oxygenSuffocating = suffocating;
 
         // Update displayed value with monotonic constraint based on rate direction
         // This prevents visual jitter from server-side fluctuations
@@ -387,7 +390,7 @@ public class CosmicHudGuiOverlay implements LayeredDraw.Layer {
         // ETA text - render outside the scaled context for crisp text
         var font = Minecraft.getInstance().font;
         var comp = computeOxygenETA();
-        if (oxygenTicksLeft >= oxygenMaxTicks && tankSecondsLeft > 0) {
+        if (!oxygenSuffocating && tankSecondsLeft > 0) {
             comp = Component.literal(formatSeconds(tankSecondsLeft))
                     .withStyle(s -> s.withColor(0xFFFFFF));
         }
@@ -401,14 +404,15 @@ public class CosmicHudGuiOverlay implements LayeredDraw.Layer {
     }
 
     private static boolean isDraining() {
-        if (oxygenTicksLeft <= 0) return true;  // Suffocating
+        if (oxygenSuffocating) return true;
+        if (tankSecondsLeft > 0) return false;
         if (oxygenTicksLeft >= oxygenMaxTicks) return false;  // Full
         double r = lastRateTicksPerSecond;
         return Double.isFinite(r) && r < -0.01;  // Negative rate = draining
     }
 
     private static Component computeOxygenETA() {
-        if (oxygenTicksLeft <= 0) {
+        if (oxygenSuffocating) {
             return Component.translatable("cosmiccore.hud.oxygen.suffocating")
                     .withStyle(s -> s.withColor(COLOR_DRAIN));
         }

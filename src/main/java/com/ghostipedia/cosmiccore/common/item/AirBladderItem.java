@@ -18,8 +18,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-import java.util.Optional;
-
 public class AirBladderItem extends Item {
 
     private static final String TAG_CHARGES = "Charges";
@@ -67,20 +65,14 @@ public class AirBladderItem extends Item {
             }
 
             if (charges > 0) {
-                ServerLevel serverLevel = serverPlayer.serverLevel();
-                Optional.of(serverPlayer.getData(CosmicAttachmentTypes.OXYGEN_BUDGET)).ifPresent(cap -> {
-                    long current = cap.getOxygenTicks(serverLevel.dimension());
-                    long max = OxygenConfig.getMaxOxygenTicks(serverPlayer);
-
-                    if (current < max) {
-                        long restored = Math.min(OxygenConfig.AIR_BLADDER_RESTORE_TICKS, max - current);
-                        cap.setOxygenTicks(serverLevel.dimension(), current + restored);
-                        setCharges(stack, getCharges(stack) - 1);
-
-                        level.playSound(null, player.blockPosition(),
-                                SoundEvents.BOTTLE_EMPTY, SoundSource.PLAYERS, 1.0f, 0.8f);
-                    }
-                });
+                var budget = serverPlayer.getData(CosmicAttachmentTypes.OXYGEN_BUDGET);
+                long current = budget.getOxygenTicks();
+                if (current < OxygenConfig.MAX_OXYGEN_TICKS) {
+                    budget.restoreOxygenTicks(OxygenConfig.AIR_BLADDER_RESTORE_TICKS);
+                    setCharges(stack, getCharges(stack) - 1);
+                    level.playSound(null, player.blockPosition(),
+                            SoundEvents.BOTTLE_EMPTY, SoundSource.PLAYERS, 1.0f, 0.8f);
+                }
                 player.getCooldowns().addCooldown(this, OxygenConfig.AIR_BLADDER_COOLDOWN);
                 return InteractionResultHolder.sidedSuccess(stack, false);
             }

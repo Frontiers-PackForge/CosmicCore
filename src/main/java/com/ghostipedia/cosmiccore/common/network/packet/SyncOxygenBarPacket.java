@@ -21,13 +21,16 @@ public class SyncOxygenBarPacket implements CustomPacketPayload {
     private final boolean show;
     private final double ratePerSecond;
     private final long tankSeconds;
+    private final boolean suffocating;
 
-    public SyncOxygenBarPacket(long left, long max, boolean show, double ratePerSecond, long tankSeconds) {
+    public SyncOxygenBarPacket(long left, long max, boolean show, double ratePerSecond, long tankSeconds,
+                               boolean suffocating) {
         this.left = left;
         this.max = max;
         this.show = show;
         this.ratePerSecond = ratePerSecond;
         this.tankSeconds = tankSeconds;
+        this.suffocating = suffocating;
     }
 
     public SyncOxygenBarPacket(FriendlyByteBuf buf) {
@@ -36,6 +39,7 @@ public class SyncOxygenBarPacket implements CustomPacketPayload {
         this.show = buf.readBoolean();
         this.ratePerSecond = buf.readDouble();
         this.tankSeconds = buf.readVarLong();
+        this.suffocating = buf.readBoolean();
     }
 
     public void encode(FriendlyByteBuf buf) {
@@ -44,10 +48,11 @@ public class SyncOxygenBarPacket implements CustomPacketPayload {
         buf.writeBoolean(show);
         buf.writeDouble(ratePerSecond);
         buf.writeVarLong(tankSeconds);
+        buf.writeBoolean(suffocating);
     }
 
     public void execute(IPayloadContext context) {
-        CosmicHudGuiOverlay.setOxygenBar(left, max, show, ratePerSecond, tankSeconds);
+        CosmicHudGuiOverlay.setOxygenBar(left, max, show, ratePerSecond, tankSeconds, suffocating);
     }
 
     @Override
