@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.bloomwyrm;
 
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
+import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.ActionResult;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 
@@ -9,7 +10,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collections;
 import java.util.Iterator;
 
-public final class BiomeldVivariumRecipeLogic extends IndependentBloomwyrmRecipeLogic {
+public final class BiomeldVivariumRecipeLogic extends RecipeLogic {
+
+    @Override
+    public void serverTick() {
+        if (getMachine().isStandaloneRefreshed()) super.serverTick();
+    }
 
     @Override
     public BiomeldVivariumMachine getMachine() {
@@ -34,7 +40,7 @@ public final class BiomeldVivariumRecipeLogic extends IndependentBloomwyrmRecipe
 
     @Override
     public void onRecipeFinish() {
-        super.onRecipeFinish();
         getMachine().advanceCultivationSequence();
+        super.onRecipeFinish();
     }
 }

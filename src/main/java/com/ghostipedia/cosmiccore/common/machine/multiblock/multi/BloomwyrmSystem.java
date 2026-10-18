@@ -159,10 +159,11 @@ public final class BloomwyrmSystem {
             .tooltips(
                     Component.translatable("cosmiccore.machine.biomeld_vivarium.tooltip.0"),
                     Component.translatable("cosmiccore.machine.biomeld_vivarium.tooltip.1"),
-                    Component.translatable("cosmiccore.machine.biomeld_vivarium.tooltip.2"))
+                    Component.translatable("cosmiccore.machine.biomeld_vivarium.tooltip.2"),
+                    Component.translatable("cosmiccore.machine.biomeld_vivarium.tooltip.3"))
             .rotationState(RotationState.NON_Y_AXIS)
             .recipeType(CosmicRecipeTypes.BIOMELD_VIVARIUM)
-            .recipeModifier(BloomwyrmUnitMachine::recipeModifier)
+            .recipeModifier(BiomeldVivariumMachine::recipeModifier)
             .appearanceBlock(LIGHTWEIGHT_STAINLESS_STEEL_CASING)
             .partAppearance((controller, part, side) -> LIGHTWEIGHT_STAINLESS_STEEL_CASING.getDefaultState())
             .pattern(definition -> MultiblockPatternBuilder
@@ -180,6 +181,7 @@ public final class BloomwyrmSystem {
                     .where(' ', any())
                     .where('A', blocks(LIGHTWEIGHT_STAINLESS_STEEL_CASING.get())
                             .or(autoAbilitiesNoEnergyIn(CosmicRecipeTypes.BIOMELD_VIVARIUM))
+                            .or(abilities(PartAbility.INPUT_ENERGY).setExactLimit(1))
                             .or(abilities(VITAE_SPAWNER).setExactLimit(1))
                             .or(abilities(EXPORT_VITAE_NETWORK).setMaxCount(1)))
                     .where('B', blocks(ChemicalHelper.getBlock(TagPrefix.frameGt,
