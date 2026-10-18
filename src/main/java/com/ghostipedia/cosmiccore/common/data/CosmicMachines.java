@@ -1203,7 +1203,7 @@ public class CosmicMachines {
                     .slice(" AAA ", "AAAAA", "AAAAA", "AAAAA", " AAA ")
                     .sliceRepeatable(1, 5, " BBB ", "BCCCB", "BCCCB", "BCCCB", " BBB ")
                     .slice(" BBB ", "BBBBB", "BBBBB", "BBBBB", " BBB ")
-                    .where(' ', air())
+                    .where(' ', any())
                     .where('D', controller(blocks(definition.getBlock())))
                     .where('A', blocks(SOMARUST_CASING.get())
                             .or(abilities(PartAbility.INPUT_ENERGY).setMaxGlobalLimited(20).setPreviewCount(1))
