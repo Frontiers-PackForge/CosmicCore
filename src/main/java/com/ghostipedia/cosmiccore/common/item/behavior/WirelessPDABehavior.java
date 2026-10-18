@@ -28,6 +28,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -54,11 +56,11 @@ public class WirelessPDABehavior implements IInteractionItem, IAddInformation {
     private static HudData clientData = HudData.empty();
 
     @Override
-    public InteractionResult useOn(UseOnContext context) {
-        return useOn(context, context.getItemInHand());
+    public InteractionResult onItemUseFirst(ItemStack item, UseOnContext context) {
+        return bindOn(context, item);
     }
 
-    public InteractionResult useOn(UseOnContext context, ItemStack item) {
+    public InteractionResult bindOn(UseOnContext context, ItemStack item) {
         var player = context.getPlayer();
         if (player == null || !player.isShiftKeyDown()) return InteractionResult.PASS;
         var level = context.getLevel();
@@ -66,24 +68,25 @@ public class WirelessPDABehavior implements IInteractionItem, IAddInformation {
         if (MetaMachine.getMachine(level, pos) instanceof PowerCapacitorMachine) {
             if (!level.isClientSide) {
                 bind(item, TAG_LOCAL_MONITOR, GlobalPos.of(level.dimension(), pos));
-                player.displayClientMessage(
-                        Component.translatable("cosmiccore.wireless_pda.bound.power", pos.toShortString())
-                                .withStyle(ChatFormatting.GREEN),
-                        true);
+                bindingFeedback(player, level, pos, "cosmiccore.wireless_pda.bound.power");
             }
             return InteractionResult.sidedSuccess(level.isClientSide);
         }
         if (level.getBlockEntity(pos) instanceof ControllerBlockEntity) {
             if (!level.isClientSide) {
                 bind(item, TAG_ME_CONTROLLER, GlobalPos.of(level.dimension(), pos));
-                player.displayClientMessage(
-                        Component.translatable("cosmiccore.wireless_pda.bound.compute", pos.toShortString())
-                                .withStyle(ChatFormatting.GREEN),
-                        true);
+                bindingFeedback(player, level, pos, "cosmiccore.wireless_pda.bound.compute");
             }
             return InteractionResult.sidedSuccess(level.isClientSide);
         }
         return InteractionResult.PASS;
+    }
+
+    private static void bindingFeedback(Player player, Level level, BlockPos pos, String message) {
+        player.displayClientMessage(
+                Component.translatable(message, pos.toShortString()).withStyle(ChatFormatting.GREEN),
+                true);
+        level.playSound(null, pos, SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 0.5f, 1.2f);
     }
 
     @Override

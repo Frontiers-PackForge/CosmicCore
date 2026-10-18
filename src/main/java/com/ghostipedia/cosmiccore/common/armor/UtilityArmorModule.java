@@ -79,12 +79,12 @@ public final class UtilityArmorModule extends ItemModule {
     }
 
     @Override
-    public InteractionResult useOn(ModuleContext module, UseOnContext context) {
+    public InteractionResult onItemUseFirst(ModuleContext module, UseOnContext context) {
         if (role != Role.PDA || !isEnabled(module)) return InteractionResult.PASS;
         var item = module.getData().getModuleItem().copy();
         var behavior = WirelessPDABehavior.behavior(item);
         if (behavior == null) return InteractionResult.PASS;
-        var result = behavior.useOn(context, item);
+        var result = behavior.bindOn(context, item);
         if (result.consumesAction() && !context.getLevel().isClientSide) {
             module.setData(module.getData().withModuleItem(item));
         }
