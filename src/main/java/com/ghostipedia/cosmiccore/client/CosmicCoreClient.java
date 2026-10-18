@@ -13,6 +13,7 @@ import com.ghostipedia.cosmiccore.client.murkbloom.MurkParticle;
 import com.ghostipedia.cosmiccore.client.murkbloom.MurkbloomOverlay;
 import com.ghostipedia.cosmiccore.client.ponder.CosmicPonderBootstrap;
 import com.ghostipedia.cosmiccore.client.rate.ProductionStatisticsEntry;
+import com.ghostipedia.cosmiccore.client.renderer.item.InstalledOxygenBarRenderer;
 import com.ghostipedia.cosmiccore.client.renderer.machine.*;
 import com.ghostipedia.cosmiccore.client.tooltip.FoodTooltipClientComponent;
 import com.ghostipedia.cosmiccore.client.tooltip.FoodTooltipComponent;
@@ -21,10 +22,13 @@ import com.ghostipedia.cosmiccore.common.data.CosmicBlockEntities;
 import com.ghostipedia.cosmiccore.common.data.CosmicParticleTypes;
 import com.ghostipedia.cosmiccore.common.dimension.FirmamentDimension;
 
+import com.gregtechceu.gtceu.api.item.armor.ModularArmorItem;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderManager;
 
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -36,6 +40,7 @@ import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.neoforged.neoforge.client.event.RegisterDimensionSpecialEffectsEvent;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
+import net.neoforged.neoforge.client.event.RegisterItemDecorationsEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import net.neoforged.neoforge.client.event.RegisterShadersEvent;
@@ -52,6 +57,15 @@ import java.util.function.Consumer;
 public class CosmicCoreClient {
 
     private CosmicCoreClient() {}
+
+    @SubscribeEvent
+    public static void registerItemDecorations(RegisterItemDecorationsEvent event) {
+        for (var item : BuiltInRegistries.ITEM) {
+            if (item instanceof ModularArmorItem armor && armor.getEquipmentSlot() == EquipmentSlot.CHEST) {
+                event.register(item, InstalledOxygenBarRenderer.INSTANCE);
+            }
+        }
+    }
 
     public static void init(IEventBus modBus) {
         modBus.register(CosmicCoreClient.class);
