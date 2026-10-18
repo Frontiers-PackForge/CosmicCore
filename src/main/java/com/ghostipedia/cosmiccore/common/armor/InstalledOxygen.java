@@ -23,13 +23,19 @@ public final class InstalledOxygen {
                 .anyMatch(context -> context.getModule() instanceof OxygenTankModule);
     }
 
-    private static ModuleContext tank(ItemStack chest) {
+    public static ItemStack tankItem(ItemStack chest) {
+        var context = tank(chest, false);
+        return context == null ? ItemStack.EMPTY : context.getData().getModuleItem();
+    }
+
+    private static ModuleContext tank(ItemStack chest, boolean enabledOnly) {
         if (!(chest.getItem() instanceof ModularArmorItem armor) || armor.getEquipmentSlot() != EquipmentSlot.CHEST)
             return null;
         var modular = GTCapabilityHelper.getModularItem(chest);
         if (modular == null) return null;
         return modular.getAllModuleInstances().stream()
-                .filter(context -> context.getModule() instanceof OxygenTankModule && context.getData().isEnabled())
+                .filter(context -> context.getModule() instanceof OxygenTankModule &&
+                        (!enabledOnly || context.getData().isEnabled()))
                 .findFirst().orElse(null);
     }
 
@@ -38,7 +44,7 @@ public final class InstalledOxygen {
     }
 
     public static int drain(ItemStack chest, int ticks) {
-        var context = tank(chest);
+        var context = tank(chest, true);
         if (context == null || ticks <= 0) return 0;
         var item = context.getData().getModuleItem().copy();
         int drained = ((OxygenTankModule) context.getModule()).tank().drainTicks(item, ticks);
@@ -51,7 +57,7 @@ public final class InstalledOxygen {
     }
 
     public static long remaining(ItemStack chest) {
-        var context = tank(chest);
+        var context = tank(chest, true);
         return context == null ? 0 : OxygenSupplyTankBehavior.remainingTicks(context.getData().getModuleItem());
     }
 }

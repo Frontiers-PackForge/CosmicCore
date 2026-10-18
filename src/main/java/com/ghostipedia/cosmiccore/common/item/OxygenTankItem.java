@@ -20,6 +20,8 @@ import static com.ghostipedia.cosmiccore.common.airControl.OxygenConfig.NO_AIR_D
 
 public class OxygenTankItem extends ComponentItem {
 
+    public static final int BAR_COLOR = 0x55D8FF;
+
     public OxygenTankItem(Properties props) {
         super(props);
     }
@@ -31,16 +33,20 @@ public class OxygenTankItem extends ComponentItem {
 
     @Override
     public int getBarWidth(@NotNull ItemStack stack) {
+        return oxygenBarWidth(stack);
+    }
+
+    public static int oxygenBarWidth(ItemStack stack) {
         IFluidHandlerItem h = stack.getCapability(Capabilities.FluidHandler.ITEM);
         if (h == null) return 0;
         int amount = h.getFluidInTank(0).getAmount();
         int cap = Math.max(1, h.getTankCapacity(0));
-        return Math.round(13.0f * amount / cap);
+        return Math.clamp(Math.round(13.0f * amount / cap), 0, 13);
     }
 
     @Override
     public int getBarColor(@NotNull ItemStack stack) {
-        return 0x55D8FF;
+        return BAR_COLOR;
     }
 
     @Override
