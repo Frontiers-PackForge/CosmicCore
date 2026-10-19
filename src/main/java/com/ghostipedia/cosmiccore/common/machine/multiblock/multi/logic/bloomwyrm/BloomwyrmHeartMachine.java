@@ -324,6 +324,11 @@ public class BloomwyrmHeartMachine extends LinkedWorkableElectricMultiblockMachi
         if (unit.usesHeartCycleAllocation() || !unit.isAvailableForAllocation() || unit.getHeart() != this) {
             return false;
         }
+        if (!BloomwyrmAllocationPolicy.canStartIndependentWork(
+                getCycleTicksRemaining(), request.biopowerInputPerParallel())) {
+            unit.recordHeartOffer(0, BloomwyrmAllocationConstraint.CYCLE_WAIT);
+            return false;
+        }
         long remainingEU = Math.max(0, getCampusEnergyBudget() - getAllocatedEUt());
         long inputVoltage = getCampusInputVoltage();
         int remainingBiopower = Math.max(0, getBiopowerCapacity() - getAllocatedBiopower());

@@ -23,4 +23,8 @@ public final class BloomwyrmAllocationPolicy {
     public static boolean shouldCloseBatch(boolean batchActive, int activeUnits, boolean pendingAllocations) {
         return batchActive && activeUnits == 0 && !pendingAllocations;
     }
+
+    public static boolean canStartIndependentWork(int cycleTicksRemaining, int biopowerInput) {
+        return cycleTicksRemaining > 0 || biopowerInput <= 0;
+    }
 }
