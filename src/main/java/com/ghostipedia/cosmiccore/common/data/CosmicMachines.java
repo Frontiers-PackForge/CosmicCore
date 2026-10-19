@@ -428,17 +428,6 @@ public class CosmicMachines {
                     .register(),
             ELECTRIC_TIERS);
 
-    public static final MachineEntry<MachineDefinition>[] SPOOLING_MACHINE = registerTieredMachines("spooling_machine",
-            (holder, tier) -> new SimpleTieredMachine(holder, tier, defaultTankSizeFunction),
-            (tier, builder) -> builder.recipeType(CosmicRecipeTypes.SPOOLING_MACHINE)
-                    .ui(GTSingleblockMachinePanels.GENERAL_MACHINE)
-                    .tooltips(workableTiered(tier, GTValues.V[tier], GTValues.V[tier] * 64,
-                            CosmicRecipeTypes.SPOOLING_MACHINE,
-                            defaultTankSizeFunction.applyAsInt(tier), true))
-                    .workableTieredHullModel(GTCEu.id("block/machines/wiremill"))
-                    .register(),
-            ELECTRIC_TIERS);
-
     public static final MachineEntry<MachineDefinition>[] LAMINATOR = registerTieredMachines("laminator",
             (holder, tier) -> new SimpleTieredMachine(holder, tier, defaultTankSizeFunction),
             (tier, builder) -> builder
