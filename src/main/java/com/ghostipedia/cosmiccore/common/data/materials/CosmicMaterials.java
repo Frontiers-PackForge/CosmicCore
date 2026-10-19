@@ -1034,7 +1034,7 @@ public class CosmicMaterials {
                 .color(0xE8F3FF).secondaryColor(0x1F2A36).iconSet(MaterialIconSet.METALLIC)
                 .buildAndRegister();
         PrimordialSoup = new Material.Builder(CosmicCore.id("primordial_soup"))
-                .liquid(new FluidBuilder().state(FluidState.LIQUID).customStill().temperature(320))
+                .liquid(new FluidBuilder().state(FluidState.LIQUID).temperature(320))
                 .color(0x6F568F).secondaryColor(0xB9A8CF).iconSet(MaterialIconSet.DULL)
                 .buildAndRegister();
 
