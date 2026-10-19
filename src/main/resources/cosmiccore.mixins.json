@@ -150,6 +150,9 @@
     "repackaged.FactoryPanelSetItemScreenFluidMixin"
   ],
   "mixins": [
+    "FiniteAbsorptionMixin",
+    "FiniteSavedHealthMixin",
+    "apothic.ApothicEffectDamageOverflowFixMixin",
     "gtfix.LegacyArmorModuleInstallMixin",
     "gtfix.LegacyArmorAirSupplierMixin",
     "gtfix.LegacyArmorFluidModuleMixin",
@@ -243,6 +246,7 @@
     "gtfix.GTToolAoEBreakEffectScopeFixMixin",
     "gtfix.PowerlessJetpackFuelReloadResetMixin",
     "gtfix.GTKubeRecipeDataWriteFixMixin",
+    "gtfix.kjs.SharedRegistryBuilderRegistrationFixMixin",
     "gtfix.DistilleryOutputFluidFixMixin",
     "gtfix.HardHammerDropConversionFixMixin",
     "gttweak.recipeui.RecipeUILayoutEmberMixin",

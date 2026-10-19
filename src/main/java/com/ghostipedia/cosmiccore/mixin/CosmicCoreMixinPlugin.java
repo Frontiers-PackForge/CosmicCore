@@ -53,6 +53,8 @@ public class CosmicCoreMixinPlugin implements IMixinConfigPlugin {
     static {
         ClassLoader loader = CosmicCoreMixinPlugin.class.getClassLoader();
         Map<String, String> probes = Map.ofEntries(
+                Map.entry(".gtfix.kjs.", "dev/latvian/mods/kubejs/registry/RegistryEventHandler.class"),
+                Map.entry(".apothic.", "dev/shadowsoffire/apothic_attributes/api/ALCombatRules.class"),
                 Map.entry(".emi.", "dev/emi/emi/api/EmiApi.class"),
                 Map.entry(".ae2.", "appeng/integration/modules/itemlists/EncodingHelper.class"),
                 Map.entry(".jei.", "mezz/jei/library/plugins/jei/tags/TagInfoRecipeCategory.class"),
