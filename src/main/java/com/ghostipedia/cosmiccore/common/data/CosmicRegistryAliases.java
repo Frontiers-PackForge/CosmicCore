@@ -63,6 +63,18 @@ public final class CosmicRegistryAliases {
     public static void register(RegisterEvent event) {
         Registry<?> registry = event.getRegistry();
         registerPetrochemicalAliases(event, registry);
+        if (event.getRegistryKey().equals(Registries.BLOCK) || event.getRegistryKey().equals(Registries.ITEM) ||
+                event.getRegistryKey().equals(Registries.BLOCK_ENTITY_TYPE) ||
+                event.getRegistryKey().equals(GTRegistries.Keys.MACHINE)) {
+            for (String tier : List.of("lv", "mv", "hv", "ev", "iv", "luv", "zpm", "uv", "uhv", "uev", "uiv",
+                    "uxv", "opv")) {
+                addAlias(registry, CosmicCore.id(tier + "_spooling_machine"), gt(tier + "_spooler"));
+            }
+            addAlias(registry, CosmicCore.id("large_spooling_machine"), gt("large_spooler"));
+        }
+        if (event.getRegistryKey().equals(Registries.RECIPE_TYPE)) {
+            addAlias(registry, CosmicCore.id("spooling_machine"), gt("spooling"));
+        }
         if (event.getRegistryKey().equals(Registries.BLOCK) || event.getRegistryKey().equals(Registries.ITEM)) {
             ABYSS_RENAMES.forEach((from, to) -> addAlias(registry, from, to));
         }

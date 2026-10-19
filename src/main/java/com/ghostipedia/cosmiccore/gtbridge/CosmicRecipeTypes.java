@@ -438,11 +438,6 @@ public class CosmicRecipeTypes {
             .setEUIO(IO.IN)
             .register();
 
-    public static final GTRecipeTypeEntry SPOOLING_MACHINE = recipeType("spooling_machine", ELECTRIC)
-            .setMaxIOSize(3, 2, 1, 0)
-            .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
-            .setEUIO(IO.IN)
-            .register();
     public static final GTRecipeTypeEntry ORBITAL_FORGE_EBF = recipeType("orbital_forge", GTRecipeTypes.MULTIBLOCK)
             .setSound(CosmicSounds.ORBITAL_FORGE)
             .setHasResearchSlot(true)
@@ -862,6 +857,7 @@ public class CosmicRecipeTypes {
 
         setMaxIOSize(LASER_ENGRAVER_RECIPES.get(), 2, 2, 1, 1);
         setMaxIOSize(PACKER_RECIPES.get(), 3, 2, 0, 0);
+        setMaxIOSize(SPOOLING_RECIPES.get(), 3, 2, 1, 0);
         // Oh my God
         setMaxIOSize(CRACKING_RECIPES.get(), 2, 2, 2, 2);
         CHEMICAL_RECIPES.get().getRecipeBuilder().onSave((builder, provider) -> {

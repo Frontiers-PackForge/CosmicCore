@@ -30,7 +30,7 @@ public class CosmicLangHandler extends LangHandler {
             "polymerizer", "hemophagic_transfuser", "imbument_pylon", "chromatic_flotation_plant", "spirit_crucible",
             "soul_foundry", "calx_reactor", "roaster", "mana_leaching_tub", "thermomagnitizer",
             "vacuum_bubbler", "large_roaster", "vile_fission", "void_salt_fission", "reconstructor",
-            "spooling_machine", "orbital_forge", "orbital_forge_abs", "alloy_blasting_kiln", "dawn_forge",
+            "orbital_forge", "orbital_forge_abs", "alloy_blasting_kiln", "dawn_forge",
             "cinder_hearth",
             "arcane_crucible", "pyrothermic_refinery", "mana_etching", "bio_lab", "star_ladder_research",
             "stellar_iris", "ignition_complex", "chormatic_distillation_plant", "celestial_bore",
@@ -2474,6 +2474,7 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.bloomwyrm.constraint.charge", "Limited by Bloomwyrm Charge");
         provider.add("cosmiccore.bloomwyrm.constraint.heart_capacity", "Limited by Bloomwyrm Charge capacity");
         provider.add("cosmiccore.bloomwyrm.constraint.structure", "Allocation cancelled: structure unformed");
+        provider.add("cosmiccore.bloomwyrm.constraint.cycle_wait", "Waiting for Heart to start the next cycle");
         provider.add("cosmiccore.bloomwyrm.waiting_for_heart_power", "Waiting for Bloomwyrm Heart power");
         provider.add("cosmiccore.bloomwyrm.unit.linked", "Bloomwyrm Heart linked");
         provider.add("cosmiccore.bloomwyrm.unit.unlinked", "Bloomwyrm Heart not linked");
