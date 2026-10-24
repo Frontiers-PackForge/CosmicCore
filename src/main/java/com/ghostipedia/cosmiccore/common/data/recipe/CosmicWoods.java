@@ -182,6 +182,10 @@ public final class CosmicWoods {
     private static Ingredient logIngredient(WoodTypeEntry e) {
         List<Ingredient> parts = new ArrayList<>();
         if (e.logTag != null) parts.add(Ingredient.of(e.logTag));
+        if (e.woodName.equals("ars_nouveau_archwood")) {
+            parts.add(Ingredient.of(TagKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath("c", "logs/archwood"))));
+        }
         List<ItemLike> items = plankInputs.getOrDefault(e.woodName, List.of());
         if (!items.isEmpty()) parts.add(Ingredient.of(items.toArray(new ItemLike[0])));
         if (parts.isEmpty()) return Ingredient.of(e.planks);
