@@ -1,7 +1,7 @@
 {
     "parent": "minecraft:block/block",
     "loader": "gtceu:machine",
-    "machine": "cosmiccore:uev_spawner_hatch",
+    "machine": "cosmiccore:spawner_holder",
     "replaceable_textures": [
         "bottom",
         "top",
@@ -12,9 +12,9 @@
             "model": {
                 "parent": "cosmiccore:block/machine/part/module_hatch",
                 "textures": {
-                    "bottom": "gtceu:block/casings/voltage/uev/bottom",
-                    "side": "gtceu:block/casings/voltage/uev/side",
-                    "top": "gtceu:block/casings/voltage/uev/top"
+                    "bottom": "gtceu:block/casings/voltage/mv/bottom",
+                    "side": "gtceu:block/casings/voltage/mv/side",
+                    "top": "gtceu:block/casings/voltage/mv/top"
                 }
             }
         }
