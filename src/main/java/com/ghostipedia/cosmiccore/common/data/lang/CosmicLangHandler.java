@@ -3,6 +3,7 @@ package com.ghostipedia.cosmiccore.common.data.lang;
 import com.ghostipedia.cosmiccore.common.data.worldgen.field.OreFieldPlacement;
 import com.ghostipedia.cosmiccore.common.murkbloom.StealthCoating;
 
+import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.data.lang.LangHandler;
@@ -52,6 +53,10 @@ public class CosmicLangHandler extends LangHandler {
     }
 
     public static void init(RegistrateLangProvider provider) {
+        for (int tier = GTValues.LV; tier <= GTValues.OpV; tier++) {
+            provider.add("item.gtceu." + GTValues.VN[tier].toLowerCase(java.util.Locale.ROOT) + "_robot_arm",
+                    GTValues.VN[tier] + " Robot Arm");
+        }
         provider.add("gtceu.key.armor_mode_switch", "Armor Mode Switch");
         provider.add("gtceu.key.enable_boots", "Enable Boosted Jump");
         provider.add("gtceu.key.armor_charging", "Armor Charging to Inventory Toggle");
