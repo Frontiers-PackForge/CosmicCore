@@ -13,6 +13,7 @@ import com.ghostipedia.cosmiccore.common.network.packet.StarLadderUplinkPackets.
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;
 import com.gregtechceu.gtceu.api.data.chemical.ChemicalHelper;
+import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.machine.trait.notifiable.NotifiableItemStackHandler;
 import com.gregtechceu.gtceu.common.data.GTItems;
@@ -23,6 +24,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.ItemStack;
@@ -355,7 +357,6 @@ public class StarLadderUplinkManager implements INBTSerializable<CompoundTag> {
     }
 
     private static final Whisper[] PHASE_1_WHISPERS = {
-            // Ambient — machine strain, sensory
             ambient("p1.conduits_heating"),
             ambient("p1.groaning_walls"),
             ambient("p1.air_tastes_iron"),
@@ -371,19 +372,16 @@ public class StarLadderUplinkManager implements INBTSerializable<CompoundTag> {
             ambient("p1.metal_ticking"),
             ambient("p1.pressure_dropping"),
             ambient("p1.something_woke_up"),
-            // Observer — terse, dismissive
             observer("p1.stop"),
             observer("p1.not_here"),
             observer("p1.leave"),
             observer("p1.no"),
-            // Reflection — determined
             reflection("p1.keep_feeding"),
             reflection("p1.hold"),
             reflection("p1.its_working"),
     };
 
     private static final Whisper[] PHASE_2_WHISPERS = {
-            // Ambient — escalating, structural
             ambient("p2.structure_resonating"),
             ambient("p2.heat_distortion"),
             ambient("p2.something_cracks"),
@@ -400,21 +398,18 @@ public class StarLadderUplinkManager implements INBTSerializable<CompoundTag> {
             ambient("p2.smell_of_burning"),
             ambient("p2.time_stutters"),
             ambient("p2.vision_doubles"),
-            // Observer — warning, cold
             observer("p2.dont_understand"),
             observer("p2.not_yours"),
             observer("p2.i_was_patient"),
             observer("p2.you_were_warned"),
             observer("p2.still_time"),
             observer("p2.enough"),
-            // Reflection — pushing through
             reflection("p2.channel_widening"),
             reflection("p2.dont_stop"),
             reflection("p2.halfway"),
     };
 
     private static final Whisper[] PHASE_3_WHISPERS = {
-            // Ambient — reality failing
             ambient("p3.everything_shaking"),
             ambient("p3.veil_fraying"),
             ambient("p3.light_bending_wrong"),
@@ -432,7 +427,6 @@ public class StarLadderUplinkManager implements INBTSerializable<CompoundTag> {
             ambient("p3.sky_too_close"),
             ambient("p3.something_looking_back"),
             ambient("p3.tinnitus_screaming"),
-            // Observer — yielding, ominous
             observer("p3.fine"),
             observer("p3.remember_this"),
             observer("p3.you_chose_this"),
@@ -440,7 +434,6 @@ public class StarLadderUplinkManager implements INBTSerializable<CompoundTag> {
             observer("p3.see_what_happens"),
             observer("p3.door_opens_both_ways"),
             observer("p3.congratulations"),
-            // Reflection — final push
             reflection("p3.almost_through"),
             reflection("p3.one_more_push"),
             reflection("p3.can_feel_it"),
@@ -600,7 +593,7 @@ public class StarLadderUplinkManager implements INBTSerializable<CompoundTag> {
 
     // ---- Sound ----
 
-    private void playSound(net.minecraft.sounds.SoundEvent sound, float volume, float pitch) {
+    private void playSound(SoundEvent sound, float volume, float pitch) {
         if (initiatingPlayer != null) {
             initiatingPlayer.playNotifySound(sound, SoundSource.BLOCKS, volume, pitch);
         }
@@ -637,7 +630,7 @@ public class StarLadderUplinkManager implements INBTSerializable<CompoundTag> {
 
     private record DemandEntry(Supplier<ItemStack> itemSupplier, int minQty, int maxQty) {}
 
-    private static DemandEntry material(TagPrefix prefix, com.gregtechceu.gtceu.api.data.chemical.material.Material mat,
+    private static DemandEntry material(TagPrefix prefix, Material mat,
                                         int min, int max) {
         return new DemandEntry(() -> ChemicalHelper.get(prefix, mat), min, max);
     }
@@ -648,24 +641,24 @@ public class StarLadderUplinkManager implements INBTSerializable<CompoundTag> {
 
     // Phase 1: EV-tier bulk materials
     private static final List<DemandEntry> PHASE_1_BULK = List.of(
-            material(TagPrefix.ingot, GTMaterials.Steel, 500, 2000),
-            material(TagPrefix.ingot, GTMaterials.Aluminium, 500, 2000),
-            material(TagPrefix.ingot, GTMaterials.StainlessSteel, 200, 800),
-            material(TagPrefix.plate, GTMaterials.Steel, 200, 1000),
-            material(TagPrefix.plate, GTMaterials.Aluminium, 200, 800),
-            material(TagPrefix.dust, GTMaterials.Redstone, 1000, 4000),
-            material(TagPrefix.dust, GTMaterials.Glowstone, 500, 2000),
-            material(TagPrefix.gem, GTMaterials.Diamond, 64, 256),
-            material(TagPrefix.ingot, GTMaterials.Gold, 200, 800),
-            material(TagPrefix.dust, GTMaterials.Lapis, 500, 2000));
+            material(TagPrefix.ingot.value(), GTMaterials.Steel.value(), 500, 2000),
+            material(TagPrefix.ingot.value(), GTMaterials.Aluminium.value(), 500, 2000),
+            material(TagPrefix.ingot.value(), GTMaterials.StainlessSteel.value(), 200, 800),
+            material(TagPrefix.plate.value(), GTMaterials.Steel.value(), 200, 1000),
+            material(TagPrefix.plate.value(), GTMaterials.Aluminium.value(), 200, 800),
+            material(TagPrefix.dust.value(), GTMaterials.Redstone.value(), 1000, 4000),
+            material(TagPrefix.dust.value(), GTMaterials.Glowstone.value(), 500, 2000),
+            material(TagPrefix.gem.value(), GTMaterials.Diamond.value(), 64, 256),
+            material(TagPrefix.ingot.value(), GTMaterials.Gold.value(), 200, 800),
+            material(TagPrefix.dust.value(), GTMaterials.Lapis.value(), 500, 2000));
 
     // Phase 1: HV-tier complex components
     private static final List<DemandEntry> PHASE_1_COMPLEX = List.of(
-            material(TagPrefix.gear, GTMaterials.StainlessSteel, 32, 512),
-            material(TagPrefix.spring, CosmicMaterials.EnergeticAluminium, 32, 512),
-            material(TagPrefix.plate, CosmicMaterials.PrismaticTungstensteel, 64, 512),
-            material(TagPrefix.frameGt, GTMaterials.StainlessSteel, 32, 512),
-            material(TagPrefix.wireFine, CosmicMaterials.EnergeticAluminium, 128, 512),
+            material(TagPrefix.gear.value(), GTMaterials.StainlessSteel.value(), 32, 512),
+            material(TagPrefix.spring.value(), CosmicMaterials.EnergeticAluminium.value(), 32, 512),
+            material(TagPrefix.plate.value(), CosmicMaterials.PrismaticTungstensteel.value(), 64, 512),
+            material(TagPrefix.frameGt.value(), GTMaterials.StainlessSteel.value(), 32, 512),
+            material(TagPrefix.wireFine.value(), CosmicMaterials.EnergeticAluminium.value(), 128, 512),
             item(CosmicItems.ADVANCED_RAM_WAFER::asStack, 64, 256),
             item(CosmicItems.ENTHEL_CPU::asStack, 16, 64),
             item(CosmicItems.ENTHELIC_PCB::asStack, 16, 64),
@@ -674,45 +667,45 @@ public class StarLadderUplinkManager implements INBTSerializable<CompoundTag> {
 
     // Phase 2: EV-tier bulk alloys
     private static final List<DemandEntry> PHASE_2_BULK = List.of(
-            material(TagPrefix.ingot, GTMaterials.TungstenSteel, 512, 2048),
-            material(TagPrefix.ingot, GTMaterials.Titanium, 512, 2048),
-            material(TagPrefix.ingot, GTMaterials.Chromium, 512, 2048),
-            material(TagPrefix.ingot, GTMaterials.Tungsten, 512, 2048),
-            material(TagPrefix.ingot, CosmicMaterials.VibrantAlloy, 512, 2048),
-            material(TagPrefix.ingot, CosmicMaterials.Signalum, 512, 2048),
-            material(TagPrefix.ingot, CosmicMaterials.Lumium, 512, 2048),
-            material(TagPrefix.ingot, CosmicMaterials.Enderium, 512, 2048),
-            material(TagPrefix.dust, GTMaterials.Platinum, 512, 2048),
-            material(TagPrefix.gem, GTMaterials.Emerald, 512, 2048));
+            material(TagPrefix.ingot.value(), GTMaterials.TungstenSteel.value(), 512, 2048),
+            material(TagPrefix.ingot.value(), GTMaterials.Titanium.value(), 512, 2048),
+            material(TagPrefix.ingot.value(), GTMaterials.Chromium.value(), 512, 2048),
+            material(TagPrefix.ingot.value(), GTMaterials.Tungsten.value(), 512, 2048),
+            material(TagPrefix.ingot.value(), CosmicMaterials.VibrantAlloy.value(), 512, 2048),
+            material(TagPrefix.ingot.value(), CosmicMaterials.Signalum.value(), 512, 2048),
+            material(TagPrefix.ingot.value(), CosmicMaterials.Lumium.value(), 512, 2048),
+            material(TagPrefix.ingot.value(), CosmicMaterials.Enderium.value(), 512, 2048),
+            material(TagPrefix.dust.value(), GTMaterials.Platinum.value(), 512, 2048),
+            material(TagPrefix.gem.value(), GTMaterials.Emerald.value(), 512, 2048));
 
     // Phase 2: EV-tier complex components
     private static final List<DemandEntry> PHASE_2_COMPLEX = List.of(
-            material(TagPrefix.gear, CosmicMaterials.VibrantAlloy, 16, 64),
-            material(TagPrefix.spring, CosmicMaterials.Signalum, 32, 128),
-            material(TagPrefix.plate, CosmicMaterials.Enderium, 32, 128),
-            material(TagPrefix.wireFine, CosmicMaterials.Lumium, 64, 256),
+            material(TagPrefix.gear.value(), CosmicMaterials.VibrantAlloy.value(), 16, 64),
+            material(TagPrefix.spring.value(), CosmicMaterials.Signalum.value(), 32, 128),
+            material(TagPrefix.plate.value(), CosmicMaterials.Enderium.value(), 32, 128),
+            material(TagPrefix.wireFine.value(), CosmicMaterials.Lumium.value(), 64, 256),
             item(GTItems.LAPOTRON_CRYSTAL::asStack, 16, 64),
             item(GTItems.ENERGIUM_CRYSTAL::asStack, 16, 64));
 
     // Phase 3: IV-tier exotic bulk
     private static final List<DemandEntry> PHASE_3_BULK = List.of(
-            material(TagPrefix.ingot, GTMaterials.Uranium235, 32, 128),
-            material(TagPrefix.ingot, GTMaterials.Osmium, 50, 200),
-            material(TagPrefix.ingot, GTMaterials.Plutonium239, 50, 200),
-            material(TagPrefix.ingot, GTMaterials.Americium, 32, 128),
-            material(TagPrefix.ingot, CosmicMaterials.Virtue, 50, 200),
-            material(TagPrefix.ingot, CosmicMaterials.MelodicAlloy, 32, 128),
-            material(TagPrefix.ingot, GTMaterials.Stellite100, 16, 64),
-            material(TagPrefix.ingot, GTMaterials.HSSG, 50, 200),
-            material(TagPrefix.ingot, CosmicMaterials.Nostium, 32, 128),
-            material(TagPrefix.ingot, CosmicMaterials.Halizine, 50, 200));
+            material(TagPrefix.ingot.value(), GTMaterials.Uranium235.value(), 32, 128),
+            material(TagPrefix.ingot.value(), GTMaterials.Osmium.value(), 50, 200),
+            material(TagPrefix.ingot.value(), GTMaterials.Plutonium239.value(), 50, 200),
+            material(TagPrefix.ingot.value(), GTMaterials.Americium.value(), 32, 128),
+            material(TagPrefix.ingot.value(), CosmicMaterials.Virtue.value(), 50, 200),
+            material(TagPrefix.ingot.value(), CosmicMaterials.MelodicAlloy.value(), 32, 128),
+            material(TagPrefix.ingot.value(), GTMaterials.Stellite100.value(), 16, 64),
+            material(TagPrefix.ingot.value(), GTMaterials.HSSG.value(), 50, 200),
+            material(TagPrefix.ingot.value(), CosmicMaterials.Nostium.value(), 32, 128),
+            material(TagPrefix.ingot.value(), CosmicMaterials.Halizine.value(), 50, 200));
 
     // Phase 3: IV-tier complex components
     private static final List<DemandEntry> PHASE_3_COMPLEX = List.of(
-            material(TagPrefix.gear, CosmicMaterials.MelodicAlloy, 8, 32),
-            material(TagPrefix.frameGt, GTMaterials.NaquadahAlloy, 16, 64),
-            material(TagPrefix.plate, CosmicMaterials.SolSteel, 16, 64),
-            material(TagPrefix.wireFine, CosmicMaterials.VoidSpark, 32, 128),
+            material(TagPrefix.gear.value(), CosmicMaterials.MelodicAlloy.value(), 8, 32),
+            material(TagPrefix.frameGt.value(), GTMaterials.NaquadahAlloy.value(), 16, 64),
+            material(TagPrefix.plate.value(), CosmicMaterials.SolSteel.value(), 16, 64),
+            material(TagPrefix.wireFine.value(), CosmicMaterials.VoidSpark.value(), 32, 128),
             item(CosmicItems.LUCIDIC_PROCESSOR::asStack, 4, 16),
             item(CosmicItems.ENTHELIC_PROCESSOR_MAINFRAME::asStack, 2, 8),
             item(CosmicItems.ESCHATON_PROCESSOR::asStack, 2, 8),

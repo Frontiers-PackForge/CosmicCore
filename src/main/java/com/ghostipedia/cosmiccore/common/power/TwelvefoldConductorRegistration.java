@@ -1,19 +1,21 @@
 package com.ghostipedia.cosmiccore.common.power;
 
-import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialIconType;
 import com.gregtechceu.gtceu.api.data.chemical.material.stack.MaterialStack;
 import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.TagPrefixEntry;
 import com.gregtechceu.gtceu.common.data.GTMaterialBlocks;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.pipelike.cable.Insulation;
 import com.gregtechceu.gtceu.data.recipe.CustomTags;
 
+import static com.gregtechceu.gtceu.common.registry.GTRegistration.REGISTRATE;
+
 public final class TwelvefoldConductorRegistration {
 
-    private static TagPrefix wirePrefix;
-    private static TagPrefix cablePrefix;
+    private static TagPrefixEntry wirePrefix;
+    private static TagPrefixEntry cablePrefix;
     private static Insulation wireInsulation;
     private static Insulation cableInsulation;
 
@@ -23,36 +25,36 @@ public final class TwelvefoldConductorRegistration {
         if (wirePrefix != null) {
             return;
         }
-        wirePrefix = new TagPrefix(GTCEu.id("wire_gt_twelve"))
+        wirePrefix = REGISTRATE.tagPrefix("wire_gt_twelve")
                 .customLookupTable(() -> GTMaterialBlocks.CABLE_BLOCKS)
-                .langValue("12x %s Wire")
+                .lang("12x %s Wire")
                 .miningToolTag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WIRE_CUTTER)
                 .materialAmount(GTValues.M * 6)
                 .materialIconType(MaterialIconType.wire)
                 .unificationEnabled(true)
-                .enableRecycling();
-        cablePrefix = new TagPrefix(GTCEu.id("cable_gt_twelve"))
+                .enableRecycling().register();
+        cablePrefix = REGISTRATE.tagPrefix("cable_gt_twelve")
                 .customLookupTable(() -> GTMaterialBlocks.CABLE_BLOCKS)
-                .langValue("12x %s Cable")
+                .lang("12x %s Cable")
                 .miningToolTag(CustomTags.MINEABLE_WITH_CONFIG_VALID_PICKAXE_WIRE_CUTTER)
                 .materialAmount(GTValues.M * 6)
                 .unificationEnabled(true)
-                .enableRecycling();
+                .enableRecycling().register();
         Insulation.values();
     }
 
     public static void attachRubberMaterial() {
-        if (cablePrefix.secondaryMaterials().isEmpty()) {
+        if (cablePrefix.value().secondaryMaterials().isEmpty()) {
             cablePrefix
                     .addSecondaryMaterial(new MaterialStack(GTMaterials.Rubber, TagPrefix.plate.materialAmount() * 4));
         }
     }
 
-    public static TagPrefix wirePrefix() {
+    public static TagPrefixEntry wirePrefix() {
         return wirePrefix;
     }
 
-    public static TagPrefix cablePrefix() {
+    public static TagPrefixEntry cablePrefix() {
         return cablePrefix;
     }
 

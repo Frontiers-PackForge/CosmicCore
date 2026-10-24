@@ -4,8 +4,8 @@ import com.ghostipedia.cosmiccore.common.power.steam.HPBoilerRates;
 import com.ghostipedia.cosmiccore.common.power.steam.SteamBoilerRates;
 
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
-import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.machine.steam.SteamBoilerMachine;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MaterialRegistryEntry;
 import com.gregtechceu.gtceu.common.machine.steam.SteamLiquidBoilerMachine;
 import com.gregtechceu.gtceu.common.machine.steam.SteamSolarBoiler;
 import com.gregtechceu.gtceu.common.machine.steam.SteamSolidBoilerMachine;
@@ -65,11 +65,11 @@ public abstract class SteamBoilerHighPressureOutputMixin {
               method = "updateCurrentTemperature()V",
               at = @At(
                        value = "INVOKE",
-                       target = "Lcom/gregtechceu/gtceu/api/data/chemical/material/Material;getFluid(I)Lnet/neoforged/neoforge/fluids/FluidStack;"),
+                       target = "Lcom/gregtechceu/gtceu/api/registry/registrate/entry/MaterialRegistryEntry;getFluid(I)Lnet/neoforged/neoforge/fluids/FluidStack;"),
               require = 1,
               expect = 1,
               allow = 1)
-    private FluidStack cosmiccore$emitHighPressureSteam(Material material, int amount) {
+    private FluidStack cosmiccore$emitHighPressureSteam(MaterialRegistryEntry material, int amount) {
         SteamBoilerMachine machine = (SteamBoilerMachine) (Object) this;
         return machine.isHighPressure() ? HPBoilerRates.highPressureSteam(amount) : material.getFluid(amount);
     }

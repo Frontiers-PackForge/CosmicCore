@@ -35,6 +35,13 @@ public class OxygenTankModule extends CapabilityProviderItemModule<IFluidHandler
     }
 
     @Override
+    public ItemStack copyCapabilityDataToModuleItem(IFluidHandlerItem cap, ModuleContext context) {
+        var current = context.getModularItemStack().getModuleContextForSlot(context.getData().getSlot());
+        return current != null && current.getModule() == this ? current.getData().getModuleItem().copy() :
+                context.getData().getModuleItem().copy();
+    }
+
+    @Override
     public boolean canApplyTo(ItemStack stack) {
         if (!(stack.getItem() instanceof ModularArmorItem armor) ||
                 armor.getEquipmentSlot() != EquipmentSlot.CHEST)

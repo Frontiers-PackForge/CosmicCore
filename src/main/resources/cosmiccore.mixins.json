@@ -159,7 +159,6 @@
     "gtfix.LegacyArmorModuleRecoveryMixin",
     "gtfix.EquipmentFoundryOxygenViewMixin",
     "gttweak.rainseal.RainSealStateMixin",
-    "gtfix.SprayCanAEColorFixMixin",
     "gttweak.material.ConcreteUnificationOrderFixMixin",
     "gttweak.rainseal.RainSealEnvironmentMixin",
     "gttweak.prospecting.LVFluidProspectorMixin",

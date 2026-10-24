@@ -3,6 +3,7 @@ package com.ghostipedia.cosmiccore;
 import com.ghostipedia.cosmiccore.api.capability.recipe.CosmicRecipeCapabilities;
 import com.ghostipedia.cosmiccore.api.data.CosmicCoreMaterialIconType;
 import com.ghostipedia.cosmiccore.api.data.CosmicTagPrefix;
+import com.ghostipedia.cosmiccore.api.data.material.property.CCoreMaterialIconSet;
 import com.ghostipedia.cosmiccore.api.item.LinkedTerminalBehavior;
 import com.ghostipedia.cosmiccore.api.pattern.CosmicPredicates;
 import com.ghostipedia.cosmiccore.api.recipe.ingredient.SoulIngredient;
@@ -11,6 +12,7 @@ import com.ghostipedia.cosmiccore.api.recipe.lookup.MapSoulIngredient;
 import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.client.CosmicCoreClient;
 import com.ghostipedia.cosmiccore.common.airControl.OxygenRules;
+import com.ghostipedia.cosmiccore.common.armor.SanguineKeyMappings;
 import com.ghostipedia.cosmiccore.common.block.crop.CosmicCropFeatures;
 import com.ghostipedia.cosmiccore.common.block.crop.CosmicCrops;
 import com.ghostipedia.cosmiccore.common.commands.argument.SoulTypeArgument;
@@ -32,12 +34,15 @@ import com.ghostipedia.cosmiccore.common.data.worldgen.field.InitialOreSurvey;
 import com.ghostipedia.cosmiccore.common.data.worldgen.firmament.CosmicFirmamentFeatures;
 import com.ghostipedia.cosmiccore.common.data.worldgen.generator.CosmicChunkGenerators;
 import com.ghostipedia.cosmiccore.common.data.worldgen.generator.CosmicVeinGenerators;
+import com.ghostipedia.cosmiccore.common.deployment.LeylineCraftingPattern;
+import com.ghostipedia.cosmiccore.common.deployment.LeylineDeploymentBehaviors;
 import com.ghostipedia.cosmiccore.common.firmament.FirmamentSpaceGravityCompat;
 import com.ghostipedia.cosmiccore.common.item.armor.boots.TravelerBootsMigration;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.bloomwyrm.BloomwyrmChunkLoading;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.modular.MultiblockInit;
 import com.ghostipedia.cosmiccore.common.mob.DimensionMobScaling;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
+import com.ghostipedia.cosmiccore.common.orrery.OrreryNetwork;
 import com.ghostipedia.cosmiccore.common.recipe.condition.CosmicConditions;
 import com.ghostipedia.cosmiccore.common.recipe.ingredient.CosmicIngredientTypes;
 import com.ghostipedia.cosmiccore.ember.CosmicEmberCapabilities;
@@ -119,6 +124,7 @@ public class CosmicCore {
         if (didRunRegistration) return;
         didRunRegistration = true;
 
+        SanguineKeyMappings.init();
         ConfigHolder.init();
         CosmicCreativeModeTabs.init();
         CosmicElements.init();
@@ -128,6 +134,7 @@ public class CosmicCore {
         CosmicCoreMaterialIconType.init();
         CosmicTagPrefix.initTagPrefixes();
         CosmicMaterialSet.init();
+        CCoreMaterialIconSet.init();
         CosmicRecipeCapabilities.init();
         CosmicConditions.register();
         CosmicRecipeTypes.init();
@@ -167,9 +174,9 @@ public class CosmicCore {
     public void commonSetup(FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
             InitialOreSurvey.init();
-            com.ghostipedia.cosmiccore.common.deployment.LeylineCraftingPattern.register();
-            com.ghostipedia.cosmiccore.common.orrery.OrreryNetwork.register();
-            com.ghostipedia.cosmiccore.common.deployment.LeylineDeploymentBehaviors.registerDefaults();
+            LeylineCraftingPattern.register();
+            OrreryNetwork.register();
+            LeylineDeploymentBehaviors.registerDefaults();
             CosmicRegistryAliases.validatePetrochemicalAliases();
             MapIngredientTypeManager.registerMapIngredient(SoulIngredient.class, MapSoulIngredient::from);
             TravelerBootsMigration.registerAliases();

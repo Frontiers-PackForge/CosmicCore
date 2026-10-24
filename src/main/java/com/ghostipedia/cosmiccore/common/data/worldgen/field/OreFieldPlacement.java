@@ -77,30 +77,22 @@ public final class OreFieldPlacement {
         if (initialized) return;
         PROFILES.clear();
 
-        put(CosmicBundleMaterials.Ferosine, profile(Level.OVERWORLD, Shape.BRANCHING));
-        put(CosmicBundleMaterials.Cuprosiva, profile(Level.OVERWORLD, Shape.STRINGER));
-        put(CosmicBundleMaterials.Galenite, profile(Level.OVERWORLD, Shape.BRANCHING));
-        put(CosmicBundleMaterials.Landisite, profile(Level.OVERWORLD, Shape.BRANCHING));
-        put(CosmicBundleMaterials.Redstona, profile(Level.OVERWORLD, Shape.FRACTURE));
-        put(CosmicBundleMaterials.Lazuric, profile(Level.OVERWORLD, Shape.CLUSTER));
-        put(CosmicBundleMaterials.Carbonic, profile(Level.OVERWORLD, Shape.CLUSTER));
-        put(CosmicBundleMaterials.EarthenSalts, profile(Level.OVERWORLD, Shape.CLUSTER));
+        put(CosmicBundleMaterials.Ferosine.value(), profile(Level.OVERWORLD, Shape.BRANCHING));
+        put(CosmicBundleMaterials.Cuprosiva.value(), profile(Level.OVERWORLD, Shape.STRINGER));
+        put(CosmicBundleMaterials.Galenite.value(), profile(Level.OVERWORLD, Shape.BRANCHING));
+        put(CosmicBundleMaterials.Landisite.value(), profile(Level.OVERWORLD, Shape.BRANCHING));
+        put(CosmicBundleMaterials.Redstona.value(), profile(Level.OVERWORLD, Shape.FRACTURE));
+        put(CosmicBundleMaterials.Lazuric.value(), profile(Level.OVERWORLD, Shape.CLUSTER));
+        put(CosmicBundleMaterials.Carbonic.value(), profile(Level.OVERWORLD, Shape.CLUSTER));
+        put(CosmicBundleMaterials.EarthenSalts.value(), profile(Level.OVERWORLD, Shape.CLUSTER));
 
-        put(CosmicBundleMaterials.Pyroltic, profile(Level.NETHER, Shape.FRACTURE));
-        put(CosmicBundleMaterials.Quartizine, profile(Level.NETHER, Shape.CLUSTER));
-        put(CosmicBundleMaterials.Molybite, profile(Level.NETHER, Shape.STRINGER));
-        put(CosmicBundleMaterials.Fahlorium, profile(Level.NETHER, Shape.FRACTURE));
-        put(CosmicBundleMaterials.MonaziteSalts, profile(Level.NETHER, Shape.STRINGER));
+        put(CosmicBundleMaterials.Pyroltic.value(), profile(Level.NETHER, Shape.FRACTURE));
+        put(CosmicBundleMaterials.Quartizine.value(), profile(Level.NETHER, Shape.CLUSTER));
+        put(CosmicBundleMaterials.Molybite.value(), profile(Level.NETHER, Shape.STRINGER));
+        put(CosmicBundleMaterials.Fahlorium.value(), profile(Level.NETHER, Shape.FRACTURE));
+        put(CosmicBundleMaterials.MonaziteSalts.value(), profile(Level.NETHER, Shape.STRINGER));
 
-        put(CosmicBundleMaterials.CrudeRadionite, profile(Level.NETHER, Shape.FRACTURE));
-
-        // TODO(cosmiccore-101): Hollow bundle fields shelved; the vertical Hollow places ore via
-        // AbyssDispatcher splatter during island stamping. Restore if fields learn island-aware Y.
-        // put(CosmicBundleMaterials.Utherite, profile(MurkbloomServerLogic.HOLLOW_DIM, Shape.BRANCHING));
-        // put(CosmicBundleMaterials.Vanachrome, profile(MurkbloomServerLogic.HOLLOW_DIM, Shape.BRANCHING));
-        // put(CosmicBundleMaterials.Phycolite, profile(MurkbloomServerLogic.HOLLOW_DIM, Shape.CLUSTER));
-        // put(CosmicBundleMaterials.Agarlite, profile(MurkbloomServerLogic.HOLLOW_DIM, Shape.STRINGER));
-
+        put(CosmicBundleMaterials.CrudeRadionite.value(), profile(Level.NETHER, Shape.FRACTURE));
         initialized = true;
     }
 

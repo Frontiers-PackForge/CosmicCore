@@ -5,7 +5,7 @@ import com.ghostipedia.cosmiccore.common.power.TwelvefoldConductorRegistration;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.PropertyKey;
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.WireProperties;
-import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.TagPrefixEntry;
 import com.gregtechceu.gtceu.data.recipe.generated.WireRecipeHandler;
 
 import net.minecraft.data.recipes.RecipeOutput;
@@ -20,27 +20,37 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @Mixin(value = WireRecipeHandler.class, remap = false)
 public abstract class WireRecipeHandlerTwelvefoldMixin {
 
     @Shadow
     @Final
-    private static Reference2IntMap<TagPrefix> INSULATION_AMOUNT;
+    private static Reference2IntMap<TagPrefixEntry> INSULATION_AMOUNT;
 
     @Shadow
     @Final
     @Mutable
-    private static TagPrefix[] wireSizes;
+    private static TagPrefixEntry[] wireSizes;
 
     @Shadow
-    private static void generateCableCovering(RecipeOutput provider, WireProperties property, TagPrefix prefix,
+    @Final
+    @Mutable
+    public static Map<TagPrefixEntry, TagPrefixEntry> WIRE_TO_CABLE_PREFIX;
+
+    @Shadow
+    private static void generateCableCovering(RecipeOutput provider, WireProperties property, TagPrefixEntry prefix,
                                               Material material) {}
 
     @Inject(method = "<clinit>", at = @At("TAIL"), require = 1)
     private static void cosmiccore$extendTwelvefoldRecipeTables(CallbackInfo ci) {
+        Map<TagPrefixEntry, TagPrefixEntry> extendedMap = new LinkedHashMap<>(WIRE_TO_CABLE_PREFIX);
+        extendedMap.put(TwelvefoldConductorRegistration.wirePrefix(), TwelvefoldConductorRegistration.cablePrefix());
+        WIRE_TO_CABLE_PREFIX = extendedMap;
         INSULATION_AMOUNT.put(TwelvefoldConductorRegistration.cablePrefix(), 4);
-        TagPrefix[] extended = Arrays.copyOf(wireSizes, wireSizes.length + 1);
+        TagPrefixEntry[] extended = Arrays.copyOf(wireSizes, wireSizes.length + 1);
         System.arraycopy(extended, extended.length - 2, extended, extended.length - 1, 1);
         extended[extended.length - 2] = TwelvefoldConductorRegistration.wirePrefix();
         wireSizes = extended;

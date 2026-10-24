@@ -31,7 +31,7 @@ public final class AlloyBlastingKilnRecipeUI {
         ICoilType requiredCoil = ICoilType.getMinRequiredType(temperature);
         if (requiredCoil != null && requiredCoil.getMaterial() != null) {
             widget.textComponents.child(new TextWidget<>(Text.lang("gtceu.recipe.coil.tier",
-                    Component.translatable(requiredCoil.getMaterial().getUnlocalizedName()).getString())));
+                    Component.translatable(requiredCoil.getMaterial().value().getUnlocalizedName()).getString())));
         }
 
         List<ItemStack> items = GTCEuAPI.HEATING_COILS.entrySet().stream()

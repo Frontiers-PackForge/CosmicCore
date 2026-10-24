@@ -8,6 +8,7 @@ import com.gregtechceu.gtceu.api.block.ActiveBlock;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.utils.GTUtil;
 
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
@@ -67,11 +68,11 @@ public class MagnetBlock extends ActiveBlock {
         private final int magnetStrength;
         private final int regenRate;
         private final int energyConsumed;
-        private final Material material;
+        private final Holder<Material> material;
         @NotNull
         private final ResourceLocation texture;
 
-        MagnetType(String name, int magnetStrength, int regenRate, int energyConsumed, Material material,
+        MagnetType(String name, int magnetStrength, int regenRate, int energyConsumed, Holder<Material> material,
                    ResourceLocation texture) {
             this.name = name;
             this.magnetStrength = magnetStrength;
@@ -98,7 +99,7 @@ public class MagnetBlock extends ActiveBlock {
         }
 
         public Material getMaterial() {
-            return material;
+            return material.value();
         }
 
         @NotNull

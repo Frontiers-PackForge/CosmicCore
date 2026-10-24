@@ -17,6 +17,6 @@ public final class BlastingRecipeCompatibility {
     }
 
     static boolean permits(TagPrefix prefix, int blastTemperature) {
-        return prefix == TagPrefix.ingot && blastTemperature == 0;
+        return prefix == TagPrefix.ingot.value() && blastTemperature == 0;
     }
 }

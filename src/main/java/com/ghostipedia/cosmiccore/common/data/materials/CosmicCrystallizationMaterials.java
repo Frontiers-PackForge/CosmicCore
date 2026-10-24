@@ -1,8 +1,9 @@
 package com.ghostipedia.cosmiccore.common.data.materials;
 
-import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MaterialRegistryEntry;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 
 import org.jetbrains.annotations.Nullable;
@@ -11,41 +12,41 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.IntSupplier;
 
 import static com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialFlags.DISABLE_DECOMPOSITION;
 
 public final class CosmicCrystallizationMaterials {
 
-    public static Material CannonseedCrystallizationMedium;
+    public static MaterialRegistryEntry CannonseedCrystallizationMedium;
 
-    private static final Map<Material, Material> ORE_SLURRIES = new LinkedHashMap<>();
-    private static final Map<Material, Material> GEM_GROWTH_SLURRIES = new LinkedHashMap<>();
+    private static final Map<MaterialRegistryEntry, MaterialRegistryEntry> ORE_SLURRIES = new LinkedHashMap<>();
+    private static final Map<MaterialRegistryEntry, MaterialRegistryEntry> GEM_GROWTH_SLURRIES = new LinkedHashMap<>();
 
     private CosmicCrystallizationMaterials() {}
 
     public static void register() {
-        CannonseedCrystallizationMedium = processFluid("cannonseed_crystallization_medium", 0x8D6A3F);
+        CannonseedCrystallizationMedium = processFluid("cannonseed_crystallization_medium", () -> 0x8D6A3F);
 
-        for (Material bundle : CosmicBundleMaterials.bundleOres()) {
+        for (MaterialRegistryEntry bundle : CosmicBundleMaterials.bundleEntries()) {
             ORE_SLURRIES.put(bundle,
-                    processFluid(bundle.getName() + "_crystallization_slurry", bundle.getMaterialRGB()));
+                    processFluid(bundle.getName() + "_crystallization_slurry", bundle::getMaterialRGB));
         }
 
-        for (Material material : gemMaterials()) {
+        for (MaterialRegistryEntry material : gemMaterials()) {
             GEM_GROWTH_SLURRIES.put(material,
-                    processFluid(material.getName() + "_gem_growth_slurry", material.getMaterialRGB()));
+                    processFluid(material.getName() + "_gem_growth_slurry", material::getMaterialRGB));
         }
     }
 
-    private static Material processFluid(String name, int color) {
-        return new Material.Builder(CosmicCore.id(name))
+    private static MaterialRegistryEntry processFluid(String name, IntSupplier color) {
+        return CosmicRegistration.REGISTRATE.material(name, builder -> builder
                 .liquid()
-                .color(color)
-                .flags(DISABLE_DECOMPOSITION)
-                .buildAndRegister();
+                .color(color.getAsInt())
+                .flags(DISABLE_DECOMPOSITION));
     }
 
-    private static List<Material> gemMaterials() {
+    private static List<MaterialRegistryEntry> gemMaterials() {
         return List.of(
                 GTMaterials.Almandine,
                 GTMaterials.Amethyst,
@@ -88,10 +89,13 @@ public final class CosmicCrystallizationMaterials {
 
     @Nullable
     public static Material oreSlurry(Material material) {
-        return ORE_SLURRIES.get(material);
+        return ORE_SLURRIES.entrySet().stream().filter(entry -> entry.getKey().value() == material)
+                .map(entry -> entry.getValue().value()).findFirst().orElse(null);
     }
 
     public static Map<Material, Material> gemGrowthSlurries() {
-        return Collections.unmodifiableMap(GEM_GROWTH_SLURRIES);
+        Map<Material, Material> materials = new LinkedHashMap<>();
+        GEM_GROWTH_SLURRIES.forEach((material, slurry) -> materials.put(material.value(), slurry.value()));
+        return Collections.unmodifiableMap(materials);
     }
 }

@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.common.recipe.condition;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.common.mirror.deed.Deed;
 import com.ghostipedia.cosmiccore.common.mirror.deed.DeedLedger;
 import com.ghostipedia.cosmiccore.common.mirror.deed.DeedRegistry;
@@ -48,8 +49,8 @@ public class DeedCondition extends RecipeCondition<DeedCondition> {
     }
 
     public static void register() {
-        TYPE = GTRegistries.register(GTRegistries.RECIPE_CONDITIONS, CosmicCore.id("deed"),
-                new RecipeConditionType<>(DeedCondition::new, DeedCondition.CODEC));
+        TYPE = new RecipeConditionType<>(DeedCondition::new, DeedCondition.CODEC);
+        CosmicRegistration.REGISTRATE.simple("deed", GTRegistries.Keys.RECIPE_CONDITION, () -> TYPE);
     }
 
     @Override

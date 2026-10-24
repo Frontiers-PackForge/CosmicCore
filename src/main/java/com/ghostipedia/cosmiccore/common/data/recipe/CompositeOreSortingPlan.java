@@ -20,11 +20,11 @@ public final class CompositeOreSortingPlan {
     public static final int SORTER_IO_CAP = 6;
 
     private static final List<SortStage> STAGES = List.of(
-            new SortStage(crushedPurified, 2, 1, 0, "sort_purified_"),
-            new SortStage(powderizedOre, 3, 1, 0, "sort_powder_"),
-            new SortStage(flocculatedOre, 4, 2, 0, "sort_flocculated_"),
-            new SortStage(crystallizedOreChunk, 5, 2, 1, "sort_crystallized_"),
-            new SortStage(atomicallyPurifiedOreChunk, SORTER_IO_CAP, 3, 1, "sort_atom_purified_"));
+            new SortStage(crushedPurified.value(), 2, 1, 0, "sort_purified_"),
+            new SortStage(powderizedOre.value(), 3, 1, 0, "sort_powder_"),
+            new SortStage(flocculatedOre.value(), 4, 2, 0, "sort_flocculated_"),
+            new SortStage(crystallizedOreChunk.value(), 5, 2, 1, "sort_crystallized_"),
+            new SortStage(atomicallyPurifiedOreChunk.value(), SORTER_IO_CAP, 3, 1, "sort_atom_purified_"));
 
     private CompositeOreSortingPlan() {}
 

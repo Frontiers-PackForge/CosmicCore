@@ -47,11 +47,11 @@ public class ABSModifications {
         GTMaterials.IndiumTinBariumTitaniumCuprate.getProperty(PropertyKey.ALLOY_BLAST)
                 .setRecipeProducer(new CustomAlloyBlastRecipeProducer(-1, -1, 16));
 
-        Material material = CosmicMaterials.ResonantVirtueMeld;
+        Material material = CosmicMaterials.ResonantVirtueMeld.value();
         AlloyBlastProperty property = material.getProperty(PropertyKey.ALLOY_BLAST);
         property.setRecipeProducer(new CustomAlloyBlastRecipeProducer(-1, -1, 32));
 
-        Material hslaSteel = GTMaterials.HSLASteel;
+        Material hslaSteel = GTMaterials.HSLASteel.value();
         AlloyBlastLifecyclePolicy.RecipeShape hslaShape = recipeShape(hslaSteel);
         if (!canGenerateAlloyBlastRecipe(hslaSteel) ||
                 hslaSteel.getFluidBuilder(FluidStorageKeys.LIQUID) == null ||
@@ -69,7 +69,8 @@ public class ABSModifications {
         CosmicCore.LOGGER.info(
                 "Restored {} GTM alloy blast material properties {}; projected {} generated Alloy Blasting Kiln recipes using GTM liquid casting; HSLA Steel and Watertight Steel enabled: {}, {}",
                 restoredMaterials.size(), restoredMaterials, generatedRecipes,
-                canGenerateAlloyBlastRecipe(hslaSteel), canGenerateAlloyBlastRecipe(GTMaterials.WatertightSteel));
+                canGenerateAlloyBlastRecipe(hslaSteel),
+                canGenerateAlloyBlastRecipe(GTMaterials.WatertightSteel.value()));
     }
 
     private static boolean addAlloyBlastProperty(Material material) {

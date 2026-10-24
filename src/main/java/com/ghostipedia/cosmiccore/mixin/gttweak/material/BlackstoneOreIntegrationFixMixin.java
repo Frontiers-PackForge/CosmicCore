@@ -13,14 +13,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = GTMaterials.class, remap = false)
 public abstract class BlackstoneOreIntegrationFixMixin {
 
-    @Inject(method = "init()V", at = @At("TAIL"), require = 1)
+    @Inject(method = "modifyMaterials", at = @At("TAIL"), require = 1)
     private static void cosmiccore$restoreBlackstoneOreIntegration(CallbackInfo ci) {
         long dustAmount = TagPrefix.dust.materialAmount();
-        boolean hasHostDust = TagPrefix.oreBlackstone.secondaryMaterials().stream()
-                .anyMatch(stack -> stack.material() == GTMaterials.Blackstone && stack.amount() == dustAmount);
+        boolean hasHostDust = TagPrefix.oreBlackstone.value().secondaryMaterials().stream()
+                .anyMatch(stack -> stack.material() == GTMaterials.Blackstone.value() && stack.amount() == dustAmount);
         if (!hasHostDust) {
             TagPrefix.oreBlackstone.addSecondaryMaterial(new MaterialStack(GTMaterials.Blackstone, dustAmount));
         }
-        GTOreByProduct.addOreByProductPrefix(TagPrefix.oreBlackstone);
+        GTOreByProduct.addOreByProductPrefix(TagPrefix.oreBlackstone.value());
     }
 }

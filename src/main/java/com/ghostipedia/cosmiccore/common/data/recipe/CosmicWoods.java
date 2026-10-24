@@ -126,7 +126,7 @@ public final class CosmicWoods {
 
         String woodName = ns + "_" + formStem;
         WoodTypeEntry.Builder builder = new WoodTypeEntry.Builder(ns, woodName)
-                .material(GTMaterials.Wood)
+                .material(GTMaterials.Wood.value())
                 .generateLogToPlankRecipe(false)
                 .addSlabRecipe()
                 .addStairsRecipe()
