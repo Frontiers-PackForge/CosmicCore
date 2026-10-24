@@ -12,12 +12,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = GTMaterials.class, remap = false)
 public abstract class GTMaterialsTwelvefoldConductorMixin {
 
-    @Inject(method = "init()V", at = @At("HEAD"), require = 1)
+    @Inject(method = "init(Lnet/neoforged/bus/api/IEventBus;)V", at = @At("HEAD"), require = 1)
     private static void cosmiccore$registerTwelvefoldConductors(CallbackInfo ci) {
         TwelvefoldConductorRegistration.registerPrefixesAndInsulations();
     }
 
-    @Inject(method = "init()V", at = @At("TAIL"), require = 1)
+    @Inject(method = "modifyMaterials", at = @At("TAIL"), require = 1)
     private static void cosmiccore$attachTwelvefoldInsulationMaterial(CallbackInfo ci) {
         TwelvefoldConductorRegistration.attachRubberMaterial();
     }

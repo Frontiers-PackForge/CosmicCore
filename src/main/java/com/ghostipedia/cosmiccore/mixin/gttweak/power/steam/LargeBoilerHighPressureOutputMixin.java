@@ -2,7 +2,7 @@ package com.ghostipedia.cosmiccore.mixin.gttweak.power.steam;
 
 import com.ghostipedia.cosmiccore.common.power.steam.HPBoilerRates;
 
-import com.gregtechceu.gtceu.api.data.chemical.material.Material;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MaterialRegistryEntry;
 import com.gregtechceu.gtceu.common.machine.multiblock.steam.LargeBoilerMachine;
 
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -36,11 +36,11 @@ public abstract class LargeBoilerHighPressureOutputMixin {
               method = "updateCurrentTemperature()V",
               at = @At(
                        value = "INVOKE",
-                       target = "Lcom/gregtechceu/gtceu/api/data/chemical/material/Material;getFluid(I)Lnet/neoforged/neoforge/fluids/FluidStack;"),
+                       target = "Lcom/gregtechceu/gtceu/api/registry/registrate/entry/MaterialRegistryEntry;getFluid(I)Lnet/neoforged/neoforge/fluids/FluidStack;"),
               require = 1,
               expect = 1,
               allow = 1)
-    private FluidStack cosmiccore$emitHighPressureSteam(Material material, int amount) {
+    private FluidStack cosmiccore$emitHighPressureSteam(MaterialRegistryEntry material, int amount) {
         return HPBoilerRates.highPressureSteam(amount);
     }
 }

@@ -25,7 +25,7 @@ public abstract class ConcreteUnificationOrderFixMixin {
     @Inject(method = "getItems", at = @At("RETURN"), cancellable = true)
     private static void cosmiccore$stableConcreteItems(MaterialEntry entry,
                                                        CallbackInfoReturnable<List<ItemLike>> cir) {
-        if (entry.tagPrefix() != TagPrefix.block || entry.material() != GTMaterials.Concrete) return;
+        if (entry.tagPrefix() != TagPrefix.block.value() || entry.material() != GTMaterials.Concrete.value()) return;
         var sorted = new ArrayList<>(cir.getReturnValue());
         sorted.sort(Comparator
                 .<ItemLike>comparingInt(item -> item.asItem() == GTBlocks.LIGHT_CONCRETE.get().asItem() ? 0 : 1)
@@ -35,7 +35,7 @@ public abstract class ConcreteUnificationOrderFixMixin {
 
     @Inject(method = "getBlocks", at = @At("RETURN"), cancellable = true)
     private static void cosmiccore$stableConcreteBlocks(MaterialEntry entry, CallbackInfoReturnable<List<Block>> cir) {
-        if (entry.tagPrefix() != TagPrefix.block || entry.material() != GTMaterials.Concrete) return;
+        if (entry.tagPrefix() != TagPrefix.block.value() || entry.material() != GTMaterials.Concrete.value()) return;
         var sorted = new ArrayList<>(cir.getReturnValue());
         sorted.sort(Comparator.<Block>comparingInt(block -> block == GTBlocks.LIGHT_CONCRETE.get() ? 0 : 1)
                 .thenComparing(block -> BuiltInRegistries.BLOCK.getKey(block).toString()));

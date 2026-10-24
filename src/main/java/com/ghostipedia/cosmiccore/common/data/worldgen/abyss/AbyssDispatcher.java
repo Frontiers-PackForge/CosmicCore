@@ -177,17 +177,17 @@ public final class AbyssDispatcher {
 
     private static void initOres() {
         TagPrefix[] hostPrefix = {
-                TagPrefix.oreDeepslate,
-                TagPrefix.oreBasalt,
-                TagPrefix.oreDeepslate,
-                TagPrefix.oreBlackstone,
-                TagPrefix.oreMarble
+                TagPrefix.oreDeepslate.value(),
+                TagPrefix.oreBasalt.value(),
+                TagPrefix.oreDeepslate.value(),
+                TagPrefix.oreBlackstone.value(),
+                TagPrefix.oreMarble.value()
         };
         Material[][] layerMats = {
-                { CosmicBundleMaterials.Utherite },
-                { CosmicBundleMaterials.Vanachrome },
-                { CosmicBundleMaterials.Phycolite },
-                { CosmicBundleMaterials.Agarlite },
+                { CosmicBundleMaterials.Utherite.value() },
+                { CosmicBundleMaterials.Vanachrome.value() },
+                { CosmicBundleMaterials.Phycolite.value() },
+                { CosmicBundleMaterials.Agarlite.value() },
                 {}
         };
         oresByLayer = new BlockState[layerMats.length][];

@@ -1,7 +1,7 @@
 package com.ghostipedia.cosmiccore.common.recipe.condition;
 
-import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.LinkedWorkableElectricMultiblockMachine;
+import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.LinkedMultiblockHelper;
 
 import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeLogic;
@@ -75,10 +75,10 @@ public class LinkedPartnerDimensionFluidCondition extends RecipeCondition<Linked
     }
 
     public static void register() {
-        TYPE = GTRegistries.register(GTRegistries.RECIPE_CONDITIONS,
-                CosmicCore.id("linked_partner_dimension_fluid"),
-                new RecipeConditionType<>(LinkedPartnerDimensionFluidCondition::new,
-                        LinkedPartnerDimensionFluidCondition.CODEC));
+        TYPE = new RecipeConditionType<>(LinkedPartnerDimensionFluidCondition::new,
+                LinkedPartnerDimensionFluidCondition.CODEC);
+        CosmicRegistration.REGISTRATE.simple("linked_partner_dimension_fluid", GTRegistries.Keys.RECIPE_CONDITION,
+                () -> TYPE);
     }
 
     @Override

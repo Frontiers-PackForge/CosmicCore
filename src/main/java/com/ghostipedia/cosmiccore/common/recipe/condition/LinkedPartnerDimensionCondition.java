@@ -1,7 +1,7 @@
 package com.ghostipedia.cosmiccore.common.recipe.condition;
 
-import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.LinkedWorkableElectricMultiblockMachine;
+import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 
 import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
@@ -27,7 +27,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public class LinkedPartnerDimensionCondition extends RecipeCondition<LinkedPartnerDimensionCondition> {
 
-    /** The dimension the partner must be in */
     public ResourceLocation dimension;
 
     public static final MapCodec<LinkedPartnerDimensionCondition> CODEC = RecordCodecBuilder
@@ -55,9 +54,9 @@ public class LinkedPartnerDimensionCondition extends RecipeCondition<LinkedPartn
     }
 
     public static void register() {
-        TYPE = GTRegistries.register(GTRegistries.RECIPE_CONDITIONS,
-                CosmicCore.id("linked_partner_dimension"),
-                new RecipeConditionType<>(LinkedPartnerDimensionCondition::new, LinkedPartnerDimensionCondition.CODEC));
+        TYPE = new RecipeConditionType<>(LinkedPartnerDimensionCondition::new, LinkedPartnerDimensionCondition.CODEC);
+        CosmicRegistration.REGISTRATE.simple("linked_partner_dimension", GTRegistries.Keys.RECIPE_CONDITION,
+                () -> TYPE);
     }
 
     @Override

@@ -6,7 +6,7 @@ import com.ghostipedia.cosmiccore.common.data.tag.TagUtil;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialFlags;
 import com.gregtechceu.gtceu.api.data.chemical.material.properties.PropertyKey;
-import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.TagPrefixEntry;
 
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -16,24 +16,25 @@ import java.util.function.Predicate;
 
 import static com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialFlags.GENERATE_ROD;
 import static com.gregtechceu.gtceu.api.data.tag.TagPrefix.Conditions.hasIngotProperty;
+import static com.gregtechceu.gtceu.common.registry.GTRegistration.REGISTRATE;
 
 public class CosmicTagPrefix {
 
     // public static TagPrefix crushedLeached;
     // public static TagPrefix prismaFrothed;
-    public static TagPrefix ultraDense;
-    public static TagPrefix heavyBeam;
-    public static TagPrefix modularShelling;
-    public static TagPrefix plasmites;
-    public static TagPrefix largeWireSpool;
-    public static TagPrefix alveFoilInsulator;
-    public static TagPrefix shapeMemoryFoil;
-    public static TagPrefix rawOreCubic;
-    public static TagPrefix oreChunk;
-    public static TagPrefix powderizedOre;
-    public static TagPrefix crystallizedOreChunk;
-    public static TagPrefix atomicallyPurifiedOreChunk;
-    public static TagPrefix flocculatedOre;
+    public static TagPrefixEntry ultraDense;
+    public static TagPrefixEntry heavyBeam;
+    public static TagPrefixEntry modularShelling;
+    public static TagPrefixEntry plasmites;
+    public static TagPrefixEntry largeWireSpool;
+    public static TagPrefixEntry alveFoilInsulator;
+    public static TagPrefixEntry shapeMemoryFoil;
+    public static TagPrefixEntry rawOreCubic;
+    public static TagPrefixEntry oreChunk;
+    public static TagPrefixEntry powderizedOre;
+    public static TagPrefixEntry crystallizedOreChunk;
+    public static TagPrefixEntry atomicallyPurifiedOreChunk;
+    public static TagPrefixEntry flocculatedOre;
     public static final TagKey<Block> STAR_LADDER_BLOCKS = TagUtil.createBlockTag("starladder_blocks");
     public static final TagKey<Item> STAR_LADDER_ITEMS = TagUtil.createItemTag("starladder_items");
 
@@ -47,79 +48,60 @@ public class CosmicTagPrefix {
             .hasFlag(MaterialFlags.GENERATE_FINE_WIRE);
 
     public static void initTagPrefixes() {
-        rawOreCubic = new TagPrefix("rawOreCubic")
+        rawOreCubic = REGISTRATE.tagPrefix("raw_ore_cubic")
                 .idPattern("raw_%s_cubic_ore")
                 .defaultTagPath("cubic_ores/%s")
                 .defaultTagPath("cubic_ores")
                 .materialIconType(CosmicCoreMaterialIconType.rawOreCubic)
                 .unificationEnabled(true)
-                .generateItem(false);
+                .generateItem(false).register();
 
-        /*
-         * crushedLeached = new TagPrefix("leachedOre")
-         * .idPattern("leached_%s_ore")
-         * .defaultTagPath("leached_ores/%s")
-         * .defaultTagPath("leached_ores")
-         * .materialIconType(CosmicCoreMaterialIconType.crushedLeached)
-         * .unificationEnabled(true)
-         * .generateItem(true)
-         * .generationCondition(hasOreProperty);
-         * prismaFrothed = new TagPrefix("prismaFrothedOre")
-         * .idPattern("prisma_frothed_%s_ore")
-         * .defaultTagPath("prisma_frothed_ores/%s")
-         * .defaultTagPath("prisma_frothed_ores")
-         * .materialIconType(CosmicCoreMaterialIconType.prismaFrothed)
-         * .unificationEnabled(true)
-         * .generateItem(true)
-         * .generationCondition(hasOreProperty);
-         */
-
-        oreChunk = new TagPrefix("oreChunk")
+        oreChunk = REGISTRATE.tagPrefix("ore_chunk")
                 .idPattern("%s_ore_chunk")
                 .defaultTagPath("ore_chunks/%s")
                 .defaultTagPath("ore_chunks")
                 .materialIconType(CosmicCoreMaterialIconType.oreChunk)
                 .unificationEnabled(true)
                 .generateItem(true)
-                .generationCondition(CosmicBundleMaterials::isBundleOutput);
+                .generationCondition(CosmicBundleMaterials::isBundleOutput).register();
 
-        powderizedOre = new TagPrefix("powderizedOre")
+        powderizedOre = REGISTRATE.tagPrefix("powderized_ore")
                 .idPattern("powderized_%s_ore")
                 .defaultTagPath("powderized_ores/%s")
                 .defaultTagPath("powderized_ores")
                 .materialIconType(CosmicCoreMaterialIconType.powderizedOre)
                 .unificationEnabled(true)
                 .generateItem(true)
-                .generationCondition(CosmicBundleMaterials::isBundleOre);
+                .generationCondition(CosmicBundleMaterials::isBundleOre).register();
 
-        crystallizedOreChunk = new TagPrefix("crystallizedOreChunk")
+        crystallizedOreChunk = REGISTRATE.tagPrefix("crystallized_ore_chunk")
                 .idPattern("crystallized_%s_ore_chunk")
                 .defaultTagPath("crystallized_ore_chunks/%s")
                 .defaultTagPath("crystallized_ore_chunks")
                 .materialIconType(CosmicCoreMaterialIconType.crystallizedOreChunk)
                 .unificationEnabled(true)
                 .generateItem(true)
-                .generationCondition(CosmicBundleMaterials::isBundleOre);
+                .generationCondition(CosmicBundleMaterials::isBundleOre).register();
 
-        atomicallyPurifiedOreChunk = new TagPrefix("atomicallyPurifiedOreChunk")
+        atomicallyPurifiedOreChunk = REGISTRATE.tagPrefix("atomically_purified_ore_chunk")
                 .idPattern("atomically_purified_%s_ore_chunk")
                 .defaultTagPath("atomically_purified_ore_chunks/%s")
                 .defaultTagPath("atomically_purified_ore_chunks")
                 .materialIconType(CosmicCoreMaterialIconType.atomicallyPurifiedOreChunk)
                 .unificationEnabled(true)
                 .generateItem(true)
-                .generationCondition(CosmicBundleMaterials::isBundleOre);
+                .generationCondition(CosmicBundleMaterials::isBundleOre).register();
 
-        flocculatedOre = new TagPrefix("flocculatedOre")
+        flocculatedOre = REGISTRATE.tagPrefix("flocculated_ore")
                 .idPattern("flocculated_%s_ore")
                 .defaultTagPath("flocculated_ores/%s")
                 .defaultTagPath("flocculated_ores")
                 .materialIconType(CosmicCoreMaterialIconType.flocculatedOre)
                 .unificationEnabled(true)
                 .generateItem(true)
-                .generationCondition(CosmicBundleMaterials::isBundleOre);
+                .generationCondition(CosmicBundleMaterials::isBundleOre).register();
 
-        ultraDense = new TagPrefix("ultradensePlate")
+        ultraDense = REGISTRATE.tagPrefix("ultradense_plate")
                 .idPattern("ultradense_%s_plate")
                 .defaultTagPath("ultra_dense_plates/%s")
                 .defaultTagPath("ultra_dense_plates")
@@ -127,9 +109,9 @@ public class CosmicTagPrefix {
                 .unificationEnabled(true)
                 .generateItem(true)
                 .maxStackSize(1)
-                .generationCondition(hasPlateProp);
+                .generationCondition(hasPlateProp).register();
 
-        heavyBeam = new TagPrefix("heavyBeam")
+        heavyBeam = REGISTRATE.tagPrefix("heavy_beam")
                 .idPattern("heavy_%s_beam")
                 .defaultTagPath("heavy_beams/%s")
                 .defaultTagPath("heavy_beams")
@@ -139,8 +121,9 @@ public class CosmicTagPrefix {
                 .maxStackSize(16)
                 .generationCondition(
                         hasPlateProp
-                                .and(hasRodProp));
-        modularShelling = new TagPrefix("modular_shelling")
+                                .and(hasRodProp))
+                .register();
+        modularShelling = REGISTRATE.tagPrefix("modular_shelling")
                 .idPattern("%s_modular_shelling")
                 .defaultTagPath("modular_shellings/%s")
                 .defaultTagPath("modular_shellings")
@@ -148,17 +131,17 @@ public class CosmicTagPrefix {
                 .unificationEnabled(true)
                 .generateItem(true)
                 .maxStackSize(16)
-                .generationCondition(hasPlateProp.and(hasFrameProp).and(hasBoltProp));
-        plasmites = new TagPrefix("plasmites")
+                .generationCondition(hasPlateProp.and(hasFrameProp).and(hasBoltProp)).register();
+        plasmites = REGISTRATE.tagPrefix("plasmites")
                 .idPattern("%s_plasmites")
                 .defaultTagPath("plasmites/%s")
                 .defaultTagPath("plasmites")
                 .materialIconType(CosmicCoreMaterialIconType.plasmites)
                 .unificationEnabled(true)
                 .generateItem(true)
-                .generationCondition(hasIngotProperty);
+                .generationCondition(hasIngotProperty).register();
 
-        largeWireSpool = new TagPrefix("large_wire_spool")
+        largeWireSpool = REGISTRATE.tagPrefix("large_wire_spool")
                 .idPattern("%s_wire_spool")
                 .defaultTagPath("wire_spools/%s")
                 .defaultTagPath("wire_spools")
@@ -166,9 +149,9 @@ public class CosmicTagPrefix {
                 .unificationEnabled(true)
                 .generateItem(true)
                 .maxStackSize(4)
-                .generationCondition(hasWireProp.or(hasFineWireProp));
+                .generationCondition(hasWireProp.or(hasFineWireProp)).register();
 
-        alveFoilInsulator = new TagPrefix("alveFoilInsulator")
+        alveFoilInsulator = REGISTRATE.tagPrefix("alve_foil_insulator")
                 .idPattern("%s_alve_foil_insulator")
                 .defaultTagPath("alve_foil_insulators/%s")
                 .defaultTagPath("alve_foil_insulators")
@@ -176,9 +159,9 @@ public class CosmicTagPrefix {
                 .unificationEnabled(true)
                 .generateItem(true)
                 .maxStackSize(64)
-                .generationCondition(hasPlateProp.and(hasFineWireProp));
+                .generationCondition(hasPlateProp.and(hasFineWireProp)).register();
 
-        shapeMemoryFoil = new TagPrefix("shapeMemoryFoil")
+        shapeMemoryFoil = REGISTRATE.tagPrefix("shape_memory_foil")
                 .idPattern("%s_shape_memory_foil")
                 .defaultTagPath("shape_memory_foils/%s")
                 .defaultTagPath("shape_memory_foils")
@@ -186,6 +169,6 @@ public class CosmicTagPrefix {
                 .unificationEnabled(true)
                 .generateItem(true)
                 .maxStackSize(64)
-                .generationCondition(hasPlateProp.and(hasBoltProp));
+                .generationCondition(hasPlateProp.and(hasBoltProp)).register();
     }
 }

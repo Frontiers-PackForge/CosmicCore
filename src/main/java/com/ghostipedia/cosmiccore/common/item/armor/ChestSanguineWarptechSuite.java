@@ -5,6 +5,7 @@ import com.ghostipedia.cosmiccore.api.capability.souls.SoulType;
 import com.ghostipedia.cosmiccore.api.data.souls.SoulNetwork;
 import com.ghostipedia.cosmiccore.api.data.souls.SoulNetworkSavedData;
 import com.ghostipedia.cosmiccore.api.recipe.ingredient.SoulStack;
+import com.ghostipedia.cosmiccore.common.armor.SanguineKeyMappings;
 import com.ghostipedia.cosmiccore.utils.ItemData;
 
 import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
@@ -120,7 +121,7 @@ public class ChestSanguineWarptechSuite extends SanguineArmorLogic implements IJ
         // Handle toggle keypresses
         String messageKey = null;
         if (toggleTimer == 0) {
-            if (SyncedKeyMappings.ARMOR_CHARGING.isKeyDown(player)) {
+            if (SanguineKeyMappings.ARMOR_CHARGING.isKeyDown(player)) {
                 canShare = !canShare;
                 if (canShare && cont.getCharge() == 0) { // Only allow for charging to be enabled if charge is nonzero
                     messageKey = "cosmiccore.armor.legacy.qts.share.error";

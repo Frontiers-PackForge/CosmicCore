@@ -15,6 +15,7 @@ import com.gregtechceu.gtceu.api.registry.registrate.builder.GTRecipeTypeBuilder
 import com.gregtechceu.gtceu.api.registry.registrate.entry.GTRecipeTypeEntry;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import com.gregtechceu.gtceu.common.data.GTSoundEntries;
+import com.gregtechceu.gtceu.common.data.machines.GTMultiMachines;
 import com.gregtechceu.gtceu.common.mui.GTGuiTextures;
 import com.gregtechceu.gtceu.common.recipe.condition.DimensionCondition;
 import com.gregtechceu.gtceu.utils.ResearchManager;
@@ -779,7 +780,7 @@ public class CosmicRecipeTypes {
     public static void configure() {
         if (VACUUM_DISTILLATION.get().getIconSupplier() == null) {
             VACUUM_DISTILLATION.get().setIconSupplier(
-                    com.gregtechceu.gtceu.common.data.machines.GTMultiMachines.DISTILLATION_TOWER::asStack);
+                    GTMultiMachines.DISTILLATION_TOWER::asStack);
         }
         MIXER_RECIPES.get().maxInputs.put(EmberRecipeCapability.CAP, 1);
 
@@ -793,7 +794,7 @@ public class CosmicRecipeTypes {
             ICoilType requiredCoil = ICoilType.getMinRequiredType(temp);
             if (requiredCoil != null && requiredCoil.getMaterial() != null) {
                 return Component.translatable("gtceu.recipe.coil.tier",
-                        Component.translatable(requiredCoil.getMaterial().getUnlocalizedName()).getString())
+                        Component.translatable(requiredCoil.getMaterial().value().getUnlocalizedName()).getString())
                         .getString();
             }
             return "";
@@ -807,7 +808,7 @@ public class CosmicRecipeTypes {
             ICoilType requiredCoil = ICoilType.getMinRequiredType(temp);
             if (requiredCoil != null && requiredCoil.getMaterial() != null) {
                 return Component.translatable("gtceu.recipe.coil.tier",
-                        Component.translatable(requiredCoil.getMaterial().getUnlocalizedName()).getString())
+                        Component.translatable(requiredCoil.getMaterial().value().getUnlocalizedName()).getString())
                         .getString();
             }
             return "";

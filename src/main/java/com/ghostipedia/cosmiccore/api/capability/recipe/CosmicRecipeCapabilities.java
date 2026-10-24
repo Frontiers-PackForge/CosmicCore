@@ -1,5 +1,7 @@
 package com.ghostipedia.cosmiccore.api.capability.recipe;
 
+import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
+
 import com.gregtechceu.gtceu.api.registry.GTRegistries;
 
 import static com.gregtechceu.gtceu.integration.kjs.recipe.components.GTRecipeComponents.FLUID;
@@ -12,9 +14,9 @@ public class CosmicRecipeCapabilities {
     public static final EmberRecipeCapability EMBER = EmberRecipeCapability.CAP;
 
     public static void init() {
-        GTRegistries.register(GTRegistries.RECIPE_CAPABILITIES, SOUL.id, SOUL);
-        GTRegistries.register(GTRegistries.RECIPE_CAPABILITIES, STERILE.id, STERILE);
-        GTRegistries.register(GTRegistries.RECIPE_CAPABILITIES, EMBER.id, EMBER);
+        CosmicRegistration.REGISTRATE.simple(SOUL.id.getPath(), GTRegistries.Keys.RECIPE_CAPABILITY, () -> SOUL);
+        CosmicRegistration.REGISTRATE.simple(STERILE.id.getPath(), GTRegistries.Keys.RECIPE_CAPABILITY, () -> STERILE);
+        CosmicRegistration.REGISTRATE.simple(EMBER.id.getPath(), GTRegistries.Keys.RECIPE_CAPABILITY, () -> EMBER);
 
         VALID_CAPS.put(STERILE, FLUID);
     }

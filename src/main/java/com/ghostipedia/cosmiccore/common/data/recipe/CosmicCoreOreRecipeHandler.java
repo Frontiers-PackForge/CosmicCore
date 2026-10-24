@@ -78,11 +78,12 @@ public class CosmicCoreOreRecipeHandler {
     }
 
     private static void refineChain(RecipeOutput provider, Material material) {
-        floatStep(provider, material, crushed, crushedPurified, "float_purify_", 400, 500);
-        millStep(provider, material, crushedPurified, powderizedOre, "mill_powder_", 600);
+        floatStep(provider, material, crushed.value(), crushedPurified.value(), "float_purify_", 400, 500);
+        millStep(provider, material, crushedPurified.value(), powderizedOre.value(), "mill_powder_", 600);
         flocculateStep(provider, material);
         crystallizationStep(provider, material);
-        floatStep(provider, material, crystallizedOreChunk, atomicallyPurifiedOreChunk, "atomically_purify_", 2600,
+        floatStep(provider, material, crystallizedOreChunk.value(), atomicallyPurifiedOreChunk.value(),
+                "atomically_purify_", 2600,
                 1000);
     }
 
@@ -181,14 +182,14 @@ public class CosmicCoreOreRecipeHandler {
     }
 
     private static ItemStack gemDust(Material material) {
-        if (material == CosmicBundleMaterials.Emberite) {
+        if (material == CosmicBundleMaterials.Emberite.value()) {
             return new ItemStack(RegistryManager.EMBER_GRIT.get(), 4);
         }
         return ChemicalHelper.get(dust, material, 4);
     }
 
     private static ItemStack gemStack(Material material) {
-        if (material == CosmicBundleMaterials.Emberite) {
+        if (material == CosmicBundleMaterials.Emberite.value()) {
             return new ItemStack(RegistryManager.EMBER_CRYSTAL.get());
         }
         return ChemicalHelper.get(gem, material);
@@ -250,19 +251,28 @@ public class CosmicCoreOreRecipeHandler {
     private static Map<Material, FurnaceOut> furnaceOutputs() {
         if (furnaceOutputs == null) {
             Map<Material, FurnaceOut> map = new LinkedHashMap<>();
-            map.put(CosmicBundleMaterials.Ferosine, new FurnaceOut(ingot, GTMaterials.Iron, 1));
-            map.put(CosmicBundleMaterials.Cuprosiva, new FurnaceOut(ingot, GTMaterials.Copper, 1));
-            map.put(CosmicBundleMaterials.Galenite, new FurnaceOut(ingot, GTMaterials.Lead, 1));
-            map.put(CosmicBundleMaterials.Landisite, new FurnaceOut(ingot, GTMaterials.Nickel, 1));
-            map.put(CosmicBundleMaterials.Redstona, new FurnaceOut(dust, GTMaterials.Redstone, 4));
-            map.put(CosmicBundleMaterials.Lazuric, new FurnaceOut(gem, GTMaterials.Lapis, 4));
-            map.put(CosmicBundleMaterials.Carbonic, new FurnaceOut(gem, GTMaterials.Coal, 4));
-            map.put(CosmicBundleMaterials.EarthenSalts, new FurnaceOut(gem, GTMaterials.Salt, 4));
-            map.put(CosmicBundleMaterials.Pyroltic, new FurnaceOut(dust, GTMaterials.Sulfur, 4));
-            map.put(CosmicBundleMaterials.Quartizine, new FurnaceOut(gem, GTMaterials.CertusQuartz, 4));
-            map.put(CosmicBundleMaterials.Molybite, new FurnaceOut(ingot, GTMaterials.Molybdenum, 1));
-            map.put(CosmicBundleMaterials.Fahlorium, new FurnaceOut(ingot, GTMaterials.Copper, 1));
-            map.put(CosmicBundleMaterials.MonaziteSalts, new FurnaceOut(dust, GTMaterials.Bastnasite, 4));
+            map.put(CosmicBundleMaterials.Ferosine.value(), new FurnaceOut(ingot.value(), GTMaterials.Iron.value(), 1));
+            map.put(CosmicBundleMaterials.Cuprosiva.value(),
+                    new FurnaceOut(ingot.value(), GTMaterials.Copper.value(), 1));
+            map.put(CosmicBundleMaterials.Galenite.value(), new FurnaceOut(ingot.value(), GTMaterials.Lead.value(), 1));
+            map.put(CosmicBundleMaterials.Landisite.value(),
+                    new FurnaceOut(ingot.value(), GTMaterials.Nickel.value(), 1));
+            map.put(CosmicBundleMaterials.Redstona.value(),
+                    new FurnaceOut(dust.value(), GTMaterials.Redstone.value(), 4));
+            map.put(CosmicBundleMaterials.Lazuric.value(), new FurnaceOut(gem.value(), GTMaterials.Lapis.value(), 4));
+            map.put(CosmicBundleMaterials.Carbonic.value(), new FurnaceOut(gem.value(), GTMaterials.Coal.value(), 4));
+            map.put(CosmicBundleMaterials.EarthenSalts.value(),
+                    new FurnaceOut(gem.value(), GTMaterials.Salt.value(), 4));
+            map.put(CosmicBundleMaterials.Pyroltic.value(),
+                    new FurnaceOut(dust.value(), GTMaterials.Sulfur.value(), 4));
+            map.put(CosmicBundleMaterials.Quartizine.value(),
+                    new FurnaceOut(gem.value(), GTMaterials.CertusQuartz.value(), 4));
+            map.put(CosmicBundleMaterials.Molybite.value(),
+                    new FurnaceOut(ingot.value(), GTMaterials.Molybdenum.value(), 1));
+            map.put(CosmicBundleMaterials.Fahlorium.value(),
+                    new FurnaceOut(ingot.value(), GTMaterials.Copper.value(), 1));
+            map.put(CosmicBundleMaterials.MonaziteSalts.value(),
+                    new FurnaceOut(dust.value(), GTMaterials.Bastnasite.value(), 4));
             furnaceOutputs = map;
         }
         return furnaceOutputs;

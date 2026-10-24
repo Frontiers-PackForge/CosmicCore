@@ -1,6 +1,6 @@
 package com.ghostipedia.cosmiccore.common.recipe.condition;
 
-import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.TitanFusionReactorMachine;
 
 import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeLogic;
@@ -41,8 +41,8 @@ public class TitanCondition extends RecipeCondition<TitanCondition> {
     }
 
     public static void register() {
-        TYPE = GTRegistries.register(GTRegistries.RECIPE_CONDITIONS, CosmicCore.id("titan_condition"),
-                new RecipeConditionType<>(TitanCondition::new, TitanCondition.CODEC));
+        TYPE = new RecipeConditionType<>(TitanCondition::new, TitanCondition.CODEC);
+        CosmicRegistration.REGISTRATE.simple("titan_condition", GTRegistries.Keys.RECIPE_CONDITION, () -> TYPE);
     }
 
     @Override

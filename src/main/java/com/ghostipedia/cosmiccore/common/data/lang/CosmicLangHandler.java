@@ -52,6 +52,10 @@ public class CosmicLangHandler extends LangHandler {
     }
 
     public static void init(RegistrateLangProvider provider) {
+        provider.add("gtceu.key.armor_mode_switch", "Armor Mode Switch");
+        provider.add("gtceu.key.enable_boots", "Enable Boosted Jump");
+        provider.add("gtceu.key.armor_charging", "Armor Charging to Inventory Toggle");
+        provider.add("gtceu.key.enable_step_assist", "Enable StepAssist");
         provider.add("cosmiccore.armor.legacy_air_supplier",
                 "Retired air supplier. Remove it in the Equipment Foundry to reclaim, but it cannot be installed again.");
         provider.add("cosmiccore.armor.legacy_fluid_storage",

@@ -14,6 +14,7 @@ import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeLogic;
 import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
 import com.gregtechceu.gtceu.api.transfer.fluid.FluidHandlerList;
 import com.gregtechceu.gtceu.api.transfer.item.NotifiableAccountedInvWrapper;
+import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.utils.GTTransferUtils;
 
 import net.minecraft.core.BlockPos;
@@ -382,13 +383,13 @@ public class OreExtractionDrillLogic extends RecipeLogic {
 
     private int selectCycleTicks() {
         int tierIndex = getMachine().getTierIndex();
-        if (tierIndex >= 2 && consumeAccelerationFluid(CosmicMaterials.ExtremeDrillingFluid)) {
+        if (tierIndex >= 2 && consumeAccelerationFluid(CosmicMaterials.ExtremeDrillingFluid.value())) {
             return EXTREME_DRILLING_FLUID_CYCLE_TICKS;
         }
-        if (tierIndex >= 1 && consumeAccelerationFluid(CosmicMaterials.AdvancedDrillingFluid)) {
+        if (tierIndex >= 1 && consumeAccelerationFluid(CosmicMaterials.AdvancedDrillingFluid.value())) {
             return ADVANCED_DRILLING_FLUID_CYCLE_TICKS;
         }
-        if (consumeAccelerationFluid(com.gregtechceu.gtceu.common.data.GTMaterials.DrillingFluid)) {
+        if (consumeAccelerationFluid(GTMaterials.DrillingFluid.value())) {
             return DRILLING_FLUID_CYCLE_TICKS;
         }
         return TICKS_PER_ORE;

@@ -31,7 +31,7 @@ public abstract class CrushedBundleHandSortMixin {
 
     @Unique
     private static MaterialStack cosmiccore$handSortOutput(ItemStack stack) {
-        if (!(stack.getItem() instanceof TagPrefixItem item) || item.tagPrefix != TagPrefix.crushed) {
+        if (!(stack.getItem() instanceof TagPrefixItem item) || item.tagPrefix != TagPrefix.crushed.value()) {
             return null;
         }
         return CosmicBundleMaterials.handSortOutput(item.material);

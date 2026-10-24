@@ -10,6 +10,7 @@ import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.data.recipe.VanillaRecipeHelper;
 import com.gregtechceu.gtceu.data.recipe.generated.WireCombiningHandler;
 
+import net.minecraft.core.Holder;
 import net.minecraft.data.recipes.RecipeOutput;
 
 import org.spongepowered.asm.mixin.Final;
@@ -33,11 +34,11 @@ public abstract class WireCombiningHandlerTwelvefoldMixin {
     @Shadow
     @Final
     @Mutable
-    private static Map<TagPrefix, TagPrefix> cableToWireMap;
+    private static Map<Holder<TagPrefix>, Holder<TagPrefix>> cableToWireMap;
 
     @Inject(method = "<clinit>", at = @At("TAIL"), require = 1)
     private static void cosmiccore$extendTwelvefoldCableMap(CallbackInfo ci) {
-        Map<TagPrefix, TagPrefix> extended = new LinkedHashMap<>(cableToWireMap);
+        Map<Holder<TagPrefix>, Holder<TagPrefix>> extended = new LinkedHashMap<>(cableToWireMap);
         extended.put(TwelvefoldConductorRegistration.cablePrefix(), TwelvefoldConductorRegistration.wirePrefix());
         cableToWireMap = extended;
     }
@@ -45,7 +46,7 @@ public abstract class WireCombiningHandlerTwelvefoldMixin {
     @Inject(method = "run", at = @At("TAIL"), require = 1)
     private static void cosmiccore$generateTwelvefoldBranchRecipes(RecipeOutput provider, Material material,
                                                                    CallbackInfo ci) {
-        TagPrefix wireTwelve = TwelvefoldConductorRegistration.wirePrefix();
+        Holder<TagPrefix> wireTwelve = TwelvefoldConductorRegistration.wirePrefix();
         if (!material.hasProperty(PropertyKey.WIRE) || !material.shouldGenerateRecipesFor(wireTwelve)) {
             return;
         }

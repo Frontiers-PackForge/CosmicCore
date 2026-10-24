@@ -1,7 +1,7 @@
 package com.ghostipedia.cosmiccore.common.recipe.condition;
 
-import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.machine.multiblock.LinkedWorkableElectricMultiblockMachine;
+import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 
 import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeLogic;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
@@ -26,11 +26,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public class LinkedPartnerCondition extends RecipeCondition<LinkedPartnerCondition> {
 
-    /** Minimum number of linked partners required */
     public int minPartners;
-    /** If true, at least one partner must have a valid structure */
     public boolean requireFormed;
-    /** If true, at least one partner must be actively running a recipe */
     public boolean requireWorking;
 
     public static final MapCodec<LinkedPartnerCondition> CODEC = RecordCodecBuilder
@@ -62,9 +59,8 @@ public class LinkedPartnerCondition extends RecipeCondition<LinkedPartnerConditi
     }
 
     public static void register() {
-        TYPE = GTRegistries.register(GTRegistries.RECIPE_CONDITIONS,
-                CosmicCore.id("linked_partner"),
-                new RecipeConditionType<>(LinkedPartnerCondition::new, LinkedPartnerCondition.CODEC));
+        TYPE = new RecipeConditionType<>(LinkedPartnerCondition::new, LinkedPartnerCondition.CODEC);
+        CosmicRegistration.REGISTRATE.simple("linked_partner", GTRegistries.Keys.RECIPE_CONDITION, () -> TYPE);
     }
 
     @Override

@@ -33,7 +33,7 @@ public final class CrushedOreTooltipHandler {
         event.getToolTip().removeIf(line -> line.getContents() instanceof TranslatableContents contents &&
                 DISABLED_CAULDRON_KEYS.contains(contents.getKey()));
 
-        if (item.tagPrefix != TagPrefix.crushed) return;
+        if (item.tagPrefix != TagPrefix.crushed.value()) return;
         MaterialStack output = CosmicBundleMaterials.handSortOutput(item.material);
         if (output == null) return;
         event.getToolTip().add(Component

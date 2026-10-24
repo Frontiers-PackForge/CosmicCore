@@ -1,13 +1,16 @@
 package com.ghostipedia.cosmiccore.common.data.materials;
 
-import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.api.registries.CosmicRegistration;
 
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialIconSet;
 import com.gregtechceu.gtceu.api.data.chemical.material.stack.MaterialStack;
 import com.gregtechceu.gtceu.api.registry.GTRegistries;
+import com.gregtechceu.gtceu.api.registry.registrate.entry.MaterialRegistryEntry;
+import com.gregtechceu.gtceu.common.registry.GTRegistration;
 
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 
 import org.jetbrains.annotations.Nullable;
@@ -32,29 +35,30 @@ import static com.gregtechceu.gtceu.common.data.GTMaterials.*;
 
 public class CosmicBundleMaterials {
 
-    public static Material Ferosine;
-    public static Material Cuprosiva;
-    public static Material Galenite;
-    public static Material Landisite;
-    public static Material Redstona;
-    public static Material Lazuric;
-    public static Material Carbonic;
-    public static Material EarthenSalts;
-    public static Material Pyroltic;
-    public static Material Quartizine;
-    public static Material Molybite;
-    public static Material Fahlorium;
-    public static Material MonaziteSalts;
-    public static Material Agarlite;
-    public static Material CrudeRadionite;
-    public static Material Vanachrome;
-    public static Material Emberite;
-    public static Material Utherite;
-    public static Material Phycolite;
+    public static MaterialRegistryEntry Ferosine;
+    public static MaterialRegistryEntry Cuprosiva;
+    public static MaterialRegistryEntry Galenite;
+    public static MaterialRegistryEntry Landisite;
+    public static MaterialRegistryEntry Redstona;
+    public static MaterialRegistryEntry Lazuric;
+    public static MaterialRegistryEntry Carbonic;
+    public static MaterialRegistryEntry EarthenSalts;
+    public static MaterialRegistryEntry Pyroltic;
+    public static MaterialRegistryEntry Quartizine;
+    public static MaterialRegistryEntry Molybite;
+    public static MaterialRegistryEntry Fahlorium;
+    public static MaterialRegistryEntry MonaziteSalts;
+    public static MaterialRegistryEntry Agarlite;
+    public static MaterialRegistryEntry CrudeRadionite;
+    public static MaterialRegistryEntry Vanachrome;
+    public static MaterialRegistryEntry Emberite;
+    public static MaterialRegistryEntry Utherite;
+    public static MaterialRegistryEntry Phycolite;
 
     private static final Map<Material, List<Material>> OUTPUTS = new LinkedHashMap<>();
     private static final Set<Material> OUTPUT_MATERIALS = new LinkedHashSet<>();
     private static final Map<Material, MaterialStack> HAND_SORT = new LinkedHashMap<>();
+    private static final Map<MaterialRegistryEntry, List<Holder<Material>>> OUTPUT_ENTRIES = new LinkedHashMap<>();
 
     public static void register() {
         Ferosine = bundle("ferosine", 0x8B5A2B, 0x5E3A1C, MaterialIconSet.ROUGH);
@@ -66,7 +70,6 @@ public class CosmicBundleMaterials {
         Carbonic = bundle("carbonic", 0x2C2C30, 0x121214, MaterialIconSet.DULL);
         EarthenSalts = bundle("earthen_salts", 0xD9CBA8, 0xA89B78, MaterialIconSet.SAND);
         Pyroltic = bundle("pyroltic", 0xC9B037, 0x8A7615, MaterialIconSet.ROUGH);
-        dustPure.removeIgnored(Pyroltic);
         Quartizine = bundle("quartizine", 0x9FD8C8, 0x5FA090, MaterialIconSet.QUARTZ);
         Molybite = bundle("molybite", 0x4A5A6A, 0x2A3540, MaterialIconSet.METALLIC);
         Fahlorium = bundle("fahlorium", 0x7A5C3E, 0x4E3A26, MaterialIconSet.DULL);
@@ -77,11 +80,10 @@ public class CosmicBundleMaterials {
         Utherite = bundle("utherite", 0xB0525E, 0x5E2830, MaterialIconSet.ROUGH);
         Phycolite = bundle("phycolite", 0x9FB8E8, 0x54689E, MaterialIconSet.SHINY);
 
-        Emberite = new Material.Builder(GTCEu.id("emberite"))
+        Emberite = GTRegistration.REGISTRATE.material("emberite", builder -> builder
                 .gem()
                 .ore()
-                .color(0xff7300).iconSet(MaterialIconSet.CERTUS)
-                .buildAndRegister();
+                .color(0xff7300).iconSet(MaterialIconSet.CERTUS));
 
         out(Ferosine, Magnetite, Goethite, YellowLimonite, Hematite, VanadiumMagnetite, Gold);
         out(Cuprosiva, Chalcopyrite, Cassiterite, Malachite, Pyrite, Zeolite, Realgar);
@@ -102,30 +104,39 @@ public class CosmicBundleMaterials {
         out(Utherite, Utherium, CosmicMaterials.Aphotite, CosmicMaterials.Arcanite);
         out(Phycolite, CosmicMaterials.Gloomarcine, CosmicMaterials.Veilspar, CosmicMaterials.Bathyst,
                 CosmicMaterials.Nyctophyte, CosmicMaterials.Hadalite, CosmicMaterials.Abyssbloom);
-
-        sort(Cuprosiva, Tin, 3);
-        sort(Ferosine, Gold, 2);
-        sort(Galenite, Silver, 2);
-        sort(Pyroltic, Sphalerite, 3);
     }
 
-    private static Material bundle(String id, int color, int secondaryColor, MaterialIconSet iconSet) {
-        return new Material.Builder(CosmicCore.id(id))
+    private static MaterialRegistryEntry bundle(String id, int color, int secondaryColor,
+                                                Holder<MaterialIconSet> iconSet) {
+        return CosmicRegistration.REGISTRATE.material(id, builder -> builder
                 .ore()
                 .color(color).secondaryColor(secondaryColor)
                 .iconSet(iconSet)
                 .flags(DISABLE_MATERIAL_RECIPES)
-                .ignoredTagPrefixes(dust, dustSmall, dustTiny, dustImpure, dustPure, crushedRefined)
-                .buildAndRegister();
+                .ignoredTagPrefixes(dust, dustSmall, dustTiny, dustImpure, dustPure, crushedRefined));
     }
 
-    private static void out(Material bundleOre, Material... minerals) {
-        OUTPUTS.put(bundleOre, List.of(minerals));
-        Collections.addAll(OUTPUT_MATERIALS, minerals);
+    @SafeVarargs
+    private static void out(MaterialRegistryEntry bundleOre, Holder<Material>... minerals) {
+        OUTPUT_ENTRIES.put(bundleOre, List.of(minerals));
+    }
+
+    public static Set<MaterialRegistryEntry> bundleEntries() {
+        return Collections.unmodifiableSet(OUTPUT_ENTRIES.keySet());
     }
 
     public static void registerLateOutputs() {
-        appendRegisteredOutput(Utherite, GTCEu.id("ambrosium"));
+        for (var entry : OUTPUT_ENTRIES.entrySet()) {
+            List<Material> outputs = entry.getValue().stream().map(Holder::value).toList();
+            OUTPUTS.put(entry.getKey().value(), outputs);
+            OUTPUT_MATERIALS.addAll(outputs);
+        }
+        dustPure.value().removeIgnored(Pyroltic.value());
+        sort(Cuprosiva.value(), Tin.value(), 3);
+        sort(Ferosine.value(), Gold.value(), 2);
+        sort(Galenite.value(), Silver.value(), 2);
+        sort(Pyroltic.value(), Sphalerite.value(), 3);
+        appendRegisteredOutput(Utherite.value(), GTCEu.id("ambrosium"));
     }
 
     private static void appendRegisteredOutput(Material bundleOre, ResourceLocation mineralId) {

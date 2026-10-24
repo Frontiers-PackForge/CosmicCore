@@ -69,11 +69,11 @@ public enum CultivationTier implements StringRepresentable {
     public List<Material> acceptedNutrients() {
         return switch (this) {
             case MV -> List.of(
-                    CosmicMaterials.BiomeldNutrientMV,
-                    CosmicMaterials.BiomeldNutrientEV,
-                    CosmicMaterials.BiomeldNutrientLuV);
-            case EV -> List.of(CosmicMaterials.BiomeldNutrientEV, CosmicMaterials.BiomeldNutrientLuV);
-            case LUV -> List.of(CosmicMaterials.BiomeldNutrientLuV);
+                    CosmicMaterials.BiomeldNutrientMV.value(),
+                    CosmicMaterials.BiomeldNutrientEV.value(),
+                    CosmicMaterials.BiomeldNutrientLuV.value());
+            case EV -> List.of(CosmicMaterials.BiomeldNutrientEV.value(), CosmicMaterials.BiomeldNutrientLuV.value());
+            case LUV -> List.of(CosmicMaterials.BiomeldNutrientLuV.value());
         };
     }
 }

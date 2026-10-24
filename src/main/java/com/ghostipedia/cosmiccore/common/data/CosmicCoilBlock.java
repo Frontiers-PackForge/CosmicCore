@@ -8,6 +8,7 @@ import com.gregtechceu.gtceu.api.data.chemical.material.Material;
 import com.gregtechceu.gtceu.common.block.CoilBlock;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
@@ -63,11 +64,12 @@ public class CosmicCoilBlock extends CoilBlock implements EntityBlock {
         private final int level;
         private final int energyDiscount;
         @NotNull
-        private final Supplier<Material> material;
+        private final Supplier<Holder<Material>> material;
         @NotNull
         private final ResourceLocation texture;
 
-        CoilType(String name, int coilTemperature, int tier, int level, int energyDiscount, Supplier<Material> material,
+        CoilType(String name, int coilTemperature, int tier, int level, int energyDiscount,
+                 Supplier<Holder<Material>> material,
                  ResourceLocation texture) {
             this.name = name;
             this.coilTemperature = coilTemperature;
@@ -111,7 +113,7 @@ public class CosmicCoilBlock extends CoilBlock implements EntityBlock {
         }
 
         @Override
-        public Material getMaterial() {
+        public Holder<Material> getMaterial() {
             return material.get();
         }
 

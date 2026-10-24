@@ -20,13 +20,13 @@ public final class CosmicOreFormPolicy {
             GTCEu.id("alunite"),
             CosmicCore.id("moondrop"));
     private static final Set<TagPrefix> STANDARD_ORE_SUBSTEP_PREFIXES = Set.of(
-            TagPrefix.rawOre,
-            TagPrefix.rawOreBlock,
-            TagPrefix.crushed,
-            TagPrefix.crushedPurified,
-            TagPrefix.crushedRefined,
-            TagPrefix.dustImpure,
-            TagPrefix.dustPure);
+            TagPrefix.rawOre.value(),
+            TagPrefix.rawOreBlock.value(),
+            TagPrefix.crushed.value(),
+            TagPrefix.crushedPurified.value(),
+            TagPrefix.crushedRefined.value(),
+            TagPrefix.dustImpure.value(),
+            TagPrefix.dustPure.value());
 
     private CosmicOreFormPolicy() {}
 
@@ -42,10 +42,10 @@ public final class CosmicOreFormPolicy {
         ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(item);
         if (!itemId.getNamespace().equals(material.getModid())) return false;
 
-        if (TagPrefix.ORES.containsKey(prefix) || TagPrefix.surfaceRock.equals(prefix)) return true;
+        if (TagPrefix.ORES.containsKey(prefix) || TagPrefix.surfaceRock.value().equals(prefix)) return true;
         if (!STANDARD_ORE_SUBSTEP_PREFIXES.contains(prefix)) return false;
 
-        return !TagPrefix.rawOre.equals(prefix) ||
+        return !TagPrefix.rawOre.value().equals(prefix) ||
                 !EXPOSED_RAW_ORE_MATERIALS.contains(material.getResourceLocation());
     }
 }

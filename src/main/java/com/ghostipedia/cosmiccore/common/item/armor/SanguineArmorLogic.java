@@ -1,5 +1,7 @@
 package com.ghostipedia.cosmiccore.common.item.armor;
 
+import com.ghostipedia.cosmiccore.common.armor.SanguineKeyMappings;
+
 import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
 import com.gregtechceu.gtceu.api.capability.IElectricItem;
 import com.gregtechceu.gtceu.api.item.armor.ArmorLogicSuite;
@@ -84,7 +86,7 @@ public abstract class SanguineArmorLogic extends ArmorLogicSuite {
             }
 
             boolean nightVision = data.nightVision();
-            if (toggleTimer == 0 && SyncedKeyMappings.ARMOR_MODE_SWITCH.isKeyDown(player)) {
+            if (toggleTimer == 0 && SanguineKeyMappings.ARMOR_MODE_SWITCH.isKeyDown(player)) {
                 nightVision = !nightVision;
                 toggleTimer = 5;
                 if (item.getCharge() < ArmorUtils.MIN_NIGHTVISION_CHARGE) {
@@ -159,7 +161,7 @@ public abstract class SanguineArmorLogic extends ArmorLogicSuite {
             boolean canUseEnergy = item.canUse(energyPerUse / 100);
             boolean jumping = SyncedKeyMappings.VANILLA_JUMP.isKeyDown(player);
             boolean boostedJump = data.boostedJump();
-            if (boostedJumpTimer == 0 && SyncedKeyMappings.BOOTS_ENABLE.isKeyDown(player)) {
+            if (boostedJumpTimer == 0 && SanguineKeyMappings.BOOTS_ENABLE.isKeyDown(player)) {
                 boostedJump = !boostedJump;
                 boostedJumpTimer = JUMPING_TIMER;
                 player.displayClientMessage(Component
@@ -199,7 +201,7 @@ public abstract class SanguineArmorLogic extends ArmorLogicSuite {
                 }
             }
 
-            if (data.boostedJumpTimer() == 0 && SyncedKeyMappings.STEP_ASSIST_ENABLE.isKeyDown(player)) {
+            if (data.boostedJumpTimer() == 0 && SanguineKeyMappings.STEP_ASSIST_ENABLE.isKeyDown(player)) {
                 data.stepAssist(!data.stepAssist());
                 data.boostedJumpTimer((byte) 5);
                 if (level.isClientSide()) player.displayClientMessage(Component
