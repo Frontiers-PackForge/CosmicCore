@@ -51,11 +51,11 @@ public final class BiomeldVivariumDisplayUI {
                         .stateCount(BiomeldVivariumMachine.Mode.values().length)
                         .stateOverlay(BiomeldVivariumMachine.Mode.MATERIAL.ordinal(),
                                 Text.lang("cosmiccore.biomeld_vivarium.mode.material.short")
-                                        .alignment(Alignment.Center)
+                                        .alignment(Alignment.TopLeft)
                                         .asTextIcon())
                         .stateOverlay(BiomeldVivariumMachine.Mode.EXPERIENCE.ordinal(),
                                 Text.lang("cosmiccore.biomeld_vivarium.mode.experience.short")
-                                        .alignment(Alignment.Center)
+                                        .alignment(Alignment.TopLeft)
                                         .asTextIcon())
                         .value(mode)
                         .width(70)

@@ -71,6 +71,10 @@ public final class CosmicRegistryAliases {
                 addAlias(registry, CosmicCore.id(tier + "_spooling_machine"), gt(tier + "_spooler"));
             }
             addAlias(registry, CosmicCore.id("large_spooling_machine"), gt("large_spooler"));
+            for (String tier : List.of("mv", "hv", "ev", "iv", "luv", "zpm", "uv", "uhv", "uev", "uiv",
+                    "uxv", "opv")) {
+                addAlias(registry, CosmicCore.id(tier + "_spawner_hatch"), CosmicCore.id("spawner_holder"));
+            }
         }
         if (event.getRegistryKey().equals(Registries.RECIPE_TYPE)) {
             addAlias(registry, CosmicCore.id("spooling_machine"), gt("spooling"));

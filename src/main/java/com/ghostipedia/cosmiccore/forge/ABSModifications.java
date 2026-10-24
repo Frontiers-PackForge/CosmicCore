@@ -30,11 +30,21 @@ public class ABSModifications {
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void addAlloyBlastProperties(PostMaterialEvent event) {
         List<String> restoredMaterials = new ArrayList<>();
+        List<String> cappedTemperatures = new ArrayList<>();
         for (Material material : GTRegistries.MATERIALS) {
+            int originalTemperature = material.getBlastTemperature();
+            applyCasingTemperature(material);
+            if (material.getBlastTemperature() != originalTemperature) {
+                cappedTemperatures.add(material.getResourceLocation() + ": " + originalTemperature + " -> " +
+                        material.getBlastTemperature() + " K");
+            }
             if (!material.hasFlag(MaterialFlags.DISABLE_ALLOY_PROPERTY) && addAlloyBlastProperty(material)) {
                 restoredMaterials.add(material.getResourceLocation().toString());
             }
         }
+
+        cappedTemperatures.sort(Comparator.naturalOrder());
+        CosmicCore.LOGGER.info("Applied GCYM casing alloy heat limits: {}", cappedTemperatures);
 
         restoredMaterials.sort(Comparator.naturalOrder());
         if (restoredMaterials.size() > AlloyBlastLifecyclePolicy.MAX_RESTORED_ALLOYS) {
@@ -82,11 +92,19 @@ public class ABSModifications {
             return false;
         }
         material.setProperty(PropertyKey.ALLOY_BLAST, new AlloyBlastProperty());
-        FluidBuilder liquidBuilder = material.getFluidBuilder(FluidStorageKeys.LIQUID);
-        Integer temperature = AlloyBlastLifecyclePolicy.casingMoltenTemperatureOverride(
-                material.getName(), material.getBlastTemperature());
-        if (temperature != null && liquidBuilder != null) liquidBuilder.temperature(temperature);
         return true;
+    }
+
+    private static void applyCasingTemperature(Material material) {
+        if (!material.getResourceLocation().getNamespace().equals("gtceu") ||
+                !material.hasProperty(PropertyKey.BLAST))
+            return;
+        Integer temperature = AlloyBlastLifecyclePolicy.casingTemperatureOverride(
+                material.getName(), material.getBlastTemperature());
+        if (temperature == null) return;
+        material.getProperty(PropertyKey.BLAST).setBlastTemperature(temperature);
+        FluidBuilder liquidBuilder = material.getFluidBuilder(FluidStorageKeys.LIQUID);
+        if (liquidBuilder != null) liquidBuilder.temperature(temperature);
     }
 
     private static boolean isFluidOnly(MaterialStack stack) {

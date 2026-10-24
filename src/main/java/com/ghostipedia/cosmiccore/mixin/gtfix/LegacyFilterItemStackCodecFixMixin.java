@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.mixin.gtfix;
 
 import com.ghostipedia.cosmiccore.common.armor.AbyssSavedItemMigration;
+import com.ghostipedia.cosmiccore.common.compat.gtceu.LegacyArmorAttributeMigration;
 import com.ghostipedia.cosmiccore.common.compat.gtceu.LegacyFilterComponentMigration;
 
 import net.minecraft.world.item.ItemStack;
@@ -20,7 +21,7 @@ public abstract class LegacyFilterItemStackCodecFixMixin {
                            require = 2,
                            allow = 2)
     private static Codec<ItemStack> cosmiccore$migrateLegacyFilterComponents(Codec<ItemStack> codec) {
-        return AbyssSavedItemMigration
-                .wrap(LegacyFilterComponentMigration.wrap(codec));
+        return LegacyArmorAttributeMigration.wrap(AbyssSavedItemMigration
+                .wrap(LegacyFilterComponentMigration.wrap(codec)));
     }
 }

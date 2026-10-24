@@ -7,7 +7,7 @@ import java.util.Set;
 
 final class AlloyBlastLifecyclePolicy {
 
-    static final int MAX_CASING_MOLTEN_TEMPERATURE = 3600;
+    static final int MAX_CASING_TEMPERATURE = 3600;
     static final int MAX_RESTORED_ALLOYS = 128;
 
     private static final Set<String> CASING_ALLOYS = Set.of(
@@ -24,9 +24,9 @@ final class AlloyBlastLifecyclePolicy {
 
     private AlloyBlastLifecyclePolicy() {}
 
-    static @Nullable Integer casingMoltenTemperatureOverride(String materialName, int inferredTemperature) {
+    static @Nullable Integer casingTemperatureOverride(String materialName, int inferredTemperature) {
         if (!CASING_ALLOYS.contains(materialName)) return null;
-        return Math.min(inferredTemperature, MAX_CASING_MOLTEN_TEMPERATURE);
+        return Math.min(inferredTemperature, MAX_CASING_TEMPERATURE);
     }
 
     static RecipeShape recipeShape(List<Component> components) {
