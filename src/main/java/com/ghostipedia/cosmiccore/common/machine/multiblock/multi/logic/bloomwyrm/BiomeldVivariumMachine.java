@@ -136,7 +136,6 @@ public final class BiomeldVivariumMachine extends WorkableElectricMultiblockMach
         Optional<CultivationProfile> profileResult = CultivationProfileManager.INSTANCE.get(entity.get());
         if (profileResult.isEmpty()) return Optional.empty();
         CultivationProfile profile = profileResult.get();
-        if (spawnerHatch.get().getTier() < profile.tier().voltageTier()) return Optional.empty();
 
         Optional<FluidStack> nutrient = findAvailableNutrient(profile);
         if (nutrient.isEmpty()) return Optional.empty();

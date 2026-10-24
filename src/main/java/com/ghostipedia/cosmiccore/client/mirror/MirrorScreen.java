@@ -690,7 +690,7 @@ public class MirrorScreen extends Screen {
                 "key.cosmiccore.deeds.open",
                 KeyConflictContext.IN_GAME,
                 InputConstants.Type.KEYSYM,
-                GLFW.GLFW_KEY_V,
+                GLFW.GLFW_KEY_K,
                 "key.categories.cosmiccore.deeds");
         event.register(OPEN);
     }

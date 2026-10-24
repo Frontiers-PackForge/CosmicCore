@@ -272,7 +272,16 @@ public class CosmicMachines {
     public static final MachineEntry<MachineDefinition>[] QUINTESSENTIA_EXPORT_HATCH = registerQuintessentiaHatch(
             "output_quintessentia_hatch", "Output Quintessentia Hatch",
             IO.OUT, VITAE_TIERS, EXPORT_VITAE_NETWORK);
-    public static final MachineEntry<MachineDefinition>[] SPAWNER_HATCH = registerSpawnerHatch(VITAE_TIERS);
+    public static final MachineEntry<MachineDefinition> SPAWNER_HOLDER = REGISTRATE
+            .machine("spawner_holder", info -> new SpawnerHatchPartMachine(info, MV))
+            .langValue("Spawner Holder")
+            .tier(MV)
+            .abilities(VITAE_SPAWNER)
+            .rotationState(RotationState.ALL)
+            .modelProperty(GTMachineModelProperties.IS_FORMED, false)
+            .overlayTieredHullModel("module_hatch")
+            .tooltips(Component.translatable("tooltip.cosmiccore.spawner_hatch"))
+            .register();
 
     public static final MachineEntry<MachineDefinition>[] EMBER_IMPORT_HATCH = registerEmberHatch(
             "ember_input_hatch", "Ember Input Hatch",
@@ -764,20 +773,6 @@ public class CosmicMachines {
                         .tooltipBuilder((item, tooltip) -> tooltip.add(Component.translatable(
                                 "tooltip.cosmiccore.quintessentia_hatch.limit",
                                 QuintessentiaHatchPartMachine.getMaxCapacity(tier, SoulType.Anima))))
-                        .register(),
-                tiers);
-    }
-
-    private static MachineEntry<MachineDefinition>[] registerSpawnerHatch(int[] tiers) {
-        return registerTieredMachines("spawner_hatch",
-                SpawnerHatchPartMachine::new,
-                (tier, builder) -> builder
-                        .langValue(GTValues.VNF[tier] + " Spawner Hatch")
-                        .abilities(VITAE_SPAWNER)
-                        .rotationState(RotationState.ALL)
-                        .modelProperty(GTMachineModelProperties.IS_FORMED, false)
-                        .overlayTieredHullModel("module_hatch")
-                        .tooltips(Component.translatable("tooltip.cosmiccore.spawner_hatch"))
                         .register(),
                 tiers);
     }

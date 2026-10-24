@@ -53,6 +53,8 @@ public class CosmicLangHandler extends LangHandler {
     }
 
     public static void init(RegistrateLangProvider provider) {
+        provider.add("cosmiccore.machine.gcym.innate_parallel",
+                "§6Innate Parallels: §e16. §cParallel hatches add onto this amount!");
         for (int tier = GTValues.LV; tier <= GTValues.OpV; tier++) {
             provider.add("item.gtceu." + GTValues.VN[tier].toLowerCase(java.util.Locale.ROOT) + "_robot_arm",
                     GTValues.VN[tier] + " Robot Arm");
@@ -896,20 +898,20 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.emi.hephaestus_cauldron.pyroflux", "Yield: %s Pyroflux Charge");
         provider.add("cosmiccore.emi.hephaestus_cauldron.pyroflux_short", "%s Pyroflux");
         provider.add("cosmiccore.emi.hephaestus_cauldron.virtual",
-                "Virtual campus charge; no item or fluid is produced");
+                "Virtual representation, no item or fluid is produced");
         provider.add("cosmiccore.emi.hephaestus_cauldron.requirements", "%s EU/t (HV) for %s ticks (%s seconds)");
         provider.add("cosmiccore.power_tower.line.first",
                 "Selected Power Tower at %s. Select your second power tower");
         provider.add("cosmiccore.power_tower.line.dimension",
                 "The selected Power Tower is in another dimension. Selection cleared.");
         provider.add("cosmiccore.power_tower.line.coil",
-                "Use a Power Tower Coil directly to link towers; the separate line tool is no longer needed.");
+                "Use a Power Tower Coil directly to link towers.");
         provider.add("cosmiccore.power_tower.line.endpoint",
                 "The selected Power Tower is unavailable or no longer accessible. Selection cleared.");
         provider.add("cosmiccore.power_tower.line.created", "Power Tower line created.");
         provider.add("cosmiccore.power_tower.line.cleared", "Power Tower selection cleared.");
         provider.add("cosmiccore.power_tower.line.tooltip",
-                "Right-click two formed Power Towers to link them. Success consumes one coil; right-click air to clear selection.");
+                "Right-click two formed Power Towers to link them. Consumes coils, right click air to cancel");
         provider.add("cosmiccore.power_tower.line.tooltip.selected", "Selected endpoint dimension: %s");
         provider.add("cosmiccore.power_tower.line.error.endpoint_not_found", "One endpoint no longer exists.");
         provider.add("cosmiccore.power_tower.line.error.self_link", "A tower cannot be linked to itself.");
@@ -1026,9 +1028,9 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.deployment.power_tower.tooltip.0",
                 "Using spatial compression rituals to jam a multiblock into a portable deployment package");
         provider.add("cosmiccore.deployment.power_tower.tooltip.1",
-                "The lowest layer rests at the target height; the controller faces you.");
+                "The lowest layer rests at the target height");
         provider.add("cosmiccore.deployment.power_tower.tooltip.2",
-                "Aim up to 96 blocks away. Confirmation reserves one package; failed deployment returns it.");
+                "Aim up to 96 blocks away. Confirmation reserves one package, returned on failure.");
 
         multiLang(provider, "cosmiccore.machine.me_computation_array.tooltip",
                 "§aStorage Size§r : §b%s§r component bays.",
@@ -1053,7 +1055,7 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.machine.me_computation_uplink.tooltip.2",
                 "Passes all §bEU/t§r from Power relays into the AE2 Network");
         provider.add("cosmiccore.machine.me_computation_uplink.tooltip.3",
-                "Source reservation: §e0§r §aCWU/t§r; it cannot consume its own output.");
+                "Source reservation: §e0§r §aCWU/t§r.");
         provider.add("cosmiccore.machine.me_computation_uplink.tooltip.4",
                 "Topology: +§e%s§r §aCWU/t§r per §e%s§r physical grid links, rounded up.");
 
@@ -1519,7 +1521,7 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmic.gui.wireless.energy.capacitor", "  §bCapacitor Location:§b ");
         provider.add("cosmiccore.wireless_pda.bound.power", "PDA linked to Power Capacitor at %s");
         provider.add("cosmiccore.wireless_pda.bound.compute", "PDA linked to ME Controller at %s");
-        provider.add("cosmiccore.wireless_pda.unbound", "PDA links cleared; scanning your global energy pocket");
+        provider.add("cosmiccore.wireless_pda.unbound", "PDA links cleared, monitoring global energy pocket");
         provider.add("cosmiccore.wireless_pda.tooltip.bind",
                 "Sneak-use on a Power Capacitor or ME Controller to monitor it");
         provider.add("cosmiccore.wireless_pda.tooltip.linked.power", "Power: %s [%s]");
@@ -1583,7 +1585,7 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.item.spraycan.tooltip.lclick_sneak", "§4Shift + Left Click: §8Cycle color backward");
         provider.add("cosmiccore.item.spraycan.tooltip.rclick", "§4Right Click: §8Paint block");
         provider.add("cosmiccore.item.spraycan.tooltip.rclick_sneak",
-                "§5Shift + Right Click: §8Use spray mode; open UI in air");
+                "§5Shift + Right Click: §8Use spray mode or target air to open UI");
         provider.add("cosmiccore.item.spraycan.tooltip.rclick_offhand", "§5Right Click in Offhand: §8Place & paint");
         provider.add("cosmiccore.item.spraycan.tooltip.middle", "§4Middle Click: §8Pick block color");
         provider.add("cosmiccore.item.spraycan.tooltip.middle_sneak", "§4Shift + Middle Click: §8Toggle lock");
@@ -1761,7 +1763,7 @@ public class CosmicLangHandler extends LangHandler {
                 "§fConsumes stored packages from the bound AE2 network§r",
                 "§7Right click once to lock a design in place, right click again to build§r",
                 "§fLeft click while design is locked to cancel placement confirmation.",
-                "§7Shift + right-click to configure; hold the radial key (default R) to select.§r");
+                "§7Shift + right-click to configure. Hold the radial key (default R) to select.§r");
 
         // Multithreaded Machine Display (base)
         provider.add("cosmiccore.machine.multithreaded.thread_status", "§b=== Thread Status ===");
@@ -1791,7 +1793,7 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.machine.ore_extraction_drill.tooltip.1",
                 "§fMines each discovered ore block once, then replaces it with stone");
         provider.add("cosmiccore.machine.ore_extraction_drill.tooltip.2",
-                "§fOptional drilling fluids reduce cycle time; stronger fluids require higher-tier drills");
+                "§fOptional drilling fluids reduce cycle time. Higher tier drilling fluids only run in higher tier drills");
         provider.add("cosmiccore.machine.ore_extraction_drill.tooltip.3",
                 "§7Use screwdriver to restart scan after completion, will run until no ore is present");
         provider.add("cosmiccore.machine.ore_extraction_drill.restarted",
@@ -2365,7 +2367,7 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.emi.biomeld_vivarium.count_range", "Yield: %s-%s");
         provider.add("cosmiccore.emi.biomeld_vivarium.chance", "Chance: %s");
         provider.add("cosmiccore.emi.biomeld_vivarium.vitae",
-                "Essentia Vitae: %s mB (Anima with output Quintessentia Hatch; excess voided)");
+                "Essentia Vitae: %s mB (Anima with output Quintessentia Hatch, voids overflow Anima)");
         provider.add("cosmiccore.emi.biomeld_vivarium.spiritus", "Spiritus: +%s units");
         provider.add("cosmiccore.emi.biomeld_vivarium.charge", "Bloomwyrm Charge: %s");
         provider.add("cosmiccore.emi.biomeld_vivarium.yield_oc", "OC: 4x EU/t, 2x yield, same time");
@@ -2504,7 +2506,8 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.bloomwyrm.heart.units", "Active units: %s / %s linked");
         provider.add("cosmiccore.bloomwyrm.heart.limited", "Resource-limited units: %s");
         provider.add("cosmiccore.bloomwyrm.heart.cycle", "Next allocation cycle: %s");
-        provider.add("cosmiccore.bloomwyrm.heart.cycle_blocked", "Next cycle ready; waiting for active campus work");
+        provider.add("cosmiccore.bloomwyrm.heart.cycle_blocked",
+                "Next cycle ready, waiting for current work to complete");
         provider.add("cosmiccore.bloomwyrm.recipe.biopower_input", "Biopower use: %s");
         provider.add("cosmiccore.bloomwyrm.recipe.biopower_output", "Biopower capacity: +%s");
         provider.add("cosmiccore.bloomwyrm.recipe.charge_input", "Bloomwyrm Charge use: %s");
@@ -2705,7 +2708,7 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("deed.cosmiccore.current_flow.telling.prelude.0",
                 "The cold iron now feels familiar, in hands unborrowed, as will traces it forward.");
         provider.add("deed.cosmiccore.current_flow.telling.prelude.1",
-                "A painter left a brush, lonely for a home. It will paint again.");
+                "A painter left a brush, lonely for a home. It will paint again a beautiful sky.");
         provider.add("deed.cosmiccore.current_flow.telling.coil.0",
                 "A metallic construct whirls and breathes life into a grove of steel and runes.");
         provider.add("deed.cosmiccore.current_flow.telling.coil.1",
@@ -2715,9 +2718,9 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("deed.cosmiccore.current_flow.telling.ring.0",
                 "\"The one who holds infinity, does such simple magicks entertain you so?\"");
         provider.add("deed.cosmiccore.current_flow.telling.ring.1",
-                "\"The flow of power is simple and honest. Do not be tempted by greed; respect it.\"");
+                "\"The flow of power is simple and honest. Do not be tempted by greed but instead respect it.\"");
         provider.add("deed.cosmiccore.current_flow.telling.knot.0",
-                "The poise of energy, the elegance of raw force, is something to cherish.");
+                "The surge of energy and the elegance of raw power, it's something to cherish.");
         provider.add("deed.cosmiccore.current_flow.telling.knot.1",
                 "In this field of stars, even the power of the skies looks so lonely and distant.");
         provider.add("deed.cosmiccore.current_flow.telling.knot.2",
