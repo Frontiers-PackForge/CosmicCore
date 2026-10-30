@@ -4,8 +4,7 @@ import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.HephaestusCauldronMachine;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
 import com.ghostipedia.cosmiccore.common.network.packet.FoundryCampusSyncPacket;
-
-import com.gregtechceu.gtceu.api.machine.MetaMachine;
+import com.ghostipedia.cosmiccore.utils.MachineLookUpUtils;
 
 import net.minecraft.core.GlobalPos;
 import net.minecraft.server.level.ServerLevel;
@@ -22,7 +21,7 @@ public final class FoundryCampusSync {
 
     public static void send(ServerLevel level, GlobalPos core) {
         if (!core.dimension().equals(level.dimension())) return;
-        if (!(MetaMachine.getMachine(level, core.pos()) instanceof HephaestusCauldronMachine machine) ||
+        if (!(MachineLookUpUtils.getLoadedMachine(level, core) instanceof HephaestusCauldronMachine machine) ||
                 !machine.isFormed()) {
             clear(level, core);
             return;
@@ -43,7 +42,7 @@ public final class FoundryCampusSync {
         ServerLevel level = event.getLevel();
         FoundryCampusSavedData data = FoundryCampusSavedData.get(level.getServer());
         for (GlobalPos core : data.coresIn(level.dimension(), event.getPos())) {
-            if (!(MetaMachine.getMachine(level, core.pos()) instanceof HephaestusCauldronMachine machine) ||
+            if (!(MachineLookUpUtils.getLoadedMachine(level, core) instanceof HephaestusCauldronMachine machine) ||
                     !machine.isFormed()) {
                 continue;
             }
@@ -63,8 +62,7 @@ public final class FoundryCampusSync {
     }
 
     private static FoundryFurnaceEndpoint endpoint(ServerLevel level, GlobalPos position) {
-        if (!position.dimension().equals(level.dimension()) || !level.isLoaded(position.pos())) return null;
-        return MetaMachine.getMachine(level, position.pos()) instanceof FoundryFurnaceEndpoint endpoint ?
+        return MachineLookUpUtils.getLoadedMachine(level, position) instanceof FoundryFurnaceEndpoint endpoint ?
                 endpoint : null;
     }
 }

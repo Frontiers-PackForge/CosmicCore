@@ -3,6 +3,7 @@ package com.ghostipedia.cosmiccore.common.machine.foundry;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.AlloyBlastingKilnMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.HephaestusCauldronMachine;
 import com.ghostipedia.cosmiccore.utils.ItemData;
+import com.ghostipedia.cosmiccore.utils.MachineLookUpUtils;
 
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 
@@ -72,7 +73,7 @@ public final class FoundryDataStickLinking {
         if (!level.isLoaded(sourcePosition.pos())) {
             return message(player, "cosmiccore.foundry.link.unloaded", ChatFormatting.RED, InteractionResult.FAIL);
         }
-        MetaMachine source = MetaMachine.getMachine(level, sourcePosition.pos());
+        MetaMachine source = MachineLookUpUtils.getLoadedMachine(level, sourcePosition);
         HephaestusCauldronMachine core;
         AlloyBlastingKilnMachine kiln;
         if (source instanceof HephaestusCauldronMachine sourceCore &&

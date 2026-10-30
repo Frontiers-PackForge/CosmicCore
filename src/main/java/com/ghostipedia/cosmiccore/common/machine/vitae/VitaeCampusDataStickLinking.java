@@ -3,6 +3,7 @@ package com.ghostipedia.cosmiccore.common.machine.vitae;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.HemophagicTransfuserMachine;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.ImbumentPylonMachine;
 import com.ghostipedia.cosmiccore.utils.ItemData;
+import com.ghostipedia.cosmiccore.utils.MachineLookUpUtils;
 
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 
@@ -67,7 +68,7 @@ public final class VitaeCampusDataStickLinking {
         if (!level.isLoaded(sourcePosition.pos())) {
             return message(player, "cosmiccore.vitae_campus.link.unloaded", InteractionResult.FAIL);
         }
-        MetaMachine source = MetaMachine.getMachine(level, sourcePosition.pos());
+        MetaMachine source = MachineLookUpUtils.getLoadedMachine(level, sourcePosition);
         HemophagicTransfuserMachine core;
         ImbumentPylonMachine pylon;
         if (source instanceof HemophagicTransfuserMachine sourceCore &&
