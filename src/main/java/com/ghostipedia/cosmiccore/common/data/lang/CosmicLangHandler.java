@@ -1412,6 +1412,14 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.jade.power.cable_cause.overvoltage", "§6Overvoltage");
         provider.add("cosmiccore.jade.power.cable_cause.both", "§6Overamperage and overvoltage");
         provider.add("cosmiccore.jade.power.cable_cause.residual", "§6Residual heat");
+        provider.add("cosmiccore.machine.transformer.mode_up", "Step Up");
+        provider.add("cosmiccore.machine.transformer.mode_down", "Step Down");
+        provider.add("cosmiccore.machine.transformer.input_rating", "Input: %s (%s V) at %s A");
+        provider.add("cosmiccore.machine.transformer.output_rating", "Output: %s (%s V) at %s A");
+        provider.add("cosmiccore.machine.transformer.output_tier", "Output Tier");
+        provider.add("cosmiccore.machine.transformer.output_amperage", "Output Amps (Max %s)");
+        provider.add("cosmiccore.machine.transformer.saved_step_down",
+                "§cCaution! §6Step down settings stay saved in step up mode.");
         provider.add("cosmiccore.machine.me_computation_array.display.components", "Components: %s Cores / %s Relays");
         provider.add("cosmiccore.machine.me_computation_array.display.cwu", "Compute/tick: %s / %s CWU/t");
         provider.add("cosmiccore.machine.me_computation_array.display.energy", "EU Demand: %s EU/t");
