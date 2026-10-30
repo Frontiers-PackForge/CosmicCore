@@ -1,10 +1,13 @@
 package com.ghostipedia.cosmiccore.common.data.lang;
 
+import com.ghostipedia.cosmiccore.api.data.CosmicTagPrefix;
 import com.ghostipedia.cosmiccore.common.data.worldgen.field.OreFieldPlacement;
 import com.ghostipedia.cosmiccore.common.murkbloom.StealthCoating;
+import com.ghostipedia.cosmiccore.common.power.TwelvefoldConductorRegistration;
 
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.data.chemical.material.Material;
+import com.gregtechceu.gtceu.api.data.tag.TagPrefix;
 import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.data.lang.LangHandler;
 
@@ -452,8 +455,8 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.gui.factory_gauge.promise_limit", "Promise Limit");
         provider.add("cosmiccore.gui.factory_gauge.promise_limit.none", "Promise Limit: Unlimited");
         provider.add("cosmiccore.gui.factory_gauge.place_fluid", "Place a fluid to monitor");
-        provider.add("tagprefix.wire_gt_twelve", "12x %s Wire");
-        provider.add("tagprefix.cable_gt_twelve", "12x %s Cable");
+        provider.add(TwelvefoldConductorRegistration.wirePrefix().value().getUnlocalizedName(), "12x %s Wire");
+        provider.add(TwelvefoldConductorRegistration.cablePrefix().value().getUnlocalizedName(), "12x %s Cable");
 
         replace(provider, "material.cosmiccore.blooming_sludge", "Blooming Sludge");
         replace(provider, "material.cosmiccore.bloom_rich_algae_solution", "Bloom Rich Algae Solution");
@@ -1277,20 +1280,21 @@ public class CosmicLangHandler extends LangHandler {
                 "§aVomahine StarLadderOld Tether Tier§f: §b%s \n §aMax Research Modules§f: §b%s");
         // provider.add("tagprefix.leached_ore", "Leached %s Ore");
         // provider.add("tagprefix.prisma_frothed_ore", "Prisma Frothed %s Ore");
-        provider.add("tagprefix.ultradense_plate", "Ultradense %s Plate");
-        provider.add("tagprefix.heavy_beam", "Heavy %s Beam");
-        provider.add("tagprefix.modular_shelling", "%s Modular Shelling");
-        provider.add("tagprefix.plasmites", "%s Plasmites");
-        provider.add("tagprefix.wire_spool", "%s Wire Spool");
-        provider.add("tagprefix.shape_memory_foil", "%s Shaping Memory Foil");
-        provider.add("tagprefix.alve_foil_insulator", "%s Alve Insulator");
-        provider.add("tagprefix.raw_ore_cubic", "Cubic %s Ore");
-        provider.add("tagprefix.ore_chunk", "%s Ore Chunk");
-        provider.add("tagprefix.powderized_ore", "Powderized %s Ore");
-        provider.add("tagprefix.crystallized_ore_chunk", "Crystallized %s Ore Chunk");
-        provider.add("tagprefix.atomically_purified_ore_chunk", "Atomically Purified %s Ore Chunk");
-        provider.add("tagprefix.flocculated_ore", "Flocculated %s Ore");
-        provider.add("tagprefix.buzzsaw_blade", "%s Buzzsaw Blade");
+        provider.add(CosmicTagPrefix.ultraDense.value().getUnlocalizedName(), "Ultradense %s Plate");
+        provider.add(CosmicTagPrefix.heavyBeam.value().getUnlocalizedName(), "Heavy %s Beam");
+        provider.add(CosmicTagPrefix.modularShelling.value().getUnlocalizedName(), "%s Modular Shelling");
+        provider.add(CosmicTagPrefix.plasmites.value().getUnlocalizedName(), "%s Plasmites");
+        provider.add(CosmicTagPrefix.largeWireSpool.value().getUnlocalizedName(), "%s Wire Spool");
+        provider.add(CosmicTagPrefix.shapeMemoryFoil.value().getUnlocalizedName(), "%s Shaping Memory Foil");
+        provider.add(CosmicTagPrefix.alveFoilInsulator.value().getUnlocalizedName(), "%s Alve Insulator");
+        provider.add(CosmicTagPrefix.rawOreCubic.value().getUnlocalizedName(), "Cubic %s Ore");
+        provider.add(CosmicTagPrefix.oreChunk.value().getUnlocalizedName(), "%s Ore Chunk");
+        provider.add(CosmicTagPrefix.powderizedOre.value().getUnlocalizedName(), "Powderized %s Ore");
+        provider.add(CosmicTagPrefix.crystallizedOreChunk.value().getUnlocalizedName(), "Crystallized %s Ore Chunk");
+        provider.add(CosmicTagPrefix.atomicallyPurifiedOreChunk.value().getUnlocalizedName(),
+                "Atomically Purified %s Ore Chunk");
+        provider.add(CosmicTagPrefix.flocculatedOre.value().getUnlocalizedName(), "Flocculated %s Ore");
+        provider.add(TagPrefix.toolHeadBuzzSaw.value().getUnlocalizedName(), "%s Buzzsaw Blade");
 
         provider.add("cosmiccore.multiblock.reboot_powergrid", "§aReboot All Connected Machines");
         provider.add("cosmiccore.multiblock.sleep_powergrid", "§cSuspend All Connected Machines");
