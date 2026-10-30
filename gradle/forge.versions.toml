@@ -7,7 +7,7 @@ configuration = "3.1.1-neoforge"
 
 jei = "19.25.1.328"
 emi = "1.1.24+1.21.1+neoforge"
-ae2 = "19.2.17"
+ae2 = "19.2.18"
 guideme = "21.1.16"
 ae2wtlib = "19.5.0"
 kubejs = "2101.7.2-build.368"
