@@ -95,6 +95,16 @@ public class CosmicItems {
 
     // Modules
 
+    public static final ItemEntry<ComponentItem> DUSK_SPIRIT_SHARD = registerChainItem(
+            "dusk_spirit_shard", "Dusk Spirit Shard", CosmicCore.id("item/dusk_spirit_shard"));
+    public static final ItemEntry<ComponentItem> DAWN_SPIRIT_SHARD = registerChainItem(
+            "dawn_spirit_shard", "Dawn Spirit Shard", CosmicCore.id("item/dawn_spirit_shard"));
+    public static final ItemEntry<ComponentItem> BALANCED_SPIRIT_CRYSTAL = registerChainItem(
+            "balanced_spirit_crystal", "Balanced Spirit Crystal", CosmicCore.id("item/balanced_spirit_crystal"));
+    public static final ItemEntry<ComponentItem> BALANCED_SPIRIT_CRYSTAL_CLUSTER = registerChainItem(
+            "balanced_spirit_crystal_cluster", "Balanced Spirit Crystal Cluster",
+            CosmicCore.id("item/balanced_spirit_crystal_cluster"));
+
     public static final ItemEntry<SoulNetworkReaderItem> SOUL_READER = REGISTRATE
             .item("soul_reader", SoulNetworkReaderItem::new)
             .lang("Soul Network Reader")
