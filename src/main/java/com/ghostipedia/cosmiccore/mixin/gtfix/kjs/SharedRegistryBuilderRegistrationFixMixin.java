@@ -20,7 +20,9 @@ import java.util.function.Supplier;
 @Mixin(value = { KubeGTRegistryEventHandler.class, RegistryEventHandler.class }, remap = false)
 public abstract class SharedRegistryBuilderRegistrationFixMixin {
 
-    @WrapOperation(method = "handleRegistryEvent",
+    @WrapOperation(method = { "handleRegistryEvent", "registerObjects" },
+                   require = 1,
+                   allow = 1,
                    at = @At(value = "INVOKE",
                             target = "Lnet/neoforged/neoforge/registries/RegisterEvent;register(Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/resources/ResourceLocation;Ljava/util/function/Supplier;)V"))
     private static <T> void cosmiccore$registerBuilderOnce(RegisterEvent event,
