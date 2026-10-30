@@ -17,13 +17,9 @@ import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import com.gregtechceu.gtceu.common.data.GTSoundEntries;
 import com.gregtechceu.gtceu.common.data.machines.GTMultiMachines;
 import com.gregtechceu.gtceu.common.mui.GTGuiTextures;
-import com.gregtechceu.gtceu.common.recipe.condition.DimensionCondition;
 import com.gregtechceu.gtceu.utils.ResearchManager;
 
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 
 import com.tterrag.registrate.providers.ProviderType;
 
@@ -778,6 +774,9 @@ public class CosmicRecipeTypes {
     }
 
     public static void configure() {
+        INDUSTRIAL_CHEMVAT.getCategory().setXEIVisible(false);
+        ORBITAL_FORGE_EBF.getCategory().setXEIVisible(false);
+        ORBITAL_FORGE_ABS.getCategory().setXEIVisible(false);
         if (VACUUM_DISTILLATION.get().getIconSupplier() == null) {
             VACUUM_DISTILLATION.get().setIconSupplier(
                     GTMultiMachines.DISTILLATION_TOWER::asStack);
@@ -864,13 +863,13 @@ public class CosmicRecipeTypes {
         CHEMICAL_RECIPES.get().getRecipeBuilder().onSave((builder, provider) -> {
             LARGE_CHEMICAL_RECIPES.copyFrom(builder)
                     .save(provider);
-            INDUSTRIAL_CHEMVAT.copyFrom(builder)
-                    .save(provider);
+            // INDUSTRIAL_CHEMVAT.copyFrom(builder)
+            // .save(provider);
         });
-        LARGE_CHEMICAL_RECIPES.get().getRecipeBuilder().onSave((builder, provider) -> {
-            INDUSTRIAL_CHEMVAT.copyFrom(builder)
-                    .save(provider);
-        });
+        // LARGE_CHEMICAL_RECIPES.get().getRecipeBuilder().onSave((builder, provider) -> {
+        // INDUSTRIAL_CHEMVAT.copyFrom(builder)
+        // .save(provider);
+        // });
         STEAM_TURBINE_FUELS.get().getRecipeBuilder().onSave((builder, provider) -> {
             if (!builder.id.equals(GTCEu.id("steam"))) {
                 TURBINE_POWER_STATION.copyFrom(builder)
@@ -897,22 +896,22 @@ public class CosmicRecipeTypes {
                     .save(provider);
         });
 
-        BLAST_RECIPES.get().getRecipeBuilder().onSave((builder, provider) -> {
-            var orbitBuilderEBF = ORBITAL_FORGE_EBF.copyFrom(builder);
-            // Orbital Forge ONLY copies Standard EBF recipes, if an EBF recipe contains a dimension condition, it is
-            // assumed it can't be done in space
-            if (!builder.conditions.isEmpty() &&
-                    builder.conditions.stream().anyMatch(cond -> cond instanceof DimensionCondition)) {
-                // Do Nothing if the recipe Contains a Dimension
-            } else {
-                // If It Doesn't have a Dimension, add the recipe and give it an dimension req of 'Sun Orbit'
-                orbitBuilderEBF
-                        .addCondition(new DimensionCondition(
-                                ResourceKey.create(Registries.DIMENSION,
-                                        ResourceLocation.parse("frontiers:sun_orbit"))))
-                        .save(provider);
-            }
-        });
+        // BLAST_RECIPES.get().getRecipeBuilder().onSave((builder, provider) -> {
+        // var orbitBuilderEBF = ORBITAL_FORGE_EBF.copyFrom(builder);
+        // // Orbital Forge ONLY copies Standard EBF recipes, if an EBF recipe contains a dimension condition, it is
+        // // assumed it can't be done in space
+        // if (!builder.conditions.isEmpty() &&
+        // builder.conditions.stream().anyMatch(cond -> cond instanceof DimensionCondition)) {
+        // // Do Nothing if the recipe Contains a Dimension
+        // } else {
+        // // If It Doesn't have a Dimension, add the recipe and give it an dimension req of 'Sun Orbit'
+        // orbitBuilderEBF
+        // .addCondition(new DimensionCondition(
+        // ResourceKey.create(Registries.DIMENSION,
+        // ResourceLocation.parse("frontiers:sun_orbit"))))
+        // .save(provider);
+        // }
+        // });
 
         // BLAST_RECIPES.get().getRecipeBuilder().onSave((builder, provider) -> {
         // STELLAR_SMELTING.copyFrom(builder)
@@ -921,20 +920,20 @@ public class CosmicRecipeTypes {
 
         ALLOY_BLAST_RECIPES.getCategory().setXEIVisible(false);
         ALLOY_BLAST_RECIPES.get().getRecipeBuilder().onSave((builder, provider) -> {
-            var orbitBuilderABS = ORBITAL_FORGE_ABS.copyFrom(builder);
-            // Orbital Forge ONLY copies Standard ABS recipes, if an ABS recipe contains a dimension condition, it is
-            // assumed it can't be done in space
-            if (!builder.conditions.isEmpty() &&
-                    builder.conditions.stream().anyMatch(cond -> cond instanceof DimensionCondition)) {
-                // Do Nothing if the recipe Contains a Dimension
-            } else {
-                // If It Doesn't have a Dimension, add the recipe and give it an dimension req of 'Sun Orbit'
-                orbitBuilderABS
-                        .addCondition(new DimensionCondition(
-                                ResourceKey.create(Registries.DIMENSION,
-                                        ResourceLocation.parse("frontiers:sun_orbit"))))
-                        .save(provider);
-            }
+            // var orbitBuilderABS = ORBITAL_FORGE_ABS.copyFrom(builder);
+            // // Orbital Forge ONLY copies Standard ABS recipes, if an ABS recipe contains a dimension condition, it is
+            // // assumed it can't be done in space
+            // if (!builder.conditions.isEmpty() &&
+            // builder.conditions.stream().anyMatch(cond -> cond instanceof DimensionCondition)) {
+            // // Do Nothing if the recipe Contains a Dimension
+            // } else {
+            // // If It Doesn't have a Dimension, add the recipe and give it an dimension req of 'Sun Orbit'
+            // orbitBuilderABS
+            // .addCondition(new DimensionCondition(
+            // ResourceKey.create(Registries.DIMENSION,
+            // ResourceLocation.parse("frontiers:sun_orbit"))))
+            // .save(provider);
+            // }
             builder.recipeType(ALLOY_BLASTING_KILN.get()).category(ALLOY_BLASTING_KILN.getCategory());
         });
     }
