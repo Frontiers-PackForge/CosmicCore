@@ -2,10 +2,12 @@ package com.ghostipedia.cosmiccore.api.misc;
 
 import com.ghostipedia.cosmiccore.api.machine.multiblock.DroneStationMachine;
 import com.ghostipedia.cosmiccore.api.machine.part.DroneMaintenanceInterfacePartMachine;
+import com.ghostipedia.cosmiccore.utils.MachineLookUpUtils;
 
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 
 import org.jetbrains.annotations.Nullable;
@@ -38,7 +40,8 @@ public final class DroneStationConnection {
     public @Nullable DroneMaintenanceInterfacePartMachine maintenanceInterface(Level level) {
         DroneMaintenanceInterfacePartMachine maintenanceInterface = interfaceReference.get();
         if (maintenanceInterface != null && !maintenanceInterface.isRemoved()) return maintenanceInterface;
-        MetaMachine machine = MetaMachine.getMachine(level, interfacePos);
+        if (!(level instanceof ServerLevel serverLevel)) return null;
+        MetaMachine machine = MachineLookUpUtils.getLoadedMachine(serverLevel, interfacePos);
         if (!(machine instanceof DroneMaintenanceInterfacePartMachine resolved)) return null;
         interfaceReference = new WeakReference<>(resolved);
         return resolved;
@@ -47,7 +50,8 @@ public final class DroneStationConnection {
     public @Nullable DroneStationMachine station(Level level) {
         DroneStationMachine station = stationReference.get();
         if (station != null && !station.isRemoved()) return station;
-        MetaMachine machine = MetaMachine.getMachine(level, stationPos);
+        if (!(level instanceof ServerLevel serverLevel)) return null;
+        MetaMachine machine = MachineLookUpUtils.getLoadedMachine(serverLevel, stationPos);
         if (!(machine instanceof DroneStationMachine resolved)) return null;
         stationReference = new WeakReference<>(resolved);
         return resolved;

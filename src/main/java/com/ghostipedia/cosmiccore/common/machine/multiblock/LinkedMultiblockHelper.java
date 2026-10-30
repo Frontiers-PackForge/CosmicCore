@@ -4,6 +4,7 @@ import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.capability.ILinkedMultiblock;
 import com.ghostipedia.cosmiccore.api.capability.ILinkedMultiblock.LinkRole;
 import com.ghostipedia.cosmiccore.api.data.savedData.LinkedMultiblockSavedData;
+import com.ghostipedia.cosmiccore.utils.MachineLookUpUtils;
 
 import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
@@ -62,11 +63,7 @@ public class LinkedMultiblockHelper {
         ServerLevel level = server.getLevel(pos.dimension());
         if (level == null) return null;
 
-        if (!level.isLoaded(pos.pos())) {
-            return null;
-        }
-
-        return MetaMachine.getMachine(level, pos.pos());
+        return MachineLookUpUtils.getLoadedMachine(level, pos);
     }
 
     @Nullable
@@ -207,7 +204,9 @@ public class LinkedMultiblockHelper {
         }
 
         try {
-            MetaMachine machine = getMachine(server, target);
+            ServerLevel level = server.getLevel(target.dimension());
+            MetaMachine machine = level != null && level.isLoaded(target.pos()) ?
+                    MetaMachine.getMachine(level, target.pos()) : null;
             if (machine instanceof WorkableElectricMultiblockMachine workable) {
                 return query.query(workable);
             }

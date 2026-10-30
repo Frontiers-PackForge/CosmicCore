@@ -6,6 +6,7 @@ import com.ghostipedia.cosmiccore.common.machine.vitae.VitaeCampusSavedData;
 import com.ghostipedia.cosmiccore.common.machine.vitae.VitaeCampusSoulHandler;
 import com.ghostipedia.cosmiccore.common.machine.vitae.VitaePylonRecipes;
 import com.ghostipedia.cosmiccore.common.machine.vitae.VitaeRenderAnchors;
+import com.ghostipedia.cosmiccore.utils.MachineLookUpUtils;
 
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
@@ -103,8 +104,8 @@ public final class ImbumentPylonMachine extends WorkableElectricMultiblockMachin
     public @Nullable HemophagicTransfuserMachine campusCore() {
         var access = access().orElse(null);
         if (access == null || !Objects.equals(access.owner(), resolveCampusOwner())) return null;
-        if (!getLevel().hasChunkAt(access.core().pos())) return null;
-        var machine = MetaMachine.getMachine(getLevel(), access.core().pos());
+        if (!(getLevel() instanceof ServerLevel level)) return null;
+        var machine = MachineLookUpUtils.getLoadedMachine(level, access.core());
         return machine instanceof HemophagicTransfuserMachine core && core.isFormed() &&
                 core.isRecipeLogicAvailable() &&
                 Objects.equals(access.owner(), core.resolveCampusOwner()) ? core : null;
