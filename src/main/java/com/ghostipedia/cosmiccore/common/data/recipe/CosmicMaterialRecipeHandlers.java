@@ -19,7 +19,7 @@ public class CosmicMaterialRecipeHandlers {
     public static void init(@NotNull RecipeOutput provider, @NotNull Material material) {
         processHeavyBeam(provider, material);
         processModularShelling(provider, material);
-        processUltraDensePlate(provider, material);
+        // processUltraDensePlate(provider, material);
         processWireSpool(provider, material);
     }
 
