@@ -8,8 +8,36 @@ import net.minecraft.network.chat.MutableComponent;
 
 import java.math.BigInteger;
 import java.text.DecimalFormat;
+import java.time.Duration;
 
 public class CosmicFormattingUtil {
+
+    public static MutableComponent formatEnergyStorageDuration(BigInteger seconds) {
+        Duration duration = Duration.ofSeconds(seconds.max(BigInteger.ZERO)
+                .min(BigInteger.valueOf(Long.MAX_VALUE)).longValue());
+        String unit;
+        long value;
+        if (duration.getSeconds() <= 180) {
+            unit = "seconds";
+            value = duration.getSeconds();
+        } else if (duration.toMinutes() <= 180) {
+            unit = "minutes";
+            value = duration.toMinutes();
+        } else if (duration.toHours() <= 72) {
+            unit = "hours";
+            value = duration.toHours();
+        } else if (duration.toDays() <= 730) {
+            unit = "days";
+            value = duration.toDays();
+        } else if (duration.toDays() / 365 < 1_000_000) {
+            unit = "years";
+            value = duration.toDays() / 365;
+        } else {
+            return Component.translatable("gtceu.multiblock.power_substation.time_forever");
+        }
+        return Component.translatable("gtceu.multiblock.power_substation.time_" + unit,
+                FormattingUtil.formatNumbers(value));
+    }
 
     public static String formatNumberWithCharacterLimit(BigInteger number, int characterLimit) {
         String formattedNumber = FormattingUtil.formatNumbers(number);

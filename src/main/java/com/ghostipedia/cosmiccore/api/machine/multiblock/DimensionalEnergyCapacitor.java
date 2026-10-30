@@ -11,6 +11,8 @@ import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
 import com.gregtechceu.gtceu.common.block.BatteryBlock;
 import com.gregtechceu.gtceu.common.machine.owner.MachineOwner;
 
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 
 import java.math.BigInteger;
@@ -18,8 +20,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-// TODO(8.0.0 MUI2): custom display text shelved; base default getWidgetsForDisplay UI used for now (original in git
-// history).
 public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
 
     public static final int MAX_BATTERY_LAYER = 18;
@@ -41,6 +41,20 @@ public class DimensionalEnergyCapacitor extends DimensionalEnergyInterface {
     public DimensionalEnergyCapacitor(BlockEntityCreationInfo info) {
         super(info);
         this.localDisplay = false;
+    }
+
+    @Override
+    protected boolean isEnergyDisplayAvailable() {
+        return !isDuplicate && super.isEnergyDisplayAvailable();
+    }
+
+    @Override
+    protected Component getEnergyDisplayLine(int line) {
+        if (isDuplicate) {
+            return line < 2 ? Component.translatable("cosmic.multiblock.capacitor.duplicate.multiblock." + (line + 1))
+                    .withStyle(ChatFormatting.DARK_RED) : Component.empty();
+        }
+        return super.getEnergyDisplayLine(line);
     }
 
     @Override
