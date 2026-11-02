@@ -1,7 +1,7 @@
 package com.ghostipedia.cosmiccore.api.machine.multiblock;
 
-import com.ghostipedia.cosmiccore.mixin.gtfix.accessor.BasicSliceGroupAccessor;
-import com.ghostipedia.cosmiccore.mixin.gtfix.accessor.BasicSliceStrategyAccessor;
+import com.ghostipedia.cosmiccore.mixin.gttweak.preview.BasicSliceGroupAccessor;
+import com.ghostipedia.cosmiccore.mixin.gttweak.preview.BasicSliceStrategyAccessor;
 
 import com.gregtechceu.gtceu.api.multiblock.pattern.BasicSliceStrategy;
 import com.gregtechceu.gtceu.api.multiblock.pattern.BlockPattern;

@@ -1,4 +1,4 @@
-package com.ghostipedia.cosmiccore.mixin.gtfix;
+package com.ghostipedia.cosmiccore.mixin.gttweak.preview;
 
 import com.ghostipedia.cosmiccore.api.machine.multiblock.GroupedSlicePreviewSupport;
 

@@ -1,4 +1,4 @@
-package com.ghostipedia.cosmiccore.mixin.gtfix.accessor;
+package com.ghostipedia.cosmiccore.mixin.gttweak.preview;
 
 import com.gregtechceu.gtceu.api.multiblock.pattern.BasicSliceStrategy;
 

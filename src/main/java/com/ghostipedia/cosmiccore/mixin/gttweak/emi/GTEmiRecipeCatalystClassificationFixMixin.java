@@ -1,4 +1,4 @@
-package com.ghostipedia.cosmiccore.mixin.gtfix.emi;
+package com.ghostipedia.cosmiccore.mixin.gttweak.emi;
 
 import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
 import com.gregtechceu.gtceu.api.capability.recipe.ItemRecipeCapability;

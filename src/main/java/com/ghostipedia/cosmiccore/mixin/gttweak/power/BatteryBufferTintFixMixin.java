@@ -1,4 +1,4 @@
-package com.ghostipedia.cosmiccore.mixin.gtfix;
+package com.ghostipedia.cosmiccore.mixin.gttweak.power;
 
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.common.machine.electric.BatteryBufferMachine;
