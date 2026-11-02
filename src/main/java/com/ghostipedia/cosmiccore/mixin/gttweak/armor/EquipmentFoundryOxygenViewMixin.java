@@ -1,4 +1,4 @@
-package com.ghostipedia.cosmiccore.mixin.gtfix;
+package com.ghostipedia.cosmiccore.mixin.gttweak.armor;
 
 import com.ghostipedia.cosmiccore.common.armor.FoundryModuleItemHandler;
 

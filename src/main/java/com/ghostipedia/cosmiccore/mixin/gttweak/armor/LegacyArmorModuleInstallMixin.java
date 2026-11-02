@@ -1,4 +1,4 @@
-package com.ghostipedia.cosmiccore.mixin.gtfix;
+package com.ghostipedia.cosmiccore.mixin.gttweak.armor;
 
 import com.gregtechceu.gtceu.api.item.module.ItemModule;
 import com.gregtechceu.gtceu.common.module.AirSupplierModule;

@@ -22,9 +22,9 @@ import java.util.Map;
 public abstract class GTToolEnchantmentTagsMixin {
 
     @Inject(method = "generateGTDynamicTags", at = @At("TAIL"))
-    private static <T> void cosmiccore$addToolEnchantmentTags(
-                                                              Map<ResourceLocation, List<TagLoader.EntryWithSource>> tagMap,
-                                                              Registry<T> registry, CallbackInfo ci) {
+    private static <T> void cosmiccore$addToolDurabilityEnchantmentTag(
+                                                                       Map<ResourceLocation, List<TagLoader.EntryWithSource>> tagMap,
+                                                                       Registry<T> registry, CallbackInfo ci) {
         if (registry != BuiltInRegistries.ITEM) {
             return;
         }
@@ -37,12 +37,6 @@ public abstract class GTToolEnchantmentTagsMixin {
             var tool = item.get();
             TagLoader.EntryWithSource entry = MixinHelpers.makeItemEntry(tool);
             tagMap.computeIfAbsent(ItemTags.DURABILITY_ENCHANTABLE.location(), key -> new ArrayList<>()).add(entry);
-
-            if (tool.getToolStats().isSuitableForBlockBreak(tool.getDefaultInstance())) {
-                tagMap.computeIfAbsent(ItemTags.MINING_ENCHANTABLE.location(), key -> new ArrayList<>()).add(entry);
-                tagMap.computeIfAbsent(ItemTags.MINING_LOOT_ENCHANTABLE.location(), key -> new ArrayList<>())
-                        .add(entry);
-            }
         });
     }
 }
