@@ -152,6 +152,8 @@
     "repackaged.FactoryPanelSetItemScreenFluidMixin"
   ],
   "mixins": [
+    "qualityfood.QualityFoodAcquisitionMixin",
+    "qualityfood.QualityFoodCookingMixin",
     "apothicspawners.ApothSpawnerEntityPolicyMixin",
     "apothicspawners.YeetCapturingMixin",
     "apothicenchanting.EnderLeadPolicyMixin",
@@ -353,7 +355,6 @@
     "qualityfoodultimine.VanillaCropLikeHandlerQualityFixMixin",
     "qualityfoodfarmersdelight.MushroomColonyQualityCarrierMixin",
     "qualityfoodfarmersdelight.MushroomColonyQualityCropMixin",
-    "qualityfoodironfurnaces.IronFurnaceQualityOutputMixin",
     "ftbquests.QuestDependencyLineDataMixin",
     "lso.FrostbiteEffectMixin",
     "lso.HeatstrokeEffectMixin",
