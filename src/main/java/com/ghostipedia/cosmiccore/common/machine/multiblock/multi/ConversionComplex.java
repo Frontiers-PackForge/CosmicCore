@@ -150,7 +150,7 @@ public final class ConversionComplex {
                         "             ")
                 .slice("AAHHHHHHHHHAA", "A HFFH HFFH A", "A HCCHHHCCH A", "AAACCVVVCCAAA", "   CC   CC   ",
                         "   CC   CC   ")
-                .slice("AAHHHHHHHHHAA", " VHCCH HCCHV ", " VHCCHHHCCHV ", "AVVCC   CCVV ", "   CC   CC   ",
+                .slice("AAHHHHHHHHHAA", " VHCCH HCCHV ", " VHCCHHHCCHV ", " VVCC   CCVV ", "   CC   CC   ",
                         "   CC   CC   ")
                 .slice("AAHHHHHHHHHAA", "A HCCH HCCH A", "A HCCHHHCCH A", "AAACCVVVCCAAA", "   CC   CC   ",
                         "   CC   CC   ")
