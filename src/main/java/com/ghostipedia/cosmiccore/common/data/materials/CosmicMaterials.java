@@ -466,9 +466,6 @@ public class CosmicMaterials {
 
         VibrantAlloy = REGISTRATE.material("vibrant_alloy", builder -> builder
                 .ingot()
-                .formula(
-                        "Au((CuAu4)(ZnCu3)Fe2(Ni(AuAgCu3)Fe3)4)?4(Ma2FeMnNi(Si(Fe2S2)5(Cr2(ZiAbAl)Hg3)(Ti2LPt)(BeK4N5)(CS)",
-                        true)
                 .liquid(new FluidBuilder().temperature(1100))
                 .color(0xa4ff70).secondaryColor(0x24e048).iconSet(MaterialIconSet.METALLIC)
                 .flags(GENERATE_BOLT_SCREW, GENERATE_ROUND, GENERATE_GEAR, GENERATE_SMALL_GEAR, GENERATE_RING,
