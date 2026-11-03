@@ -152,6 +152,9 @@
     "repackaged.FactoryPanelSetItemScreenFluidMixin"
   ],
   "mixins": [
+    "apothicspawners.ApothSpawnerEntityPolicyMixin",
+    "apothicspawners.YeetCapturingMixin",
+    "apothicenchanting.EnderLeadPolicyMixin",
     "FiniteAbsorptionMixin",
     "FiniteSavedHealthMixin",
     "apothic.ApothicEffectDamageOverflowFixMixin",

@@ -55,6 +55,8 @@ public class CosmicCoreMixinPlugin implements IMixinConfigPlugin {
         Map<String, String> probes = Map.ofEntries(
                 Map.entry(".gtfix.kjs.", "dev/latvian/mods/kubejs/registry/RegistryEventHandler.class"),
                 Map.entry(".apothic.", "dev/shadowsoffire/apothic_attributes/api/ALCombatRules.class"),
+                Map.entry(".apothicspawners.", "dev/shadowsoffire/apothic_spawners/block/ApothSpawnerTile.class"),
+                Map.entry(".apothicenchanting.", "dev/shadowsoffire/apothic_enchanting/objects/EnderLeadItem.class"),
                 Map.entry(".emi.", "dev/emi/emi/api/EmiApi.class"),
                 Map.entry(".ae2.", "appeng/integration/modules/itemlists/EncodingHelper.class"),
                 Map.entry(".jei.", "mezz/jei/library/plugins/jei/tags/TagInfoRecipeCategory.class"),
