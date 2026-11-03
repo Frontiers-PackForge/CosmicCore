@@ -7,6 +7,7 @@ dependencies {
     //Immediately Fast
     compileOnly("maven.modrinth:5ZwdcRci:B2MHnfkW") { transitive = false }
     compileOnly annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-common:0.3.7-beta.1")
+    testRuntimeOnly("com.github.bawnorton.mixinsquared:mixinsquared-common:0.3.7-beta.1")
     mixinSquaredRuntime("com.github.bawnorton.mixinsquared:mixinsquared-neoforge:0.3.7-beta.1")
     //This should be obvious.
     implementation(files("libs/gtceu-1.21.1-8.0.0.jar"))
@@ -30,6 +31,7 @@ dependencies {
     // WAILA-likes
     implementation(forge.jade)
     compileOnly("maven.modrinth:Ahdn1OE0:Q2Ua4hew")
+    testRuntimeOnly("maven.modrinth:Ahdn1OE0:Q2Ua4hew") { transitive = false }
     compileOnly("curse.maven:farmers-delight-398521:8083481") { transitive = false }
 
     // Curios

@@ -39,10 +39,4 @@ public final class QualityFoodCompat {
         Quality quality = QualityUtils.getQuality(stack);
         LevelData.set(level, pos, quality == Quality.NONE ? Quality.PLAYER_PLACED : quality);
     }
-
-    public static ItemStack recipeOutput(ItemStack result, ItemStack input) {
-        ItemStack copy = result.copy();
-        QualityUtils.applyQuality(copy, QualityUtils.getQuality(input));
-        return copy;
-    }
 }

@@ -1,7 +1,9 @@
 package com.ghostipedia.cosmiccore.mixin;
 
 import com.ghostipedia.cosmiccore.mixin.support.CosmicMixinTaintTracker;
+import com.ghostipedia.cosmiccore.mixin.support.QualityFoodAcquisitionCanceller;
 
+import com.bawnorton.mixinsquared.canceller.MixinCancellerRegistrar;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
@@ -34,7 +36,6 @@ public class CosmicCoreMixinPlugin implements IMixinConfigPlugin {
     private static final String AERONAUTICS_MARKER = "dev/eriksonn/aeronautics/content/blocks/hot_air/balloon/effect/ClientBalloonEffectRenderer.class";
     private static final String QUALITY_FOOD_MARKER = "de/cadentem/quality_food/util/QualityUtils.class";
     private static final String ULTIMINE_CROP_MARKER = "dev/ftb/mods/ftbultimine/crops/VanillaCropLikeHandler.class";
-    private static final String IRON_FURNACES_MARKER = "ironfurnaces/tileentity/furnaces/BlockIronFurnaceTileBase.class";
     private static final List<String> EFFORTLESS_BUILDING_BASELINE_CLASSES = List.of(
             "neoforge/nl/requios/effortlessbuilding/buildpipeline/BuildPipelineClient.class",
             "neoforge/nl/requios/effortlessbuilding/render/BlockPreviewRenderer.class",
@@ -53,6 +54,7 @@ public class CosmicCoreMixinPlugin implements IMixinConfigPlugin {
     static {
         ClassLoader loader = CosmicCoreMixinPlugin.class.getClassLoader();
         Map<String, String> probes = Map.ofEntries(
+                Map.entry(".qualityfood.", QUALITY_FOOD_MARKER),
                 Map.entry(".gtfix.kjs.", "dev/latvian/mods/kubejs/registry/RegistryEventHandler.class"),
                 Map.entry(".apothic.", "dev/shadowsoffire/apothic_attributes/api/ALCombatRules.class"),
                 Map.entry(".apothicspawners.", "dev/shadowsoffire/apothic_spawners/block/ApothSpawnerTile.class"),
@@ -103,9 +105,6 @@ public class CosmicCoreMixinPlugin implements IMixinConfigPlugin {
                 ".qualityfoodfarmersdelight.",
                 loader.getResource(QUALITY_FOOD_MARKER) != null &&
                         loader.getResource("vectorwing/farmersdelight/common/block/MushroomColonyBlock.class") != null);
-        GATES.put(
-                ".qualityfoodironfurnaces.",
-                loader.getResource(QUALITY_FOOD_MARKER) != null && loader.getResource(IRON_FURNACES_MARKER) != null);
         GATES.put(".ebfix.", matchesEffortlessBuildingBaseline(loader));
     }
 
@@ -141,6 +140,7 @@ public class CosmicCoreMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public void onLoad(String mixinPackage) {
+        MixinCancellerRegistrar.register(new QualityFoodAcquisitionCanceller());
         CosmicMixinTaintTracker.printLogNotice();
     }
 
