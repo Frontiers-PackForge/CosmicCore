@@ -598,7 +598,11 @@ public class CosmicLangHandler extends LangHandler {
         multiLang(provider, "cosmiccore.multiblock.steam_cracking_furnace.tooltip",
                 "§7Power and Maintenance: §fRefractory Structural Casings",
                 "§7Item and Fluid Inputs: §fSteel-Plated Bronze Casings",
-                "§7Fluid Output: §fRefractory Containment Casings");
+                "§7Fluid Output: §fRefractory Containment Casings",
+                "§7Requires two fluid input hatches and one fluid output hatch.");
+        provider.add("cosmiccore.vacuum_bubbler.desc", "Processes fluids under a vacuum.");
+        provider.add("item.occultism.ritual_dummy.rs.rune_ritual", "Ritual: Craft Runed Steel");
+        provider.add("item.occultism.ritual_dummy.rs.fusion_ritual.ritual_miner", "Ritual: Bind Foliot Miner");
         multiLang(provider, "cosmiccore.multiblock.fractional_condenser.tooltip",
                 "§7Power and Maintenance: §fRefractory Structural Casings",
                 "§7Fluid Inputs: §fLarge Tower of Lightweight Stainless Steel Casings",
@@ -2356,6 +2360,7 @@ public class CosmicLangHandler extends LangHandler {
                 "Negates fall damage and steps up full blocks while standing.");
 
         provider.add("cosmiccore.hud.oxygen.suffocating", "SUFFOCATING");
+        provider.add("cosmiccore.oxygen.warn", "Warning: %s seconds of oxygen remaining!");
         provider.add("cosmiccore.tooltip.hand_sort", "Can be hand sorted for: %s");
         provider.add("cosmiccore.emi.composite_ore_sorting", "Ore Sorting Diagram");
         provider.add("cosmiccore.emi.composite_ore_sorting.tier", "Tier");
