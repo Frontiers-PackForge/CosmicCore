@@ -1041,6 +1041,12 @@ public class CosmicLangHandler extends LangHandler {
                 "Requires one or two MV or higher Energy Input Hatches and one ME Computation Uplink",
                 "Power relays are prioritized before computation cores when EU is low.",
                 "Fill unused component bays with ME Computation Bay Casings.");
+        provider.add("cosmiccore.machine.large_computation_array.tooltip.coolant",
+                "PCB Coolant boosts output by 4x CWU/t for 1.5x EU/t. Relays are unchanged.");
+        provider.add("cosmiccore.machine.large_computation_array.tooltip.consumption",
+                "Consumes 4,000 mB/min while supplying boosted computation or runs normally without coolant.");
+        provider.add("cosmiccore.machine.large_computation_array.coolant.active", "PCB Coolant: Boost Active");
+        provider.add("cosmiccore.machine.large_computation_array.coolant.idle", "PCB Coolant: Boost Inactive");
         provider.add("cosmiccore.block.me_computation_bay_casing.tooltip.0",
                 "Fills unused spots inside of Computation Arrays");
         provider.add("cosmiccore.block.me_computation_bay_casing.tooltip.1",

@@ -60,6 +60,8 @@ public enum MEComputationArrayProvider implements IBlockComponentProvider, IServ
         telemetry.putDouble(STORED_POWER_EU, machine.getStoredPowerEu());
         telemetry.putDouble(MAXIMUM_STORED_POWER_EU, machine.getMaximumStoredPowerEu());
         telemetry.putBoolean(UPLINK_ONLINE, machine.isUplinkOnline());
+        telemetry.putBoolean("CoolantSupported", machine.isCoolantSupported());
+        telemetry.putBoolean("CoolantActive", machine.isCoolantBoostActive());
         data.put(DATA, telemetry);
     }
 
@@ -70,6 +72,11 @@ public enum MEComputationArrayProvider implements IBlockComponentProvider, IServ
             return;
         }
         CompoundTag telemetry = serverData.getCompound(DATA);
+        if (telemetry.getBoolean("CoolantSupported")) {
+            tooltip.add(Component.translatable(telemetry.getBoolean("CoolantActive") ?
+                    "cosmiccore.machine.large_computation_array.coolant.active" :
+                    "cosmiccore.machine.large_computation_array.coolant.idle"));
+        }
         tooltip.add(Component.translatable(
                 "cosmiccore.jade.me_computation_array.components",
                 value(telemetry.getInt(CORES), ChatFormatting.AQUA),
