@@ -6,17 +6,23 @@ import com.ghostipedia.cosmiccore.common.machine.multiblock.part.MEComputationUp
 import com.ghostipedia.cosmiccore.common.machine.trait.activity.MachineActivityRuntime;
 
 import com.gregtechceu.gtceu.api.blockentity.BlockEntityCreationInfo;
+import com.gregtechceu.gtceu.api.capability.recipe.FluidRecipeCapability;
+import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMachine;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.MultiblockPartMachine;
 import com.gregtechceu.gtceu.api.machine.trait.recipe.RecipeLogic;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
+import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
 import com.gregtechceu.gtceu.api.sync_system.annotations.SyncToClient;
+import com.gregtechceu.gtceu.api.transfer.fluid.FluidHandlerList;
+import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.mui.GTMultiblockTextUtil;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 import brachy.modularui.api.drawable.Text;
 import brachy.modularui.api.widget.IWidget;
@@ -37,6 +43,12 @@ import java.util.function.Supplier;
 
 public final class MEComputationArrayMachine extends WorkableElectricMultiblockMachine {
 
+    private final boolean coolantSupported;
+    private FluidHandlerList coolantInputs = new FluidHandlerList(List.of());
+    @SaveField
+    private int coolantRemainder;
+    private boolean coolingSelected;
+    private boolean cooledThisTick;
     private final List<MEComputationComponentPartMachine> computationCores = new ArrayList<>(
             MEComputationArrayTuning.COMPONENT_POSITIONS);
     private final List<MEComputationComponentPartMachine> powerRelays = new ArrayList<>(
@@ -58,12 +70,19 @@ public final class MEComputationArrayMachine extends WorkableElectricMultiblockM
     private UUID activeGridLeaseId;
 
     public MEComputationArrayMachine(BlockEntityCreationInfo info) {
+        this(info, false);
+    }
+
+    public MEComputationArrayMachine(BlockEntityCreationInfo info, boolean coolantSupported) {
         super(info, new ComputationArrayRecipeLogic());
+        this.coolantSupported = coolantSupported;
     }
 
     @Override
     public void formStructure(@NotNull String substructureName) {
         super.formStructure(substructureName);
+        coolantInputs = new FluidHandlerList(getCapabilitiesFlat(IO.IN, FluidRecipeCapability.CAP).stream()
+                .filter(IFluidHandler.class::isInstance).map(IFluidHandler.class::cast).toList());
         computationCores.clear();
         powerRelays.clear();
         uplink = null;
@@ -103,6 +122,9 @@ public final class MEComputationArrayMachine extends WorkableElectricMultiblockM
         activeGridLeaseId = null;
         uplink = null;
         super.invalidateStructure(name);
+        coolantInputs = new FluidHandlerList(List.of());
+        coolingSelected = false;
+        cooledThisTick = false;
         updateTickSubscription();
     }
 
@@ -128,7 +150,27 @@ public final class MEComputationArrayMachine extends WorkableElectricMultiblockM
     }
 
     public long getMaximumCwut() {
-        return computationCores.stream().mapToLong(MEComputationComponentPartMachine::cwutPerTick).sum();
+        long baseCwut = computationCores.stream().mapToLong(MEComputationComponentPartMachine::cwutPerTick).sum();
+        boolean cooled = powerCycleTick == getCurrentServerTick() && coolingSelected ?
+                cooledThisTick : hasCoolant();
+        return baseCwut * (cooled ? MEComputationArrayTuning.COOLED_CWU_MULTIPLIER : 1);
+    }
+
+    public boolean isCoolantSupported() {
+        return coolantSupported;
+    }
+
+    public boolean isCoolantBoostActive() {
+        return isFormed() && powerCycleTick == getCurrentServerTick() && cooledThisTick;
+    }
+
+    private boolean hasCoolant() {
+        if (!coolantSupported || !isFormed()) {
+            return false;
+        }
+        int amount = MEComputationArrayTuning.coolantForTick(coolantRemainder);
+        return coolantInputs.drain(GTMaterials.PCBCoolant.getFluid(amount), IFluidHandler.FluidAction.SIMULATE)
+                .getAmount() == amount;
     }
 
     public long getInstalledCwut() {
@@ -142,7 +184,7 @@ public final class MEComputationArrayMachine extends WorkableElectricMultiblockM
                 onlineCwut += computationCores.get(index).cwutPerTick();
             }
         }
-        return onlineCwut;
+        return onlineCwut * (cooledThisTick ? MEComputationArrayTuning.COOLED_CWU_MULTIPLIER : 1);
     }
 
     public long getEuDemandPerTick() {
@@ -194,6 +236,20 @@ public final class MEComputationArrayMachine extends WorkableElectricMultiblockM
         } else if (activeGridLeaseTick != serverTick) {
             return 0;
         }
+        if (!coolingSelected && targetTotalCwut > 0) {
+            coolingSelected = true;
+            if (getOnlineCwut() > 0 && hasCoolant()) {
+                int amount = MEComputationArrayTuning.coolantForTick(coolantRemainder);
+                try (ActivityScope ignored = MachineActivityRuntime.scope(this)) {
+                    cooledThisTick = coolantInputs.drain(GTMaterials.PCBCoolant.getFluid(amount),
+                            IFluidHandler.FluidAction.EXECUTE).getAmount() == amount;
+                }
+                if (cooledThisTick) {
+                    coolantRemainder = MEComputationArrayTuning.nextCoolantRemainder(coolantRemainder);
+                    setChanged();
+                }
+            }
+        }
         long requestedCwut = Math.min(Math.max(0, targetTotalCwut), getMaximumCwut());
         long targetCwut = Math.min(requestedCwut, getOnlineCwut());
         if (targetCwut <= committedCwut) {
@@ -203,8 +259,9 @@ public final class MEComputationArrayMachine extends WorkableElectricMultiblockM
             return committedCwut;
         }
         long targetCoreEu = Math.max(
-                standbyCoreEuThisTick,
-                ceilMultiplyDivide(
+                cooledThisTick ? MEComputationArrayTuning.cooledStandbyEu(standbyCoreEuThisTick) :
+                        standbyCoreEuThisTick,
+                cooledThisTick ? MEComputationArrayTuning.coreEuForCwut(targetCwut, true) : ceilMultiplyDivide(
                         targetCwut,
                         MEComputationArrayTuning.CORE_EU_RATIO_NUMERATOR,
                         MEComputationArrayTuning.CORE_EU_RATIO_DENOMINATOR));
@@ -218,8 +275,7 @@ public final class MEComputationArrayMachine extends WorkableElectricMultiblockM
         paidCoreEuThisTick += additionalEu;
         long fundedCwut = Math.min(
                 targetCwut,
-                paidCoreEuThisTick * MEComputationArrayTuning.CORE_EU_RATIO_DENOMINATOR /
-                        MEComputationArrayTuning.CORE_EU_RATIO_NUMERATOR);
+                MEComputationArrayTuning.cwutForCoreEu(paidCoreEuThisTick, cooledThisTick));
         long additionalCwut = Math.max(0, fundedCwut - committedCwut);
         try (ActivityScope ignored = MachineActivityRuntime.scope(this)) {
             ActivityScope.value("computation", "gtceu:cwut", additionalCwut, false);
@@ -257,6 +313,13 @@ public final class MEComputationArrayMachine extends WorkableElectricMultiblockM
         syncManager.syncValue("me_computation_maximum_stored_power_eu", maximumStoredPowerEu);
         widgets.add(GTMultiblockTextUtil.addUnformedWarning(this, syncManager));
         widgets.add(GTMultiblockTextUtil.addWorkingStatusLine(this, syncManager));
+        if (coolantSupported) {
+            IntSyncValue cooling = new IntSyncValue(() -> isCoolantBoostActive() ? 1 : 0);
+            syncManager.syncValue("me_computation_cooling", cooling);
+            widgets.add(telemetryLine(() -> Component.translatable(cooling.getIntValue() == 1 ?
+                    "cosmiccore.machine.large_computation_array.coolant.active" :
+                    "cosmiccore.machine.large_computation_array.coolant.idle")));
+        }
         widgets.add(telemetryLine(() -> Component.translatable(
                 "cosmiccore.machine.me_computation_array.display.components",
                 coloredValue(cores.getIntValue(), ChatFormatting.AQUA),
@@ -328,6 +391,8 @@ public final class MEComputationArrayMachine extends WorkableElectricMultiblockM
     }
 
     private void resetPowerCycle(long serverTick) {
+        coolingSelected = false;
+        cooledThisTick = false;
         setCommittedCwut(0);
         setCurrentConsumption(0, 0);
         Arrays.fill(onlineCores, false);
