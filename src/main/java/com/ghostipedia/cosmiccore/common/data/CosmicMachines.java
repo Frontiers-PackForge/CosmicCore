@@ -53,7 +53,6 @@ import com.gregtechceu.gtceu.api.multiblock.MultiPredicate;
 import com.gregtechceu.gtceu.api.multiblock.Predicates;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
-import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifierList;
 import com.gregtechceu.gtceu.api.registry.registrate.builder.MachineBuilder;
 import com.gregtechceu.gtceu.api.registry.registrate.entry.MachineEntry;
@@ -1322,19 +1321,19 @@ public class CosmicMachines {
             properties.alwaysTryModifyRecipe(true);
         });
         MachineDefinitionOverrides.edit(GTMultiMachines.LARGE_COMBUSTION_ENGINE,
-                properties -> properties.recipeTypes(new GTRecipeType[] { DUMMY_RECIPES.get() }));
+                properties -> properties.recipeTypes(new ArrayList<>(List.of(DUMMY_RECIPES))));
         MachineDefinitionOverrides.editMultiblock(GTMultiMachines.LARGE_COMBUSTION_ENGINE,
                 properties -> properties.renderMultiblockXEIPreview(false));
         MachineDefinitionOverrides.editMultiblock(GTMultiMachines.LARGE_COMBUSTION_ENGINE,
                 properties -> properties.renderMultiblockWorldPreview(false));
         MachineDefinitionOverrides.edit(GTMultiMachines.LARGE_PLASMA_TURBINE,
-                properties -> properties.recipeTypes(new GTRecipeType[] { DUMMY_RECIPES.get() }));
+                properties -> properties.recipeTypes(new ArrayList<>(List.of(DUMMY_RECIPES))));
         MachineDefinitionOverrides.editMultiblock(GTMultiMachines.LARGE_PLASMA_TURBINE,
                 properties -> properties.renderMultiblockXEIPreview(false));
         MachineDefinitionOverrides.editMultiblock(GTMultiMachines.LARGE_PLASMA_TURBINE,
                 properties -> properties.renderMultiblockWorldPreview(false));
         MachineDefinitionOverrides.edit(GTMultiMachines.EXTREME_COMBUSTION_ENGINE,
-                properties -> properties.recipeTypes(new GTRecipeType[] { DUMMY_RECIPES.get() }));
+                properties -> properties.recipeTypes(new ArrayList<>(List.of(DUMMY_RECIPES))));
         MachineDefinitionOverrides.editMultiblock(GTMultiMachines.EXTREME_COMBUSTION_ENGINE,
                 properties -> properties.renderMultiblockXEIPreview(false));
         MachineDefinitionOverrides.editMultiblock(GTMultiMachines.EXTREME_COMBUSTION_ENGINE,
@@ -1351,26 +1350,26 @@ public class CosmicMachines {
                 properties -> properties.renderMultiblockWorldPreview(false));
 
         MachineDefinitionOverrides.edit(GTMultiMachines.LARGE_STEAM_TURBINE,
-                properties -> properties.recipeTypes(new GTRecipeType[] { DUMMY_RECIPES.get() }));
+                properties -> properties.recipeTypes(new ArrayList<>(List.of(DUMMY_RECIPES))));
         MachineDefinitionOverrides.editMultiblock(GTMultiMachines.LARGE_STEAM_TURBINE,
                 properties -> properties.renderMultiblockXEIPreview(false));
         MachineDefinitionOverrides.editMultiblock(GTMultiMachines.LARGE_STEAM_TURBINE,
                 properties -> properties.renderMultiblockWorldPreview(false));
 
         MachineDefinitionOverrides.edit(GTMultiMachines.LARGE_GAS_TURBINE,
-                properties -> properties.recipeTypes(new GTRecipeType[] { DUMMY_RECIPES.get() }));
+                properties -> properties.recipeTypes(new ArrayList<>(List.of(DUMMY_RECIPES))));
         MachineDefinitionOverrides.editMultiblock(GTMultiMachines.LARGE_GAS_TURBINE,
                 properties -> properties.renderMultiblockXEIPreview(false));
         MachineDefinitionOverrides.editMultiblock(GTMultiMachines.LARGE_GAS_TURBINE,
                 properties -> properties.renderMultiblockWorldPreview(false));
         MachineDefinitionOverrides.edit(GCYMMachines.ROTARY_HEARTH_FURNACE,
-                properties -> properties.recipeTypes(new GTRecipeType[] { DUMMY_RECIPES.get() }));
+                properties -> properties.recipeTypes(new ArrayList<>(List.of(DUMMY_RECIPES))));
         MachineDefinitionOverrides.editMultiblock(GCYMMachines.ROTARY_HEARTH_FURNACE,
                 properties -> properties.renderMultiblockXEIPreview(false));
         MachineDefinitionOverrides.editMultiblock(GCYMMachines.ROTARY_HEARTH_FURNACE,
                 properties -> properties.renderMultiblockWorldPreview(false));
         MachineDefinitionOverrides.edit(GCYMMachines.MEGA_VACUUM_FREEZER,
-                properties -> properties.recipeTypes(new GTRecipeType[] { DUMMY_RECIPES.get() }));
+                properties -> properties.recipeTypes(new ArrayList<>(List.of(DUMMY_RECIPES))));
         MachineDefinitionOverrides.editMultiblock(GCYMMachines.MEGA_VACUUM_FREEZER,
                 properties -> properties.renderMultiblockXEIPreview(false));
         MachineDefinitionOverrides.editMultiblock(GCYMMachines.MEGA_VACUUM_FREEZER,
@@ -1381,17 +1380,17 @@ public class CosmicMachines {
         for (MachineEntry<MachineDefinition> miner : GTMachines.MINER) {
             if (miner == null) continue;
             MachineDefinitionOverrides.edit(miner,
-                    properties -> properties.recipeTypes(new GTRecipeType[] { DUMMY_RECIPES.get() }));
+                    properties -> properties.recipeTypes(new ArrayList<>(List.of(DUMMY_RECIPES))));
         }
         MachineDefinitionOverrides.edit(GTMachines.STEAM_MINER.first(),
-                properties -> properties.recipeTypes(new GTRecipeType[] { DUMMY_RECIPES.get() }));
+                properties -> properties.recipeTypes(new ArrayList<>(List.of(DUMMY_RECIPES))));
         MachineDefinitionOverrides.edit(GTMachines.STEAM_MINER.second(),
-                properties -> properties.recipeTypes(new GTRecipeType[] { DUMMY_RECIPES.get() }));
+                properties -> properties.recipeTypes(new ArrayList<>(List.of(DUMMY_RECIPES))));
 
         for (MachineEntry<MultiblockMachineDefinition> largeMiner : GTMultiMachines.LARGE_MINER) {
             if (largeMiner == null) continue;
             MachineDefinitionOverrides.edit(largeMiner,
-                    properties -> properties.recipeTypes(new GTRecipeType[] { DUMMY_RECIPES.get() }));
+                    properties -> properties.recipeTypes(new ArrayList<>(List.of(DUMMY_RECIPES))));
             MachineDefinitionOverrides.editMultiblock(largeMiner,
                     properties -> properties.renderMultiblockXEIPreview(false));
             MachineDefinitionOverrides.editMultiblock(largeMiner,

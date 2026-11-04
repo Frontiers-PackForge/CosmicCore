@@ -9,12 +9,12 @@ import com.gregtechceu.gtceu.api.machine.multiblock.PartAbility;
 import com.gregtechceu.gtceu.api.multiblock.MultiPredicate;
 import com.gregtechceu.gtceu.api.multiblock.pattern.IBlockPattern;
 import com.gregtechceu.gtceu.api.multiblock.pattern.MultiblockPatternBuilder;
-import com.gregtechceu.gtceu.api.recipe.GTRecipeType;
 import com.gregtechceu.gtceu.common.data.GTBlocks;
 import com.gregtechceu.gtceu.common.data.GTRecipeTypes;
 import com.gregtechceu.gtceu.common.data.machines.GTAEMachines;
 import com.gregtechceu.gtceu.common.data.machines.GTMultiMachines;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.ghostipedia.cosmiccore.common.data.CosmicBlocks.CASING_HEAT_VENT;
@@ -36,9 +36,8 @@ public final class VacuumDistillationTower {
     public static void init() {
         var definition = GTMultiMachines.DISTILLATION_TOWER;
         com.ghostipedia.cosmiccore.common.compat.gtceu.MachineDefinitionOverrides.editMultiblock(definition,
-                properties -> properties.recipeTypes(new GTRecipeType[] {
-                        GTRecipeTypes.DISTILLATION_RECIPES.get(), CosmicRecipeTypes.VACUUM_DISTILLATION.get()
-                }));
+                properties -> properties.recipeTypes(new ArrayList<>(List.of(
+                        GTRecipeTypes.DISTILLATION_RECIPES, CosmicRecipeTypes.VACUUM_DISTILLATION))));
         TieredMultiblockPatterns.registerConfigurations(definition, List.of(
                 new TieredMultiblockPatterns.PatternLabel(
                         "cosmiccore.multiblock.configuration.atmospheric",
