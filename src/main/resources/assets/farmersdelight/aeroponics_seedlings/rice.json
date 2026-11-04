@@ -1,0 +1,16 @@
+{
+  "state": {
+    "Name": "farmersdelight:rice",
+    "Properties": {
+      "age": "3",
+      "supporting": "true"
+    }
+  },
+  "upper_state": {
+    "Name": "farmersdelight:rice_panicles",
+    "Properties": {
+      "age": "3"
+    }
+  },
+  "scale": 0.1875
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cross",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "cross": "cosmiccore:aeroponics_seedlings/ars_nouveau/bastion_pod/plant"
+  }
+}

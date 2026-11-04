@@ -1,0 +1,19 @@
+{
+    "variants": {
+        "facing=east": {
+            "model": "cosmiccore:block/aeroponics_crop_holder",
+            "y": 90
+        },
+        "facing=north": {
+            "model": "cosmiccore:block/aeroponics_crop_holder"
+        },
+        "facing=south": {
+            "model": "cosmiccore:block/aeroponics_crop_holder",
+            "y": 180
+        },
+        "facing=west": {
+            "model": "cosmiccore:block/aeroponics_crop_holder",
+            "y": 270
+        }
+    }
+}

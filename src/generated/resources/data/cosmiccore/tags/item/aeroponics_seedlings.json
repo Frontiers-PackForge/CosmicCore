@@ -1,0 +1,19 @@
+{
+    "values": [
+        "cosmiccore:driftweed",
+        "cosmiccore:rainbow_cane",
+        "cosmiccore:soul_gourd_seeds",
+        "cosmiccore:rockvine_berry",
+        "cosmiccore:sporebeans",
+        "cosmiccore:driftweed_rhizome",
+        "minecraft:bamboo",
+        {
+            "id": "mynethersdelight:powder_cannon",
+            "required": false
+        },
+        {
+            "id": "upgrade_aquatic:mulberry",
+            "required": false
+        }
+    ]
+}
