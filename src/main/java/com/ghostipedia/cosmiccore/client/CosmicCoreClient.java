@@ -1,6 +1,8 @@
 package com.ghostipedia.cosmiccore.client;
 
 import com.ghostipedia.cosmiccore.CosmicCore;
+import com.ghostipedia.cosmiccore.client.aeroponics.AeroponicsCropHolderRenderer;
+import com.ghostipedia.cosmiccore.client.aeroponics.SeedVisualRegistration;
 import com.ghostipedia.cosmiccore.client.dev.AbyssDevView;
 import com.ghostipedia.cosmiccore.client.dev.MurkbloomDevControls;
 import com.ghostipedia.cosmiccore.client.firmament.FirmamentSpecialEffects;
@@ -19,6 +21,7 @@ import com.ghostipedia.cosmiccore.client.tooltip.FoodTooltipClientComponent;
 import com.ghostipedia.cosmiccore.client.tooltip.FoodTooltipComponent;
 import com.ghostipedia.cosmiccore.common.config.CosmicCoreConfig;
 import com.ghostipedia.cosmiccore.common.data.CosmicBlockEntities;
+import com.ghostipedia.cosmiccore.common.data.CosmicBlocks;
 import com.ghostipedia.cosmiccore.common.data.CosmicParticleTypes;
 import com.ghostipedia.cosmiccore.common.dimension.FirmamentDimension;
 
@@ -26,6 +29,7 @@ import com.gregtechceu.gtceu.api.item.armor.ModularArmorItem;
 import com.gregtechceu.gtceu.client.renderer.machine.DynamicRenderManager;
 
 import net.minecraft.client.renderer.ShaderInstance;
+import net.minecraft.client.renderer.block.BlockModelShaper;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -37,6 +41,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
+import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
 import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.neoforged.neoforge.client.event.RegisterDimensionSpecialEffectsEvent;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
@@ -46,6 +51,7 @@ import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import net.neoforged.neoforge.client.event.RegisterShadersEvent;
 import net.neoforged.neoforge.client.event.RenderGuiLayerEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
+import net.neoforged.neoforge.common.NeoForge;
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
@@ -69,6 +75,7 @@ public class CosmicCoreClient {
 
     public static void init(IEventBus modBus) {
         modBus.register(CosmicCoreClient.class);
+        NeoForge.EVENT_BUS.addListener(SeedVisualRegistration.INSTANCE::onTagsUpdated);
         if (ModList.get().isLoaded("veil")) {
             FirmamentSunsetPostProcessor.register();
         }
@@ -172,6 +179,19 @@ public class CosmicCoreClient {
     }
 
     @SubscribeEvent
+    public static void registerSeedlingVisuals(RegisterClientReloadListenersEvent event) {
+        event.registerReloadListener(SeedVisualRegistration.INSTANCE);
+    }
+
+    @SubscribeEvent
+    public static void registerCropHolderModels(ModelEvent.ModifyBakingResult event) {
+        for (var state : CosmicBlocks.AEROPONICS_CROP_HOLDER.get().getStateDefinition().getPossibleStates()) {
+            event.getModels().computeIfPresent(BlockModelShaper.stateToModelLocation(state),
+                    (id, model) -> new AeroponicsCropHolderRenderer(model));
+        }
+    }
+
+    @SubscribeEvent
     public static void registerParticleProviders(RegisterParticleProvidersEvent event) {
         event.registerSpriteSet(CosmicParticleTypes.MURK.get(), MurkParticle.BodyProvider::new);
         event.registerSpriteSet(CosmicParticleTypes.MURK_PALE.get(), MurkParticle.PaleProvider::new);
@@ -191,6 +211,7 @@ public class CosmicCoreClient {
 
     @SubscribeEvent
     public static void registerAdditionalModels(ModelEvent.RegisterAdditional event) {
+        SeedVisualRegistration.registerModels(event);
         event.register(ModelResourceLocation.standalone(StellarIrisRender.IRIS_MODEL_CORE));
         event.register(ModelResourceLocation.standalone(StellarIrisRender.IRIS_MODEL_RING));
         event.register(ModelResourceLocation.standalone(StellarIrisRender.IRIS_MODEL_RING_WHITE));

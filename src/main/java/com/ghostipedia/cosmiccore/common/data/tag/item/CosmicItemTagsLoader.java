@@ -24,6 +24,10 @@ public class CosmicItemTagsLoader {
             .toArray(ItemEntry<?>[]::new);
 
     public static void init(RegistrateTagsProvider<Item> provider) {
+        create(provider, CosmicItemTags.AEROPONICS_SEEDLINGS,
+                required("minecraft", "bamboo"),
+                optional("mynethersdelight", "powder_cannon"),
+                optional("upgrade_aquatic", "mulberry"));
         create(provider, CosmicItemTags.NANOMUSCLE_SPACE_SUITE, NANO_SPACE_SUITE);
         create(provider, CosmicItemTags.QUARKTECH_SPACE_SUITE, QUANTUM_SPACE_SUITE);
         create(provider, ItemTags.FREEZE_IMMUNE_WEARABLES, travelerBoots());
