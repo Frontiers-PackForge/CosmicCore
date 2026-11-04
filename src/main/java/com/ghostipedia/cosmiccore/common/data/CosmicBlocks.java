@@ -4,6 +4,7 @@ import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.api.CosmicCoreAPI;
 import com.ghostipedia.cosmiccore.api.block.IMagnetType;
 import com.ghostipedia.cosmiccore.client.renderer.block.NebulaeCoilRenderer;
+import com.ghostipedia.cosmiccore.common.block.AeroponicsCropHolderBlock;
 import com.ghostipedia.cosmiccore.common.block.BerryVineBlock;
 import com.ghostipedia.cosmiccore.common.block.ComputationBayCasingBlock;
 import com.ghostipedia.cosmiccore.common.block.CraftingCpuCoreBlock;
@@ -305,6 +306,18 @@ public class CosmicBlocks {
                         .partialState().with(GTBlockStateProperties.ACTIVE, true).modelForState().modelFile(active)
                         .addModel();
             });
+
+    public static final BlockEntry<AeroponicsCropHolderBlock> AEROPONICS_CROP_HOLDER = REGISTRATE
+            .block("aeroponics_crop_holder", AeroponicsCropHolderBlock::new)
+            .lang("Aeroponics Crop Holder")
+            .initialProperties(() -> Blocks.IRON_BLOCK)
+            .properties(p -> p.strength(3.0F, 6.0F).sound(SoundType.NETHERITE_BLOCK).noOcclusion())
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+            .blockstate((context, provider) -> provider.horizontalBlock(context.get(),
+                    provider.models().getExistingFile(CosmicCore.id("block/aeroponics_crop_holder"))))
+            .loot((tables, block) -> tables.dropSelf(block))
+            .simpleItem()
+            .register();
 
     public static final BlockEntry<HearthPlateBlock> HEARTH_PLATE = REGISTRATE
             .block("hearth_plate", HearthPlateBlock::new)

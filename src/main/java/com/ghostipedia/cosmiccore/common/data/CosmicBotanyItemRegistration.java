@@ -1,5 +1,7 @@
 package com.ghostipedia.cosmiccore.common.data;
 
+import com.ghostipedia.cosmiccore.common.data.tag.item.CosmicItemTags;
+
 import com.gregtechceu.gtceu.api.item.ComponentItem;
 
 import net.minecraft.world.item.ItemStack;
@@ -13,7 +15,7 @@ public class CosmicBotanyItemRegistration {
     public static final ItemEntry<ComponentItem> DRIFTWEED = REGISTRATE.item("driftweed", ComponentItem::new)
             .lang("Driftweed")
             .properties(p -> p.stacksTo(16))
-            .tag()
+            .tag(CosmicItemTags.AEROPONICS_SEEDLINGS)
             .defaultModel()
             .register();
 

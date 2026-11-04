@@ -1,5 +1,6 @@
 package com.ghostipedia.cosmiccore.common.data;
 
+import com.ghostipedia.cosmiccore.common.blockentity.AeroponicsCropHolderBlockEntity;
 import com.ghostipedia.cosmiccore.common.food.hearth.HearthPlateBlockEntity;
 import com.ghostipedia.cosmiccore.ember.blockentity.CosmicEmberEmitterBlockEntity;
 import com.ghostipedia.cosmiccore.ember.blockentity.CosmicEmberReceptorBlockEntity;
@@ -36,6 +37,11 @@ public class CosmicBlockEntities {
         event.registerBlockEntity(AECapabilities.IN_WORLD_GRID_NODE_HOST, CRAFTING_CPU_CORE.get(),
                 (blockEntity, context) -> blockEntity);
     }
+
+    public static final BlockEntityEntry<AeroponicsCropHolderBlockEntity> AEROPONICS_CROP_HOLDER = REGISTRATE
+            .blockEntity("aeroponics_crop_holder", AeroponicsCropHolderBlockEntity::new)
+            .validBlock(CosmicBlocks.AEROPONICS_CROP_HOLDER)
+            .register();
 
     public static final BlockEntityEntry<HearthPlateBlockEntity> HEARTH_PLATE_BE = REGISTRATE
             .<HearthPlateBlockEntity>blockEntity("hearth_plate",

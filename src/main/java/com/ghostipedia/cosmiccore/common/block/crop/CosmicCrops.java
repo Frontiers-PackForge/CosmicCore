@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.common.block.crop;
 
 import com.ghostipedia.cosmiccore.common.data.CosmicBotanyItemRegistration;
 import com.ghostipedia.cosmiccore.common.data.CosmicCreativeModeTabs;
+import com.ghostipedia.cosmiccore.common.data.tag.item.CosmicItemTags;
 
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.world.food.FoodProperties;
@@ -125,6 +126,7 @@ public final class CosmicCrops {
             .item("rainbow_cane", p -> new ItemNameBlockItem(RAINBOW_CANE.get(), p))
             .lang("Rainbow Cane")
             .model(NonNullBiConsumer.noop())
+            .tag(CosmicItemTags.AEROPONICS_SEEDLINGS)
             .register();
     public static final ItemEntry<ItemNameBlockItem> SOUL_GOURD = REGISTRATE
             .item("soul_gourd", p -> new ItemNameBlockItem(SOUL_GOURD_BLOOM.get(), p))
@@ -136,22 +138,26 @@ public final class CosmicCrops {
             .item("soul_gourd_seeds", p -> new ItemNameBlockItem(SOUL_GOURD_CROP.get(), p))
             .lang("Soul Gourd Seeds")
             .model(NonNullBiConsumer.noop())
+            .tag(CosmicItemTags.AEROPONICS_SEEDLINGS)
             .register();
     public static final ItemEntry<ItemNameBlockItem> ROCKVINE_BERRY = REGISTRATE
             .item("rockvine_berry", p -> new ItemNameBlockItem(CULTIVATED_ROCKVINE_BLOOM.get(),
                     p.food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.3f).build())))
             .lang("Rockvine Berry")
             .model(NonNullBiConsumer.noop())
+            .tag(CosmicItemTags.AEROPONICS_SEEDLINGS)
             .register();
     public static final ItemEntry<ItemNameBlockItem> SPOREBEANS = REGISTRATE
             .item("sporebeans", p -> new ItemNameBlockItem(SPOREBEAN_CROP.get(), p))
             .lang("Sporebeans")
             .defaultModel()
+            .tag(CosmicItemTags.AEROPONICS_SEEDLINGS)
             .register();
     public static final ItemEntry<ItemNameBlockItem> DRIFTWEED_RHIZOME = REGISTRATE
             .item("driftweed_rhizome", p -> new ItemNameBlockItem(DRIFTWEED_ROOT.get(), p))
             .lang("Driftweed Rhizome")
             .model(NonNullBiConsumer.noop())
+            .tag(CosmicItemTags.AEROPONICS_SEEDLINGS)
             .register();
 
     private CosmicCrops() {}

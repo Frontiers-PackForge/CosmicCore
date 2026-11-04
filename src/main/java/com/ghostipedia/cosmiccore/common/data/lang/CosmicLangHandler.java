@@ -56,6 +56,10 @@ public class CosmicLangHandler extends LangHandler {
     }
 
     public static void init(RegistrateLangProvider provider) {
+        provider.add("cosmiccore.aeroponics.plant_hint", "Right-click a planter with a seed to plant it.");
+        provider.add("cosmiccore.aeroponics.remove_hint",
+                "Right-click a planter with an empty hand to remove its seedling.");
+        provider.add("cosmiccore.aeroponics.planter_occupied", "This planter already has a seedling!");
         provider.add("cosmiccore.machine.gcym.innate_parallel",
                 "§6Innate Parallels: §e16. §cParallel hatches add onto this amount!");
         for (int tier = GTValues.LV; tier <= GTValues.OpV; tier++) {
