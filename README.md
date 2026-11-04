@@ -41,24 +41,42 @@ These devs may take the time to observe how poor of a programmer I am and laugh 
 
 
 # License
+
 ## Code
-All Code is issued under LGPL-3.0 unless explicitly stated within the file header
+
+CosmicCore code is licensed under LGPL-3.0 unless explicitly stated otherwise in its own notice.
+
 ## Assets
-### All Files with the extension `.mtl`, `.obj`,`.fsh`, and `.vsh` are All Rights reserved.
-### All assets in `resources/assets/cosmiccore/textures` are licensed under All Rights Reserved by default
-### All assets in `resources/assets/cosmiccore/models/item/unique` and `resources/assets/cosmiccore/models/block/unique` and are licensed under All Rights Reserved
-Exclusions to this rule are as follows  
- - All files contained in the subfolder(s) `item` are licensed as MIT
- - All files contained in the subfolder(s) `block` EXCLUDING `iris` are licensed as MIT
 
-```
-Human readable format:
-You may use code freely under LGPL-3.0, and most assets are licensed under MIT.
-You are NOT allowed to use my .mtl, .obj, .fsh, or .vsh files or associated assets linked to them for any reason. Anything in the models folder under `unique` also may not be reused.
-Other Assets from Different Mods are used and in good faith have I tried to make sure I follow their respective licenses , please reach out to me if something needs to be removed, thanks!
-```
+Assets have folder level `LICENSE.md` notices. Read the nearest notice and any file detail or
+upstream notice before reusing an asset. These defaults apply only to CosmicCore original works.
+Imported assets and derivatives retain their upstream License wherever they are stored.
 
-Using code/assets from this project requires attribution in both cases and requires particular licensing, please keep that in mind.
+Paths below are relative to `src/main/resources/assets/cosmiccore/`:
+
+## Folder Paths and Asset Types - Defaults for CosmicCore owned assets, works, and materials
+ 
+ `textures/` - All Rights Reserved 
+ `textures/item/` - MIT 
+ `textures/block/` - MIT except explicitly marked subfolders 
+ `textures/block/iris/` - All Rights Reserved 
+ `models/`, including `block/iris/` and both `unique/` folders - All Rights Reserved 
+ `shaders/` and `pinwheel/shaders/` - All Rights Reserved 
+ `.obj`, `.mtl`, `.fsh`, and `.vsh` files elsewhere - All Rights Reserved unless explicitly stated otherwise 
+ `textures/aeroponics_seedlings/` - CropsNH-derived textures: LGPL-3.0, including recolours 
+
+The same resource paths in `src/generated/resources/` inherit these notices. Existing license grants
+for previously published material remain valid! These defaults do not revoke or mutate them!
+
+An MIT folder may contain a differently licensed subtree only when that exception has its own
+`LICENSE.md`, or an specific entry in the local notice. Moving or recoloring an import
+does not put it under the enclosing folder's license.
+See the [bundled asset policy](src/main/resources/assets/cosmiccore/LICENSE.md)
+and [CropsNH provenance](src/main/resources/licenses/aeroponics/assets.json).
+
+MIT permits reuse subject to its notice requirements. All Rights Reserved areas require permission
+for reuse beyond any separate grants. Upstream licenses dictate imported assets. Please contact
+the project through its issue tracker if attribution or licensing information needs correction, this is done in good faith and any corrections are welcomed!
 
 ## Code Credits
 [Gregtech Modern](https://github.com/GregTechCEu/GregTech-Modern) for plenty of useful code references and invaluable knowledge in learning Java.
@@ -72,6 +90,8 @@ Using code/assets from this project requires attribution in both cases and requi
 [Applied Energistics 2](https://github.com/AppliedEnergistics/Applied-Energistics-2) - Used to make general compatibility patches for AE, and overall requires sometimes modifying core AE2 classes. Granted most of this work has been offloaded outside of Core to a separate helper mod.
 
 ## Assets Credits
+- [CropsNH](https://github.com/GTNewHorizons/CropsNH) - Crop textures used by the aeroponics planter overrides. sources and licenses are recorded in the bundled provenance.
+
 - [GTCEu:Modern](https://www.curseforge.com/minecraft/mc-mods/gregtechceu-modern) - General material assets
 
 - [Regions Unexplored](https://www.curseforge.com/minecraft/mc-mods/regions-unexplored) - Reused assets for plants, crystals, other biomatter stuff, thanks!
