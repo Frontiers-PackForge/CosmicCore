@@ -18,25 +18,7 @@ Modpacks are insane abominations held together by love, passion, and excessively
 
 In summary, I do not want my pack users to point fingers at others, and I'll take a proactive stance in saying this.
 If you are a mod dev reading this due to a user report, Feel free to show them this if deemed appropriate. If you wish to then reach out to me so resolve any problems or make me aware of better solutions or just to tell me to fix it, feel free to reach out to me on my discord. 
-
-## C. For Ease of Developer Access and time saving, below is a short list of mods that are using mixins in cosmiccore. 
-These devs may take the time to observe how poor of a programmer I am and laugh at my choices. Any help you give can be out of good will and isn't required. If you spot someone using this mod externailly in a random pack that IS NOT CosmicFrontiers and You're the owner of one of these mods, refer them to here.
- 
- `The Big Scary Mixins that'll probably get me glared at, if you're the owner of one of these mods and have a better solution, do tell either via an issue or shoot me a message in my discord!`
- 
- `This section mostly applies to things that modify varibles or overwrites methods entirely`
- - AE2 ; Mixins for Style Guide redirections for custom widgets and UI overwrites as well as PatternProvider Behaviors. I unfortunately was not able to find an elegant solution to this within their API, either by my own lack of skill or their lack of extensibility(or readability).
- - EMI ; We Directly Mixin into `RecipeScreen.class` to change the size limit of catalyst slots as well as `EmiApi.class` to Alias Buckets/Fluid Containers to Show their Fluid Stack when clicked/checked for recipes on
- - Apotheosis ; Hardcoded Recipes for many things that really shouldn't be but I could be wrong - We remove those recipes and replace them with our own.
- - Legendary Survival Overhaul ; We mixin into the way damage scaling is handled by Frostbite and Heat Stroke
-   
- `Less Scary Mixins that are less likely to be massive 'toe steppers' as one would like to reference`
- - Create ; We mixin into the Diving Helmet to work with "Thin Air".
- - Ad Astra ; We Mixin into spacesuits to apply oxygen tanks to our own gear. We Also Hide the "LAND" button for planets that don't need them (Gas Giants, ETC)
- - GTCEu:Modern ; We Mixin unto GTValues to change some color values.
- - Tinkers Construct ; We Mixin into `ModifiableItem.class` to allow Tinkers Tools to work in GTCEu:Modern Crafting Recipes and consume durability when said recipe is crafted. Prior to this tools just got consumed.
-
- To Conclude any help or collaboration with mods I tweak would be appreciated, this is here to shield you fron idiotic end users demanding fixes that they should be demanding me fixes for lol.
+To Conclude any help or collaboration with mods I tweak would be appreciated, this is here to shield you fron idiotic end users demanding fixes that they should be demanding me fixes for lol.
 </details>
 
 
@@ -54,15 +36,22 @@ Imported assets and derivatives retain their upstream License wherever they are 
 
 Paths below are relative to `src/main/resources/assets/cosmiccore/`:
 
-## Folder Paths and Asset Types - Defaults for CosmicCore owned assets, works, and materials
+## Folder Paths and Asset Types
  
  `textures/` - All Rights Reserved 
+ 
  `textures/item/` - MIT 
+ 
  `textures/block/` - MIT except explicitly marked subfolders 
+ 
  `textures/block/iris/` - All Rights Reserved 
+ 
  `models/`, including `block/iris/` and both `unique/` folders - All Rights Reserved 
+ 
  `shaders/` and `pinwheel/shaders/` - All Rights Reserved 
+ 
  `.obj`, `.mtl`, `.fsh`, and `.vsh` files elsewhere - All Rights Reserved unless explicitly stated otherwise 
+ 
  `textures/aeroponics_seedlings/` - CropsNH-derived textures: LGPL-3.0, including recolours 
 
 The same resource paths in `src/generated/resources/` inherit these notices. Existing license grants
