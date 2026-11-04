@@ -30,8 +30,10 @@ import com.gregtechceu.gtceu.utils.FormattingUtil;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.ints.Int2IntFunction;
@@ -108,7 +110,7 @@ public class CosmicMachinesUtils {
 
     public static MachineEntry<MultiblockMachineDefinition> registerLargeTurbineCosmic(
                                                                                        String name, int tier,
-                                                                                       Supplier<GTRecipeType> recipeType,
+                                                                                       DeferredHolder<RecipeType<?>, GTRecipeType> recipeType,
                                                                                        Supplier<? extends Block> casing,
                                                                                        Supplier<? extends Block> gear,
                                                                                        ResourceLocation casingTexture,
@@ -159,7 +161,7 @@ public class CosmicMachinesUtils {
     }
 
     public static MachineEntry<MachineDefinition>[] registerSimpleGenerator(String name,
-                                                                            Supplier<GTRecipeType> recipeType,
+                                                                            DeferredHolder<RecipeType<?>, GTRecipeType> recipeType,
                                                                             Int2IntFunction tankScalingFunction,
                                                                             float hazardStrengthPerOperation,
                                                                             int... tiers) {
