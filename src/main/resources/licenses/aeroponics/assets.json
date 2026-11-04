@@ -1,0 +1,96 @@
+{
+  "description": "A list of files used from CropsNH",
+  "license": "LGPL-3.0 as supplied by the pinned version of the upstream project",
+  "license_text": "../CropsNH-LGPL-3.0.txt",
+  "incorporated_license_text": "../GPL-3.0.txt",
+  "folder_notice": "../../assets/cosmiccore/textures/aeroponics_seedlings/LICENSE.md",
+  "attribution": "CropsNH / GTNewHorizons",
+  "sha256_scope": "the sha256's that exist are strictly of the files before any possible modifications, just to clearly point which ones they are from source",
+  "cropsnh_revision": "fbe850b17a0d5ccce9a4152954c61d2c7cfd32dc",
+  "textures": [
+    {
+      "item": "minecraft:cocoa_beans",
+      "texture": "src/main/resources/assets/cosmiccore/textures/aeroponics_seedlings/minecraft/cocoa_beans/plant.png",
+      "source": "https://github.com/GTNewHorizons/CropsNH/blob/fbe850b17a0d5ccce9a4152954c61d2c7cfd32dc/src/main/resources/assets/cropsnh/textures/blocks/crops/cocoa/4.png",
+      "source_texture": "CropsNH:cocoa/4.png",
+      "sha256": "f3b4029f1e068e32cbeacd81e0b7c5cea4e72345284020b663750b6e602db54c"
+    },
+    {
+      "item": "ars_nouveau:mendosteen_pod",
+      "texture": "src/main/resources/assets/cosmiccore/textures/aeroponics_seedlings/ars_nouveau/mendosteen_pod/plant.png",
+      "source": "https://github.com/GTNewHorizons/CropsNH/blob/fbe850b17a0d5ccce9a4152954c61d2c7cfd32dc/src/main/resources/assets/cropsnh/textures/blocks/crops/cocoa/4.png",
+      "source_texture": "CropsNH:cocoa/4.png",
+      "sha256": "f3b4029f1e068e32cbeacd81e0b7c5cea4e72345284020b663750b6e602db54c"
+    },
+    {
+      "item": "ars_nouveau:frostaya_pod",
+      "texture": "src/main/resources/assets/cosmiccore/textures/aeroponics_seedlings/ars_nouveau/frostaya_pod/plant.png",
+      "source": "https://github.com/GTNewHorizons/CropsNH/blob/fbe850b17a0d5ccce9a4152954c61d2c7cfd32dc/src/main/resources/assets/cropsnh/textures/blocks/crops/cocoa/4.png",
+      "source_texture": "CropsNH:cocoa/4.png",
+      "sha256": "f3b4029f1e068e32cbeacd81e0b7c5cea4e72345284020b663750b6e602db54c"
+    },
+    {
+      "item": "ars_nouveau:bastion_pod",
+      "texture": "src/main/resources/assets/cosmiccore/textures/aeroponics_seedlings/ars_nouveau/bastion_pod/plant.png",
+      "source": "https://github.com/GTNewHorizons/CropsNH/blob/fbe850b17a0d5ccce9a4152954c61d2c7cfd32dc/src/main/resources/assets/cropsnh/textures/blocks/crops/cocoa/4.png",
+      "source_texture": "CropsNH:cocoa/4.png",
+      "sha256": "f3b4029f1e068e32cbeacd81e0b7c5cea4e72345284020b663750b6e602db54c"
+    },
+    {
+      "item": "ars_nouveau:bombegranate_pod",
+      "texture": "src/main/resources/assets/cosmiccore/textures/aeroponics_seedlings/ars_nouveau/bombegranate_pod/plant.png",
+      "source": "https://github.com/GTNewHorizons/CropsNH/blob/fbe850b17a0d5ccce9a4152954c61d2c7cfd32dc/src/main/resources/assets/cropsnh/textures/blocks/crops/cocoa/4.png",
+      "source_texture": "CropsNH:cocoa/4.png",
+      "sha256": "f3b4029f1e068e32cbeacd81e0b7c5cea4e72345284020b663750b6e602db54c"
+    },
+    {
+      "item": "ars_elemental:flashpine_pod",
+      "texture": "src/main/resources/assets/cosmiccore/textures/aeroponics_seedlings/ars_elemental/flashpine_pod/plant.png",
+      "source": "https://github.com/GTNewHorizons/CropsNH/blob/fbe850b17a0d5ccce9a4152954c61d2c7cfd32dc/src/main/resources/assets/cropsnh/textures/blocks/crops/cocoa/4.png",
+      "source_texture": "CropsNH:cocoa/4.png",
+      "sha256": "f3b4029f1e068e32cbeacd81e0b7c5cea4e72345284020b663750b6e602db54c"
+    },
+    {
+      "item": "cosmiccore:sporebeans",
+      "texture": "src/main/resources/assets/cosmiccore/textures/aeroponics_seedlings/cosmiccore/sporebeans/plant.png",
+      "source": "https://github.com/GTNewHorizons/CropsNH/blob/fbe850b17a0d5ccce9a4152954c61d2c7cfd32dc/src/main/resources/assets/cropsnh/textures/blocks/crops/manaBean/3.png",
+      "source_texture": "CropsNH:manaBean/3.png",
+      "sha256": "ced1c69766a3f323e8c6b3429d802c036e46ab3eca1143c5f39f43274813ab70"
+    },
+    {
+      "item": "minecraft:bamboo",
+      "texture": "src/main/resources/assets/cosmiccore/textures/aeroponics_seedlings/minecraft/bamboo/plant.png",
+      "source": "https://github.com/GTNewHorizons/CropsNH/blob/fbe850b17a0d5ccce9a4152954c61d2c7cfd32dc/src/main/resources/assets/cropsnh/textures/blocks/crops/bamboo/3.png",
+      "source_texture": "CropsNH:bamboo/3.png",
+      "sha256": "d95bae7710742dfff34e6cd79338b407a61c5448c251cfde265e9692f467d358"
+    },
+    {
+      "item": "minecraft:melon_seeds",
+      "texture": "src/main/resources/assets/cosmiccore/textures/aeroponics_seedlings/minecraft/melon_seeds/plant.png",
+      "source": "https://github.com/GTNewHorizons/CropsNH/blob/fbe850b17a0d5ccce9a4152954c61d2c7cfd32dc/src/main/resources/assets/cropsnh/textures/blocks/crops/melon/4.png",
+      "source_texture": "CropsNH:melon/4.png",
+      "sha256": "05bf996ab8e45006fff5178508b706112b3949ecaf85d9181c2845aa3a9a182e"
+    },
+    {
+      "item": "minecraft:pumpkin_seeds",
+      "texture": "src/main/resources/assets/cosmiccore/textures/aeroponics_seedlings/minecraft/pumpkin_seeds/plant.png",
+      "source": "https://github.com/GTNewHorizons/CropsNH/blob/fbe850b17a0d5ccce9a4152954c61d2c7cfd32dc/src/main/resources/assets/cropsnh/textures/blocks/crops/pumpkin/4.png",
+      "source_texture": "CropsNH:pumpkin/4.png",
+      "sha256": "fe4eb801b1ca379a97486bb4f8aeaefb43ee60cc71ca1edbbdd38ac25cd03441"
+    },
+    {
+      "item": "cosmiccore:soul_gourd_seeds",
+      "texture": "src/main/resources/assets/cosmiccore/textures/aeroponics_seedlings/cosmiccore/soul_gourd_seeds/plant.png",
+      "source": "https://github.com/GTNewHorizons/CropsNH/blob/fbe850b17a0d5ccce9a4152954c61d2c7cfd32dc/src/main/resources/assets/cropsnh/textures/blocks/crops/pumpkin/4.png",
+      "source_texture": "CropsNH:pumpkin/4.png",
+      "sha256": "fe4eb801b1ca379a97486bb4f8aeaefb43ee60cc71ca1edbbdd38ac25cd03441"
+    },
+    {
+      "item": "undergarden:gloomgourd_seeds",
+      "texture": "src/main/resources/assets/cosmiccore/textures/aeroponics_seedlings/undergarden/gloomgourd_seeds/plant.png",
+      "source": "https://github.com/GTNewHorizons/CropsNH/blob/fbe850b17a0d5ccce9a4152954c61d2c7cfd32dc/src/main/resources/assets/cropsnh/textures/blocks/crops/pumpkin/4.png",
+      "source_texture": "CropsNH:pumpkin/4.png",
+      "sha256": "fe4eb801b1ca379a97486bb4f8aeaefb43ee60cc71ca1edbbdd38ac25cd03441"
+    }
+  ]
+}

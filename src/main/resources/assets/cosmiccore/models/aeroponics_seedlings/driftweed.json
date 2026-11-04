@@ -1,0 +1,4 @@
+{
+  "parent": "cosmiccore:block/crops/driftweed/bloom_stage_3",
+  "render_type": "minecraft:cutout"
+}
