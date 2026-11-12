@@ -1,7 +1,7 @@
 # AI Usage Policy
 
-CosmicCore has utilized AI assisted tooling from devs and contributors 
-but remains an assistive tool rather than a replacement for human effort fully.
+CosmicCore has utilized AI assisted tooling from devs and contributors, 
+but Agents remain an assistive tool rather than a replacement for human effort fully.
 
 This project did not officially adopt standards against or for AI until June of 2026.
 Prior to this date, this project was human made fully bar one incident of claude getting into the commit history 
@@ -29,8 +29,8 @@ hand, **do not contribute it**.
 This entails
 ```
 * You fully understand how to work with Minecraft 1.21.1 NeoForge code and are using the model purely for agility;
-* You have knowledge of how CosmicCore and Relevant mods is structured and have gotten said knowledge without the use of an LLM summarization.
-* You can independently verify, vouch, and explain in your own words the code the model has produced does.
+* You have knowledge of how CosmicCore and relevant mods is structured and have gotten said knowledge without the use of an LLM summarization.
+* You can independently verify, vouch, and explain in your own words what the code the model has produced does.
 * You write the description of the Pull Request yourself, explaining what the change does, and why it's correct.
 * You disclose the use of an LLM in the Pull Request.
 ```
@@ -44,7 +44,7 @@ produced by agents, fullstop.
 And ultimately, I will reach for it last rather than at first.
 
 * **Human-review and trim AI text.** Issues, discussions, and pull request
-descriptions may **NOT** AI-assisted!
+descriptions may **NOT** be AI-assisted in any regard!
 A human must read, edit, and submit their pull request
 with honest efforts as I would maintaining this project, no exceptions.
 This includes those overly verbose nonsense comments.
@@ -57,7 +57,7 @@ season for generators or to half-ass.
 
 * **Low-effort AI slop will not be accepted.** 
 If it takes you asking what slop is, you are not in a position to be using these tools.
-Note: this only applies to contributors, Ghostipedia themselves is fully 
+Note @ghostipedia themselves is not exempt from these guidelines and is fully 
 responsible for inspecting and checking their code works before deployment,
 I am still human and still make my own mistakes.
 
