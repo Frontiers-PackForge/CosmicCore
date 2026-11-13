@@ -34,6 +34,7 @@ public final class BronzeSteamTurbine {
             .generator(true)
             .recipeModifier(BronzeSteamTurbineMachine::recipeModifier, true)
             .appearanceBlock(GTBlocks.CASING_BRONZE_BRICKS)
+            .partAppearance((controller, part, side) -> GTBlocks.CASING_BRONZE_BRICKS.getDefaultState())
             .pattern(definition -> MultiblockPatternBuilder
                     .start(RelativeDirection.BACK, RelativeDirection.UP, RelativeDirection.LEFT)
                     .slice(" A A ", " AFA ", " A A ", "     ")
