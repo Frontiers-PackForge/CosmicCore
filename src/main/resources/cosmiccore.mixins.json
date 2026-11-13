@@ -152,6 +152,7 @@
     "repackaged.FactoryPanelSetItemScreenFluidMixin"
   ],
   "mixins": [
+    "gttweak.ender.DeprecatedEnderLinkMixin",
     "qualityfood.QualityFoodAcquisitionMixin",
     "qualityfood.QualityFoodCookingMixin",
     "apothicspawners.ApothSpawnerEntityPolicyMixin",

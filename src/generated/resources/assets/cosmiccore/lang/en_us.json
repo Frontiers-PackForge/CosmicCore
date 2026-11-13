@@ -2140,6 +2140,7 @@
     "cosmiccore.tooltip.create_drill.field_fluid": "Mounted field mining requires %s mB of drilling fluid per ore",
     "cosmiccore.tooltip.create_drill.field_scaling": "Drilling fluid cost compounds above %s mounted mining heads",
     "cosmiccore.tooltip.create_drill.field_yield": "%s%% Yield on Resource Field Ores",
+    "cosmiccore.tooltip.deprecated_ender_link": "Deprecated, behavior has been disabled",
     "cosmiccore.tooltip.food.cooling": "Cooling",
     "cosmiccore.tooltip.food.duration": "Duration",
     "cosmiccore.tooltip.food.max_health": "Max health",
