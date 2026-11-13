@@ -11,6 +11,9 @@ import com.ghostipedia.cosmiccore.client.renderer.StructureBoundingBox;
 import com.ghostipedia.cosmiccore.common.block.AeroponicsCropHolderBlock.SeedlingPlants;
 import com.ghostipedia.cosmiccore.common.compat.effortlessbuilding.EffortlessBuildingAE2Bridge;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.AeroponicsCrops;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.AeroponicsTower;
+
+import com.gregtechceu.gtceu.common.data.GTItems;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -34,7 +37,11 @@ public class ForgeClientEventHandler {
 
     @SubscribeEvent
     public static void onAeroponicsPlantTooltip(ItemTooltipEvent event) {
-        for (var fertilizer : com.ghostipedia.cosmiccore.common.machine.multiblock.multi.AeroponicsTower.Fertilizer.TIERS) {
+        if (event.getItemStack().is(GTItems.COVER_ENDER_ITEM_LINK.get()) ||
+                event.getItemStack().is(GTItems.COVER_ENDER_FLUID_LINK.get())) {
+            event.getToolTip().add(Component.translatable("cosmiccore.tooltip.deprecated_ender_link"));
+        }
+        for (var fertilizer : AeroponicsTower.Fertilizer.TIERS) {
             if (event.getItemStack().is(fertilizer.item().get())) {
                 event.getToolTip()
                         .add(Component.translatable("cosmiccore.aeroponics.fertilizer_amount", fertilizer.points()));

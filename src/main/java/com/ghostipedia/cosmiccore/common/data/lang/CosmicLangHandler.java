@@ -56,6 +56,7 @@ public class CosmicLangHandler extends LangHandler {
     }
 
     public static void init(RegistrateLangProvider provider) {
+        provider.add("cosmiccore.tooltip.deprecated_ender_link", "Deprecated, behavior has been disabled");
         provider.add("cosmiccore.aeroponics.plantable", "Can be planted in an Aeroponics Tower.");
         provider.add("cosmiccore.aeroponics.fertilizer_amount", "Fertilizer Amount: %s");
         provider.add("cosmiccore.aeroponics.tooltip.title", "An Automatic Garden!");
