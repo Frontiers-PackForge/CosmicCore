@@ -1,8 +1,10 @@
 package com.ghostipedia.cosmiccore.mixin.emi;
 
 import com.ghostipedia.cosmiccore.integration.emi.RecipeScreenAccessor;
+import com.ghostipedia.cosmiccore.integration.recipes.emi.AeroponicsEmiRecipe;
 
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -31,6 +33,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
 
@@ -74,6 +77,22 @@ public abstract class RecipeScreenMixin extends Screen implements RecipeScreenAc
 
     @Shadow(remap = false)
     private List<WidgetGroup> currentPage;
+
+    @Inject(method = "mouseScrolled(DDDD)Z", at = @At("HEAD"), cancellable = true, require = 1)
+    private void cosmiccore$scrollAeroponicsList(double mouseX, double mouseY, double horizontal, double vertical,
+                                                 CallbackInfoReturnable<Boolean> cir) {
+        for (WidgetGroup group : currentPage) {
+            if (!(group.recipe instanceof AeroponicsEmiRecipe)) continue;
+            int x = (int) Math.floor(mouseX - group.x), y = (int) Math.floor(mouseY - group.y);
+            for (Widget widget : group.widgets) {
+                if (widget instanceof GuiEventListener listener && widget.getBounds().contains(x, y) &&
+                        listener.mouseScrolled(x, y, horizontal, vertical)) {
+                    cir.setReturnValue(true);
+                    return;
+                }
+            }
+        }
+    }
 
     /**
      * @author CosmicCore

@@ -1,0 +1,107 @@
+{
+    "values": [
+        "cosmiccore:driftweed",
+        "minecraft:pitcher_plant",
+        "minecraft:torchflower",
+        {
+            "id": "farmersdelight:wild_beetroots",
+            "required": false
+        },
+        {
+            "id": "farmersdelight:wild_cabbages",
+            "required": false
+        },
+        {
+            "id": "farmersdelight:wild_carrots",
+            "required": false
+        },
+        {
+            "id": "farmersdelight:wild_onions",
+            "required": false
+        },
+        {
+            "id": "farmersdelight:wild_potatoes",
+            "required": false
+        },
+        {
+            "id": "farmersdelight:wild_rice",
+            "required": false
+        },
+        {
+            "id": "farmersdelight:wild_tomatoes",
+            "required": false
+        },
+        {
+            "id": "legendarysurvivaloverhaul:ice_fern_gold",
+            "required": false
+        },
+        {
+            "id": "legendarysurvivaloverhaul:sun_fern_gold",
+            "required": false
+        },
+        {
+            "id": "#regions_unexplored:branches",
+            "required": false
+        },
+        {
+            "id": "regions_unexplored:enchanted_birch_leaf_litter",
+            "required": false
+        },
+        {
+            "id": "regions_unexplored:maple_leaf_litter",
+            "required": false
+        },
+        {
+            "id": "regions_unexplored:orange_maple_leaf_litter",
+            "required": false
+        },
+        {
+            "id": "regions_unexplored:red_maple_leaf_litter",
+            "required": false
+        },
+        {
+            "id": "regions_unexplored:silver_birch_leaf_litter",
+            "required": false
+        },
+        {
+            "id": "undergarden:hanging_grongle_leaves",
+            "required": false
+        },
+        {
+            "id": "biomesoplenty:hanging_cobweb_strand",
+            "required": false
+        },
+        {
+            "id": "biomesoplenty:hanging_cobweb",
+            "required": false
+        },
+        {
+            "id": "biomesoplenty:flesh_tendons_strand",
+            "required": false
+        },
+        {
+            "id": "biomesoplenty:flesh_tendons",
+            "required": false
+        },
+        {
+            "id": "biomesoplenty:spanish_moss_plant",
+            "required": false
+        },
+        {
+            "id": "regions_unexplored:spanish_moss",
+            "required": false
+        },
+        {
+            "id": "biomesoplenty:spanish_moss",
+            "required": false
+        },
+        {
+            "id": "biomesoplenty:glowworm_silk_strand",
+            "required": false
+        },
+        {
+            "id": "biomesoplenty:glowworm_silk",
+            "required": false
+        }
+    ]
+}

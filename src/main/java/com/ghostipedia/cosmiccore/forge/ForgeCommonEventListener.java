@@ -20,6 +20,7 @@ import com.ghostipedia.cosmiccore.common.gravity.GravityDebugCommand;
 import com.ghostipedia.cosmiccore.common.item.armor.boots.TravelerBootsLogic;
 import com.ghostipedia.cosmiccore.common.item.behavior.EffectApplicationBehavior;
 import com.ghostipedia.cosmiccore.common.item.behavior.WirelessPDABehavior;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.AeroponicsCrops;
 import com.ghostipedia.cosmiccore.common.mirror.deed.DeedCommand;
 import com.ghostipedia.cosmiccore.common.mirror.deed.DeedTeams;
 import com.ghostipedia.cosmiccore.common.network.CCoreNetwork;
@@ -44,6 +45,7 @@ import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
+import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEquipmentChangeEvent;
@@ -64,6 +66,13 @@ public class ForgeCommonEventListener {
     @SubscribeEvent
     public static void addReloadListeners(AddReloadListenerEvent event) {
         event.addListener(CultivationProfileManager.INSTANCE);
+        event.addListener(AeroponicsCrops.INSTANCE);
+    }
+
+    @SubscribeEvent
+    public static void syncAeroponicsCatalog(OnDatapackSyncEvent event) {
+        var packet = AeroponicsCrops.INSTANCE.sync();
+        event.getRelevantPlayers().forEach(player -> CCoreNetwork.sendToPlayer(player, packet));
     }
 
     @SubscribeEvent

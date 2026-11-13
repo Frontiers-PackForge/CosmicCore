@@ -159,7 +159,8 @@ public class AeroponicsCropHolderBlock extends HorizontalDirectionalBlock implem
         private SeedlingPlants() {}
 
         public static boolean canPlant(ItemStack stack) {
-            return !stack.isEmpty() && (stack.is(CosmicItemTags.AEROPONICS_SEEDLINGS) || defaultVisual(stack) != null);
+            return !stack.isEmpty() && !stack.is(CosmicItemTags.AEROPONICS_EXCLUDED) &&
+                    (stack.is(CosmicItemTags.AEROPONICS_SEEDLINGS) || defaultVisual(stack) != null);
         }
 
         public static @Nullable BlockState defaultVisual(ItemStack stack) {

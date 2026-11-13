@@ -19,12 +19,39 @@ import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.client.model.data.ModelProperty;
 
 import java.util.List;
+import java.util.UUID;
 
 public class AeroponicsCropHolderBlockEntity extends BlockEntity {
 
     public static final ModelProperty<Seedlings> SEEDLINGS = new ModelProperty<>();
 
     private final NonNullList<ItemStack> seedlings = NonNullList.withSize(Planter.ALL.size(), ItemStack.EMPTY);
+    private final UUID[] plantings = new UUID[Planter.ALL.size()];
+    private Runnable plantingListener;
+
+    public UUID plantingId(Planter planter) {
+        int index = planter.ordinal();
+        if (plantings[index] == null && !seedlings.get(index).isEmpty()) {
+            plantings[index] = UUID.randomUUID();
+            setChanged();
+        }
+        return plantings[index];
+    }
+
+    public void setPlantingListener(Runnable listener) {
+        plantingListener = listener;
+    }
+
+    public void removePlantingListener(Runnable listener) {
+        if (plantingListener == listener) plantingListener = null;
+    }
+
+    @Override
+    public void setRemoved() {
+        super.setRemoved();
+        if (plantingListener != null) plantingListener.run();
+        plantingListener = null;
+    }
 
     public AeroponicsCropHolderBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -37,13 +64,17 @@ public class AeroponicsCropHolderBlockEntity extends BlockEntity {
     public boolean plant(Planter planter, ItemStack seed) {
         if (!getSeedling(planter).isEmpty() || !SeedlingPlants.canPlant(seed)) return false;
         seedlings.set(planter.ordinal(), seed.copyWithCount(1));
+        plantings[planter.ordinal()] = UUID.randomUUID();
         sync();
         return true;
     }
 
     public ItemStack removeSeedling(Planter planter) {
         ItemStack removed = ContainerHelper.takeItem(seedlings, planter.ordinal());
-        if (!removed.isEmpty()) sync();
+        if (!removed.isEmpty()) {
+            plantings[planter.ordinal()] = null;
+            sync();
+        }
         return removed;
     }
 
@@ -58,6 +89,7 @@ public class AeroponicsCropHolderBlockEntity extends BlockEntity {
         setChanged();
         refreshVisuals();
         if (level != null && !level.isClientSide) {
+            if (plantingListener != null) plantingListener.run();
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
         }
     }
@@ -66,6 +98,9 @@ public class AeroponicsCropHolderBlockEntity extends BlockEntity {
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
         ContainerHelper.saveAllItems(tag, seedlings, registries);
+        for (int i = 0; i < plantings.length; i++) {
+            if (plantings[i] != null) tag.putUUID("Planting" + i, plantings[i]);
+        }
     }
 
     @Override
@@ -73,6 +108,10 @@ public class AeroponicsCropHolderBlockEntity extends BlockEntity {
         super.loadAdditional(tag, registries);
         seedlings.clear();
         ContainerHelper.loadAllItems(tag, seedlings, registries);
+        for (int i = 0; i < plantings.length; i++) {
+            plantings[i] = tag.hasUUID("Planting" + i) ? tag.getUUID("Planting" + i) : null;
+        }
+        if (plantingListener != null) plantingListener.run();
         refreshVisuals();
     }
 

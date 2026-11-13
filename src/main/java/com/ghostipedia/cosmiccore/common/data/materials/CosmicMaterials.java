@@ -117,6 +117,7 @@ public class CosmicMaterials {
     public static MaterialRegistryEntry PaleSteel;
     public static MaterialRegistryEntry PaleOil;
     public static MaterialRegistryEntry PrimordialSoup;
+    public static MaterialRegistryEntry WorldDew;
     public static MaterialRegistryEntry Moondrop;
     public static MaterialRegistryEntry Somanone;
 
@@ -912,6 +913,9 @@ public class CosmicMaterials {
         PrimordialSoup = REGISTRATE.material("primordial_soup", builder -> builder
                 .liquid(new FluidBuilder().state(FluidState.LIQUID).temperature(320))
                 .color(0x6F568F).secondaryColor(0xB9A8CF).iconSet(MaterialIconSet.DULL));
+
+        WorldDew = REGISTRATE.material("world_dew", builder -> builder
+                .liquid().color(0x88E0D0).iconSet(MaterialIconSet.SHINY));
 
         Somanone = REGISTRATE.material("somanone", builder -> builder
                 .formula("✧+")

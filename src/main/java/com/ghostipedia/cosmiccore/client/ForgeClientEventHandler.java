@@ -8,16 +8,21 @@ import com.ghostipedia.cosmiccore.client.map.RevealedFields;
 import com.ghostipedia.cosmiccore.client.mirror.ClientDeedCache;
 import com.ghostipedia.cosmiccore.client.renderer.RingUpgradePreviewRenderer;
 import com.ghostipedia.cosmiccore.client.renderer.StructureBoundingBox;
+import com.ghostipedia.cosmiccore.common.block.AeroponicsCropHolderBlock.SeedlingPlants;
 import com.ghostipedia.cosmiccore.common.compat.effortlessbuilding.EffortlessBuildingAE2Bridge;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.AeroponicsCrops;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.FogRenderer;
+import net.minecraft.network.chat.Component;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.client.event.ViewportEvent;
+import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import net.neoforged.neoforge.event.level.LevelEvent;
 
 import brachy.modularui.utils.RegistryAccessContainer;
@@ -26,6 +31,21 @@ import com.mojang.blaze3d.shaders.FogShape;
 @SuppressWarnings("unused")
 @EventBusSubscriber(modid = CosmicCore.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public class ForgeClientEventHandler {
+
+    @SubscribeEvent
+    public static void onAeroponicsPlantTooltip(ItemTooltipEvent event) {
+        for (var fertilizer : com.ghostipedia.cosmiccore.common.machine.multiblock.multi.AeroponicsTower.Fertilizer.TIERS) {
+            if (event.getItemStack().is(fertilizer.item().get())) {
+                event.getToolTip()
+                        .add(Component.translatable("cosmiccore.aeroponics.fertilizer_amount", fertilizer.points()));
+                break;
+            }
+        }
+        if (SeedlingPlants.canPlant(event.getItemStack())) {
+            event.getToolTip().add(Component.translatable("cosmiccore.aeroponics.plantable")
+                    .withStyle(ChatFormatting.GREEN));
+        }
+    }
 
     @SubscribeEvent
     public static void onRenderWorldLast(RenderLevelStageEvent event) {
@@ -57,6 +77,7 @@ public class ForgeClientEventHandler {
 
     @SubscribeEvent
     public static void onLoggingOut(ClientPlayerNetworkEvent.LoggingOut event) {
+        AeroponicsCrops.clearClientCatalog();
         EffortlessBuildingAE2Bridge.clearClientCache();
         FoundryCampusClientState.clear();
         ClientDeedCache.clear();

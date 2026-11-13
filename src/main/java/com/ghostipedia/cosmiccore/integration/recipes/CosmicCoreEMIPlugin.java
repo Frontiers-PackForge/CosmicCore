@@ -14,6 +14,7 @@ import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.Powderizer;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.LarvaMachine;
 import com.ghostipedia.cosmiccore.common.vitae.CultivationProfileManager;
 import com.ghostipedia.cosmiccore.common.vitae.EnderIOSpawnerResolver;
+import com.ghostipedia.cosmiccore.integration.recipes.emi.AeroponicsEmiRecipe;
 import com.ghostipedia.cosmiccore.integration.recipes.emi.AsteroidEmiRecipe;
 import com.ghostipedia.cosmiccore.integration.recipes.emi.BiomeldVivariumEmiRecipe;
 import com.ghostipedia.cosmiccore.integration.recipes.emi.CompositeOreSortingEmiRecipe;
@@ -75,6 +76,7 @@ public class CosmicCoreEMIPlugin implements EmiPlugin {
         CraftingStationRecipeHandler.register(registry);
         FactoryGaugeEmiCompat.register(registry);
         registerFoodAliases(registry);
+        AeroponicsEmiRecipe.register(registry);
 
         registry.addCategory(HephaestusCauldronEmiRecipe.CATEGORY);
         registry.addWorkstation(HephaestusCauldronEmiRecipe.CATEGORY,
