@@ -19,6 +19,7 @@ import com.gregtechceu.gtceu.api.transfer.fluid.FluidHandlerList;
 import com.gregtechceu.gtceu.common.data.GTMaterials;
 import com.gregtechceu.gtceu.common.mui.GTMultiblockTextUtil;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
+import com.gregtechceu.gtceu.utils.GTTransferUtils;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -169,7 +170,8 @@ public final class MEComputationArrayMachine extends WorkableElectricMultiblockM
             return false;
         }
         int amount = MEComputationArrayTuning.coolantForTick(coolantRemainder);
-        return coolantInputs.drain(GTMaterials.PCBCoolant.getFluid(amount), IFluidHandler.FluidAction.SIMULATE)
+        return GTTransferUtils.drainFluidAccountNotifiableList(coolantInputs, GTMaterials.PCBCoolant.getFluid(amount),
+                IFluidHandler.FluidAction.SIMULATE)
                 .getAmount() == amount;
     }
 
@@ -241,7 +243,8 @@ public final class MEComputationArrayMachine extends WorkableElectricMultiblockM
             if (getOnlineCwut() > 0 && hasCoolant()) {
                 int amount = MEComputationArrayTuning.coolantForTick(coolantRemainder);
                 try (ActivityScope ignored = MachineActivityRuntime.scope(this)) {
-                    cooledThisTick = coolantInputs.drain(GTMaterials.PCBCoolant.getFluid(amount),
+                    cooledThisTick = GTTransferUtils.drainFluidAccountNotifiableList(coolantInputs,
+                            GTMaterials.PCBCoolant.getFluid(amount),
                             IFluidHandler.FluidAction.EXECUTE).getAmount() == amount;
                 }
                 if (cooledThisTick) {
