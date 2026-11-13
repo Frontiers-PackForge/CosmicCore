@@ -45,7 +45,7 @@ public class CosmicRecipeTypes {
             .setEUIO(IO.IN)
             .register();
     public static final GTRecipeTypeEntry ESSENCE_REACTOR = recipeType("essence_reactor", MULTIBLOCK)
-            .setMaxIOSize(4, 4, 4, 4)
+            .setMaxIOSize(6, 6, 6, 6)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
             .setEUIO(IO.IN)
             .register();
