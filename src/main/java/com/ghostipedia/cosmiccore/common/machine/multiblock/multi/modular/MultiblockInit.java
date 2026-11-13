@@ -60,6 +60,7 @@ public class MultiblockInit {
         IndustrialOreSorter.init();
         IndustrialFlotationPlant.init();
         DissolutionVat.init();
+        AeroponicsTower.init();
         PhaseSeparator.init();
         Desalter.init();
         SteamCrackingFurnace.init();

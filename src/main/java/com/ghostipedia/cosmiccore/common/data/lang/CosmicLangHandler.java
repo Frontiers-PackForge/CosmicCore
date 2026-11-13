@@ -56,10 +56,75 @@ public class CosmicLangHandler extends LangHandler {
     }
 
     public static void init(RegistrateLangProvider provider) {
+        provider.add("cosmiccore.aeroponics.plantable", "Can be planted in an Aeroponics Tower.");
+        provider.add("cosmiccore.aeroponics.fertilizer_amount", "Fertilizer Amount: %s");
+        provider.add("cosmiccore.aeroponics.tooltip.title", "An Automatic Garden!");
+        provider.add("cosmiccore.aeroponics.tooltip.shift", "[Hold Shift for Information]");
+        provider.add("cosmiccore.aeroponics.tooltip.planting",
+                "Plant seeds within the planter pots by hand, or by inserting them within the crop manager gui.");
+        provider.add("cosmiccore.aeroponics.tooltip.resources",
+                "Seeds require world dew and fertilizer to grow, providing less than require slows the entire crop farm.");
+        provider.add("cosmiccore.aeroponics.tooltip.quality",
+                "Quality Crops use more resources to grow. (NYI, Quality Crop Overhaul WIP)");
+        provider.add("cosmiccore.aeroponics.emi.nutrient", "World Dew Cost");
+        provider.add("cosmiccore.aeroponics.emi.time", "Time to Grow");
+        provider.add("cosmiccore.aeroponics.emi.fertilizer", "Fertilizer Cost");
+        provider.add("cosmiccore.aeroponics.emi.mb", "%s mB");
+        provider.add("cosmiccore.aeroponics.emi.seconds", "%s s");
+        provider.add("cosmiccore.aeroponics.emi.units", "%s units");
+        provider.add("cosmiccore.aeroponics.emi.quality", "Quality");
+        provider.add("cosmiccore.aeroponics.emi.quality.normal", "Normal");
+        provider.add("cosmiccore.aeroponics.emi.normal_tier_only", "[Normal Tier Only]");
+        provider.add("cosmiccore.aeroponics.emi.quality.iron", "Iron");
+        provider.add("cosmiccore.aeroponics.emi.quality.gold", "Gold");
+        provider.add("cosmiccore.aeroponics.emi.quality.diamond", "Diamond");
+        provider.add("cosmiccore.aeroponics.emi.mutations", "Mutations");
+        provider.add("cosmiccore.aeroponics.emi.edit", "Edit");
+        provider.add("cosmiccore.aeroponics.emi.none", "None");
+        provider.add("cosmiccore.aeroponics.emi.more", "%1$s +%2$s");
+        provider.add("cosmiccore.aeroponics.emi.remembered", "%1$s (%2$s inactive)");
+        provider.add("cosmiccore.aeroponics.emi.search", "Search name or effect");
+        provider.add("cosmiccore.aeroponics.emi.selected", "Selected (%s)");
+        provider.add("cosmiccore.aeroponics.emi.inactive", "%s (inactive for this crop)");
+        provider.add("cosmiccore.aeroponics.emi.no_matches", "No matching mutations");
+        provider.add("cosmiccore.aeroponics.emi.effects", "World Dew ×%1$s, fertilizer ×%2$s, time ×%3$s, yield ×%4$s");
+        provider.add("mutation.cosmiccore.high_yield", "High Yield");
+        provider.add("mutation.cosmiccore.high_yield.effect",
+                "Increases harvest amount in exchange for more growth time and fertilizer.");
+        provider.add("mutation.cosmiccore.efficient", "Efficient Uptake");
+        provider.add("mutation.cosmiccore.efficient.effect",
+                "Reduces World Dew and fertilizer consumption.");
+        provider.add("mutation.cosmiccore.fast", "Fast Growth");
+        provider.add("mutation.cosmiccore.fast.effect",
+                "Shortens time to harvest and increases fertilizer costs.");
         provider.add("cosmiccore.aeroponics.plant_hint", "Right-click a planter with a seed to plant it.");
         provider.add("cosmiccore.aeroponics.remove_hint",
                 "Right-click a planter with an empty hand to remove its seedling.");
         provider.add("cosmiccore.aeroponics.planter_occupied", "This planter already has a seedling!");
+        provider.add("cosmiccore.aeroponics.empty", "Empty cup");
+        provider.add("cosmiccore.aeroponics.management", "Plant Management");
+        provider.add("cosmiccore.aeroponics.overview", "Overview");
+        provider.add("cosmiccore.aeroponics.layer", "Layer %s");
+        provider.add("cosmiccore.aeroponics.layer_count", "%1$s / %2$s planted");
+        provider.add("cosmiccore.aeroponics.transfer_hint",
+                "Shift-click seeds in your inventory to plant on this layer. Shift-click a planted cup to take its seed.");
+        provider.add("cosmiccore.aeroponics.planted", "Planted %s.");
+        provider.add("cosmiccore.aeroponics.returned", "Returned %s to inventory.");
+        provider.add("cosmiccore.aeroponics.unsupported", "%s | No cultivation profile");
+        provider.add("cosmiccore.aeroponics.ready", "%s | 100%% | Waiting for output");
+        provider.add("cosmiccore.aeroponics.progress",
+                "%1$s | %2$s%%\n%3$s s per harvest\n%4$s mB World Dew | %5$s fertilizer");
+        provider.add("cosmiccore.aeroponics.speed", "Growth %s%% | %s");
+        provider.add("cosmiccore.aeroponics.counts", "%s growing cups | %s harvests awaiting export");
+        provider.add("cosmiccore.aeroponics.nutrient_rate", "World Dew  %s / %s mB per minute");
+        provider.add("cosmiccore.aeroponics.fertilizer_rate", "Fertilizer  %s / %s units per minute");
+        provider.add("cosmiccore.aeroponics.item_rate", "Projected harvest  %s items per minute");
+        provider.add("cosmiccore.aeroponics.state.running", "Full supply");
+        provider.add("cosmiccore.aeroponics.state.nutrient", "World Dew limited");
+        provider.add("cosmiccore.aeroponics.state.fertilizer", "Fertilizer limited");
+        provider.add("cosmiccore.aeroponics.state.output", "Waiting for output");
+        provider.add("cosmiccore.aeroponics.state.unformed", "Structure incomplete");
+        provider.add("cosmiccore.aeroponics.state.idle", "Idle");
         provider.add("cosmiccore.machine.gcym.innate_parallel",
                 "§6Innate Parallels: §e16. §cParallel hatches add onto this amount!");
         for (int tier = GTValues.LV; tier <= GTValues.OpV; tier++) {

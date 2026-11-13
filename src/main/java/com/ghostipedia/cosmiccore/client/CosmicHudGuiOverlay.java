@@ -3,6 +3,7 @@ package com.ghostipedia.cosmiccore.client;
 import com.ghostipedia.cosmiccore.CosmicCore;
 import com.ghostipedia.cosmiccore.client.murkbloom.MurkbloomClientState;
 import com.ghostipedia.cosmiccore.common.armor.ArmorModuleHelper;
+import com.ghostipedia.cosmiccore.common.compat.qualityfood.QualityFoodCompat;
 import com.ghostipedia.cosmiccore.common.food.CosmicFoodData;
 import com.ghostipedia.cosmiccore.common.food.FoodBar;
 import com.ghostipedia.cosmiccore.common.food.FoodMemory;
@@ -36,12 +37,6 @@ public class CosmicHudGuiOverlay implements LayeredDraw.Layer {
     // Oxygen bar textures
     private static final ResourceLocation OXY_BG = CosmicCore.id("textures/gui/oxygen_bg.png");
     private static final ResourceLocation OXY_FILL = CosmicCore.id("textures/gui/oxygen_fill.png");
-    private static final ResourceLocation QUALITY_IRON = ResourceLocation.fromNamespaceAndPath("quality_food",
-            "quality_icon/iron");
-    private static final ResourceLocation QUALITY_GOLD = ResourceLocation.fromNamespaceAndPath("quality_food",
-            "quality_icon/gold");
-    private static final ResourceLocation QUALITY_DIAMOND = ResourceLocation.fromNamespaceAndPath("quality_food",
-            "quality_icon/diamond");
     private static final int TEX_W = 64, TEX_H = 12;
 
     // Time bar state
@@ -289,7 +284,7 @@ public class CosmicHudGuiOverlay implements LayeredDraw.Layer {
     }
 
     private static void renderQualityIcon(GuiGraphics guiGraphics, int cellX, int cellTop, int quality, float scale) {
-        ResourceLocation qualityIcon = qualityIcon(quality);
+        ResourceLocation qualityIcon = QualityFoodCompat.star(quality);
         if (qualityIcon == null) return;
 
         var pose = guiGraphics.pose();
@@ -298,16 +293,6 @@ public class CosmicHudGuiOverlay implements LayeredDraw.Layer {
         pose.scale(scale, scale, 1f);
         guiGraphics.blitSprite(qualityIcon, 0, 0, 16, 16);
         pose.popPose();
-    }
-
-    @Nullable
-    private static ResourceLocation qualityIcon(int quality) {
-        return switch (quality) {
-            case 1 -> QUALITY_IRON;
-            case 2 -> QUALITY_GOLD;
-            case 3 -> QUALITY_DIAMOND;
-            default -> null;
-        };
     }
 
     private static void renderHUDWirelessPDA(@NotNull ItemStack stack, GuiGraphics guiGraphics) {

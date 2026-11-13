@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.common.network;
 
 import com.ghostipedia.cosmiccore.common.compat.ftbquests.DeedQuestCompatBridge;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.AeroponicsCrops;
 import com.ghostipedia.cosmiccore.common.network.packet.AbyssTimeWarnPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.BuildTieredMultiblockPacket;
 import com.ghostipedia.cosmiccore.common.network.packet.DashPacket;
@@ -60,6 +61,8 @@ public class CCoreNetwork {
 
     public static void registerPayloads(RegisterPayloadHandlersEvent event) {
         PayloadRegistrar registrar = event.registrar(PROTOCOL_VERSION);
+        registrar.playToClient(AeroponicsCrops.Sync.TYPE, AeroponicsCrops.Sync.CODEC,
+                (packet, context) -> packet.accept());
         com.ghostipedia.cosmiccore.common.network.packet.OrreryPackets.register(registrar);
         registrar.playToServer(LeylinePrefabRequestPacket.TYPE, LeylinePrefabRequestPacket.CODEC,
                 LeylinePrefabRequestPacket::execute);

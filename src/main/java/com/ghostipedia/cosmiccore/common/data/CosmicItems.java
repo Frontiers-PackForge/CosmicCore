@@ -1167,6 +1167,10 @@ public class CosmicItems {
             .tag()
             .defaultModel()
             .register();
+    public static final ItemEntry<ComponentItem> FERTILIZER_T2 = registerChainItem(
+            "fertilizer_t2", "Enriched Fertilizer", CosmicCore.id("item/fertilizer_t2"));
+    public static final ItemEntry<ComponentItem> FERTILIZER_T3 = registerChainItem(
+            "fertilizer_t3", "High Quality Fertilizer", CosmicCore.id("item/fertilizer_t3"));
     public static final ItemEntry<ComponentItem> GREEN_PROTO_ALGAE = REGISTRATE
             .item("green_proto_algae", ComponentItem::new)
             .lang("Green Proto-Algae")

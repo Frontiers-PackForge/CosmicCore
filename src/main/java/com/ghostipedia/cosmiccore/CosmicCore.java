@@ -38,6 +38,7 @@ import com.ghostipedia.cosmiccore.common.deployment.LeylineCraftingPattern;
 import com.ghostipedia.cosmiccore.common.deployment.LeylineDeploymentBehaviors;
 import com.ghostipedia.cosmiccore.common.firmament.FirmamentSpaceGravityCompat;
 import com.ghostipedia.cosmiccore.common.item.armor.boots.TravelerBootsMigration;
+import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.AeroponicsTower;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.bloomwyrm.BloomwyrmChunkLoading;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.modular.MultiblockInit;
 import com.ghostipedia.cosmiccore.common.mob.DimensionMobScaling;
@@ -73,6 +74,7 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.registries.RegisterEvent;
 
 import appeng.api.features.GridLinkables;
+import brachy.modularui.factory.GuiManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -97,6 +99,7 @@ public class CosmicCore {
         modContainer.registerConfig(ModConfig.Type.CLIENT, CosmicCoreConfig.CLIENT_SPEC);
         CosmicRegistration.REGISTRATE.registerEventListeners(modBus);
         CosmicAttachmentTypes.ATTACHMENT_TYPES.register(modBus);
+        CosmicMutations.init(modBus);
         CosmicEffects.EFFECTS.register(modBus);
         CosmicParticleTypes.PARTICLE_TYPES.register(modBus);
         CosmicLootModifiers.register(modBus);
@@ -173,6 +176,7 @@ public class CosmicCore {
     @SubscribeEvent
     public void commonSetup(FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
+            GuiManager.registerFactory(AeroponicsTower.PlantingFactory.INSTANCE);
             InitialOreSurvey.init();
             LeylineCraftingPattern.register();
             OrreryNetwork.register();

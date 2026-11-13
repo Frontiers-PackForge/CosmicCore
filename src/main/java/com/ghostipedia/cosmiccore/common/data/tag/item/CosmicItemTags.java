@@ -8,6 +8,7 @@ import net.minecraft.world.item.Item;
 public class CosmicItemTags {
 
     public static final TagKey<Item> AEROPONICS_SEEDLINGS = TagUtil.createModItemTag("aeroponics_seedlings");
+    public static final TagKey<Item> AEROPONICS_EXCLUDED = TagUtil.createModItemTag("aeroponics_excluded");
     public static final TagKey<Item> NANOMUSCLE_SPACE_SUITE = TagUtil.createModItemTag("nano_space_suite");
     public static final TagKey<Item> QUARKTECH_SPACE_SUITE = TagUtil.createModItemTag("quantum_space_suite");
     public static final TagKey<Item> PRESSURE_RATED_1 = TagUtil.createModItemTag("pressure_rated/1");
