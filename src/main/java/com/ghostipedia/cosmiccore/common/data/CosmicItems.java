@@ -1169,6 +1169,14 @@ public class CosmicItems {
             .register();
     public static final ItemEntry<ComponentItem> FERTILIZER_T2 = registerChainItem(
             "fertilizer_t2", "Enriched Fertilizer", CosmicCore.id("item/fertilizer_t2"));
+    public static final ItemEntry<ComponentItem> CHROMAPLAST_JELLY = registerChainItem(
+            "chromaplast_jelly", "Chromaplast Jelly", CosmicCore.id("item/gelatin_scaffold"));
+    public static final ItemEntry<ComponentItem> BROWN_ALGAE = registerChainItem(
+            "brown_algae", "Brown Algae", CosmicCore.id("item/brown_algae"));
+    public static final ItemEntry<ComponentItem> PURPLE_ALGAE = registerChainItem(
+            "purple_algae", "Purple Algae", CosmicCore.id("item/purple_algae"));
+    public static final ItemEntry<ComponentItem> TEAL_ALGAE = registerChainItem(
+            "teal_algae", "Teal Algae", CosmicCore.id("item/teal_algae"));
     public static final ItemEntry<ComponentItem> FERTILIZER_T3 = registerChainItem(
             "fertilizer_t3", "High Quality Fertilizer", CosmicCore.id("item/fertilizer_t3"));
     public static final ItemEntry<ComponentItem> GREEN_PROTO_ALGAE = REGISTRATE
