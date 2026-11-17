@@ -17,7 +17,8 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import java.util.Map;
 
 public final class GeneratorFuelGrades {
-    //Reference, LV is 1 rather than ULV
+
+    // Reference, LV is 1 rather than ULV
     private static final Map<ResourceLocation, Integer> GRADES = Map.ofEntries(
             Map.entry(ResourceLocation.parse("gtceu:cinder_gas"), 1),
             Map.entry(ResourceLocation.parse("gtceu:methane"), 1),
@@ -96,7 +97,9 @@ public final class GeneratorFuelGrades {
                 (type.getPath().equals("turbine_power_station") || type.getPath().equals("combustion_power_station"));
     }
 
-    public static OppScaleThingyWhatDoICallThisItsTheFuelDensityLol operatingPoint(int grade, int generatorTier, long baseAmperage, long hardwareLimit) {
+    public static OppScaleThingyWhatDoICallThisItsTheFuelDensityLol operatingPoint(int grade, int generatorTier,
+                                                                                   long baseAmperage,
+                                                                                   long hardwareLimit) {
         if (grade < GTValues.LV || grade > GTValues.EV || generatorTier < GTValues.LV ||
                 generatorTier >= GTValues.V.length || baseAmperage <= 0 || hardwareLimit <= 0 ||
                 generatorTier - grade >= 2) {
@@ -104,14 +107,16 @@ public final class GeneratorFuelGrades {
         }
         long fuelVoltage = GTValues.V[Math.min(grade, generatorTier)];
         long ceiling = baseAmperage > Long.MAX_VALUE / fuelVoltage ? Long.MAX_VALUE : baseAmperage * fuelVoltage;
-        return new OppScaleThingyWhatDoICallThisItsTheFuelDensityLol(Math.min(ceiling, hardwareLimit), generatorTier > grade ? 0.5 : 1.0);
+        return new OppScaleThingyWhatDoICallThisItsTheFuelDensityLol(Math.min(ceiling, hardwareLimit),
+                generatorTier > grade ? 0.5 : 1.0);
     }
 
     public static ModifierFunction modifier(MetaMachine machine, GTRecipe recipe, int generatorTier,
                                             long baseAmperage, long hardwareLimit, double outputFraction) {
         int grade = grade(recipe);
         if (grade == 0) return reject(machine, recipe, Component.translatable("cosmiccore.fuel_grade.unassigned"));
-        OppScaleThingyWhatDoICallThisItsTheFuelDensityLol point = operatingPoint(grade, generatorTier, baseAmperage, hardwareLimit);
+        OppScaleThingyWhatDoICallThisItsTheFuelDensityLol point = operatingPoint(grade, generatorTier, baseAmperage,
+                hardwareLimit);
         if (generatorTier - grade >= 2) {
             return reject(machine, recipe, Component.translatable("cosmiccore.fuel_grade.incompatible",
                     grade, GTValues.VN[grade + 1]));
