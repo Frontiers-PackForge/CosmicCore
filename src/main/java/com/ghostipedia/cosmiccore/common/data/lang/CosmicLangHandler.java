@@ -20,7 +20,8 @@ import static com.ghostipedia.cosmiccore.common.data.worldgen.abyss.AbyssRegions
 public class CosmicLangHandler extends LangHandler {
 
     private static final String[] COSMIC_RECIPE_TYPE_IDS = {
-            "mechanical_mineshaft", "essence_reactor", "sludge_digestor", "powderizer", "industrial_ore_sorter",
+            "mechanical_mineshaft", "essence_reactor", "automated_rituals", "sludge_digestor", "powderizer",
+            "industrial_ore_sorter",
             "industrial_flotation_plant",
             "oneiric_sieve", "dissolution_vat", "phase_separator", "simple_desalter", "desalter",
             "steam_cracking_furnace", "fractional_condenser", "fluid_catalytic_cracking", "hydrotreating",

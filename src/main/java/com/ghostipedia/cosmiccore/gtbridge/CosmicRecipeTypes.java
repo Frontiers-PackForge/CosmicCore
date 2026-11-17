@@ -2,6 +2,7 @@ package com.ghostipedia.cosmiccore.gtbridge;
 
 import com.ghostipedia.cosmiccore.api.capability.recipe.EmberRecipeCapability;
 import com.ghostipedia.cosmiccore.api.capability.recipe.SoulRecipeCapability;
+import com.ghostipedia.cosmiccore.client.recipe.AutomatedRitualRecipeUI;
 import com.ghostipedia.cosmiccore.common.data.CosmicSounds;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic.bloomwyrm.BloomwyrmRecipeKeys;
 
@@ -44,6 +45,12 @@ public class CosmicRecipeTypes {
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
             .setEUIO(IO.IN)
             .register();
+    public static final GTRecipeTypeEntry AUTOMATED_RITUALS = recipeType("automated_rituals", MULTIBLOCK)
+            .setMaxIOSize(12, 1, 0, 0)
+            .UI(builder -> builder.customRecipeTypeUI(AutomatedRitualRecipeUI::create))
+            .setEUIO(IO.IN)
+            .register();
+
     public static final GTRecipeTypeEntry ESSENCE_REACTOR = recipeType("essence_reactor", MULTIBLOCK)
             .setMaxIOSize(6, 6, 6, 6)
             .UI(builder -> builder.setProgressBar(GTGuiTextures.PROGRESS_ARROW))
