@@ -1,6 +1,7 @@
 package com.ghostipedia.cosmiccore.common.machine.multiblock.multi.logic;
 
 import com.ghostipedia.cosmiccore.common.data.CosmicBlocks;
+import com.ghostipedia.cosmiccore.common.machine.generator.GeneratorFuelGrades;
 import com.ghostipedia.cosmiccore.common.machine.multiblock.multi.pattern.ModularPowerStationPatterns;
 
 import com.gregtechceu.gtceu.api.GTValues;
@@ -17,10 +18,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.WorkableElectricMultiblockMa
 import com.gregtechceu.gtceu.api.multiblock.util.RelativeDirection;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
 import com.gregtechceu.gtceu.api.recipe.RecipeHelper;
-import com.gregtechceu.gtceu.api.recipe.content.ContentModifier;
-import com.gregtechceu.gtceu.api.recipe.ingredient.EnergyStack;
 import com.gregtechceu.gtceu.api.recipe.modifier.ModifierFunction;
-import com.gregtechceu.gtceu.api.recipe.modifier.ParallelLogic;
 import com.gregtechceu.gtceu.api.recipe.modifier.RecipeModifier;
 import com.gregtechceu.gtceu.api.sync_system.annotations.SaveField;
 import com.gregtechceu.gtceu.api.sync_system.annotations.SyncToClient;
@@ -163,6 +161,11 @@ public class ModularPowerStationMachine extends WorkableElectricMultiblockMachin
                 .copy(Component::copy).equalsDefault().build();
         syncManager.syncValue("modularPowerStationFuelRate", fuelRate);
         widgets.add(Text.dynamic(fuelRate::getValue).asWidget());
+        var fuelGrade = GenericSyncValue.<RegistryFriendlyByteBuf, Component>builder(Component.class)
+                .getter(this::fuelGradeLine).adapter(ByteBufAdapters.COMPONENT)
+                .copy(Component::copy).equalsDefault().build();
+        syncManager.syncValue("modularPowerStationFuelGrade", fuelGrade);
+        widgets.add(Text.dynamic(fuelGrade::getValue).asWidget());
         widgets.add(GTMultiblockTextUtil.addProgressLine(this, syncManager));
         widgets.add(GTMultiblockTextUtil.addWorkingStatusLine(this, syncManager));
         widgets.addAll(getDefinition().getAdditionalDisplay().apply(this, syncManager));
@@ -222,23 +225,8 @@ public class ModularPowerStationMachine extends WorkableElectricMultiblockMachin
         }
         if (!station.isAssemblyReady()) return ModifierFunction.NULL;
 
-        EnergyStack output = recipe.getOutputEUt();
-        long baseOutput = output.getTotalEU();
-        if (output.isEmpty() || baseOutput <= 0) return ModifierFunction.NULL;
-
-        int maximumParallel = (int) Math.min(Integer.MAX_VALUE, station.getRatedOutput() / baseOutput);
-        if (maximumParallel < 1) return ModifierFunction.NULL;
-        int actualParallel = ParallelLogic.getParallelAmountFast(station, recipe, maximumParallel);
-        if (actualParallel < 1) return ModifierFunction.NULL;
-
-        double outputFraction = station.getOutputFraction();
-        return ModifierFunction.builder()
-                .inputModifier(ContentModifier.multiplier(actualParallel))
-                .outputModifier(ContentModifier.multiplier(actualParallel))
-                .eutMultiplier(actualParallel * outputFraction)
-                .durationMultiplier(1.0 / outputFraction)
-                .parallels(actualParallel)
-                .build();
+        return GeneratorFuelGrades.modifier(station, recipe, station.statorTier,
+                (long) station.stageCount * AMPERAGE_PER_STAGE, station.getRatedOutput(), station.getOutputFraction());
     }
 
     public DriveType getDriveType() {
@@ -433,6 +421,19 @@ public class ModularPowerStationMachine extends WorkableElectricMultiblockMachin
         return Component.translatable("cosmiccore.multiblock.modular_power_station.fuel.rate",
                 fuel.getHoverName(), FormattingUtil.formatNumbers(perMinute), FormattingUtil.formatNumbers(perHour))
                 .withStyle(ChatFormatting.WHITE);
+    }
+
+    private Component fuelGradeLine() {
+        GTRecipe activeRecipe = recipeLogic.getLastRecipe();
+        if (activeRecipe == null || !isAssemblyReady()) return Component.empty();
+        int grade = GeneratorFuelGrades.grade(activeRecipe);
+        if (grade == 0) return Component.empty();
+        var point = GeneratorFuelGrades.operatingPoint(grade, statorTier,
+                (long) stageCount * AMPERAGE_PER_STAGE, getRatedOutput());
+        return Component.translatable("cosmiccore.fuel_grade.operating", grade,
+                FormattingUtil.formatNumbers(point.efficiency() * 100),
+                FormattingUtil.formatNumbers(Math.floor(point.maximumEUt() * getOutputFraction())))
+                .withStyle(ChatFormatting.GOLD);
     }
 
     private void clearAssembly() {

@@ -57,6 +57,15 @@ public class CosmicLangHandler extends LangHandler {
     }
 
     public static void init(RegistrateLangProvider provider) {
+        provider.add("cosmiccore.fuel_grade.label", "Fuel Grade: Mk.%s (%s)");
+        provider.add("cosmiccore.fuel_grade.normal", "Full Power Yield: %s and below");
+        provider.add("cosmiccore.fuel_grade.migration_density", "%s: 50%% less EU from fuel");
+        provider.add("cosmiccore.fuel_grade.migration_power", "%s: %s power ceiling");
+        provider.add("cosmiccore.fuel_grade.cutoff", "%s and above: incompatible!");
+        provider.add("cosmiccore.fuel_grade.unassigned", "Fuel is missing grade, REPORT THIS TO GITHUB!!!!!!!!!!");
+        provider.add("cosmiccore.fuel_grade.incompatible", "Mk.%s fuel requires a %s or lower generator");
+        provider.add("cosmiccore.fuel_grade.insufficient_batch", "Insufficient fuel output at respective throttle!");
+        provider.add("cosmiccore.fuel_grade.operating", "Fuel: Mk.%s | %s%% density | %s EU/t limit");
         provider.add("cosmiccore.tooltip.deprecated_ender_link", "Deprecated, behavior has been disabled");
         provider.add("cosmiccore.aeroponics.plantable", "Can be planted in an Aeroponics Tower.");
         provider.add("cosmiccore.aeroponics.fertilizer_amount", "Fertilizer Amount: %s");
@@ -2626,7 +2635,7 @@ public class CosmicLangHandler extends LangHandler {
         provider.add("cosmiccore.multiblock.modular_power_station.drive", "Drive: %s");
         provider.add("cosmiccore.multiblock.modular_power_station.stages", "Drive Stages: %s / 4");
         provider.add("cosmiccore.multiblock.modular_power_station.stator", "Stator: %s (%s V)");
-        provider.add("cosmiccore.multiblock.modular_power_station.throttle", "Output Limit: %s%% (%s EU/t, %s A)");
+        provider.add("cosmiccore.multiblock.modular_power_station.throttle", "Hardware Limit: %s%% (%s EU/t, %s A)");
         provider.add("cosmiccore.multiblock.modular_power_station.fuel.idle", "Fuel Rate: Waiting for an active fuel");
         provider.add("cosmiccore.multiblock.modular_power_station.fuel.none", "Fuel Rate: No fluid fuel input");
         provider.add("cosmiccore.multiblock.modular_power_station.fuel.rate",
