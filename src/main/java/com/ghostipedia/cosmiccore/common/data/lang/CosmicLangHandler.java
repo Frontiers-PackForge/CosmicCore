@@ -535,6 +535,7 @@ public class CosmicLangHandler extends LangHandler {
         replace(provider, "material.cosmiccore.biomeld_nutrient_luv", "Blooming Biomeld Nutrient");
         replace(provider, "material.cosmiccore.phyto_grease", "Phyto-Grease");
         replace(provider, "material.cosmiccore.energetic_aluminium", "Energized Aluminium");
+        replace(provider, "material.cosmiccore.sap_of_enrichment", "Sap of Enrichment");
         replace(provider, "material.gtceu.chromaplast", "Chromaplast");
         replace(provider, "material.gtceu.multi_phase_oil", "Multi-Phase Oil");
         replace(provider, "block.gtceu.multi_phase_oil", "Multi-Phase Oil");

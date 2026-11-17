@@ -117,7 +117,16 @@ public class CosmicMaterials {
     public static MaterialRegistryEntry PaleSteel;
     public static MaterialRegistryEntry PaleOil;
     public static MaterialRegistryEntry PrimordialSoup;
+    public static MaterialRegistryEntry MendosteenJuice;
+    public static MaterialRegistryEntry BastionFruitJuice;
+    public static MaterialRegistryEntry FrostayaJuice;
+    public static MaterialRegistryEntry BombegranateJuice;
+    public static MaterialRegistryEntry ForestPunch;
+    public static MaterialRegistryEntry AuricSap;
+    public static MaterialRegistryEntry SourceberrySyrup;
     public static MaterialRegistryEntry WorldDew;
+    public static MaterialRegistryEntry EarthenDew;
+    public static MaterialRegistryEntry SapOfEnrichment;
     public static MaterialRegistryEntry Moondrop;
     public static MaterialRegistryEntry Somanone;
 
@@ -912,8 +921,26 @@ public class CosmicMaterials {
                 .liquid(new FluidBuilder().state(FluidState.LIQUID).temperature(320))
                 .color(0x6F568F).secondaryColor(0xB9A8CF).iconSet(MaterialIconSet.DULL));
 
+        MendosteenJuice = REGISTRATE.material("mendosteen_juice", builder -> builder
+                .liquid().color(0xC44562).iconSet(MaterialIconSet.FINE));
+        BastionFruitJuice = REGISTRATE.material("bastion_fruit_juice", builder -> builder
+                .liquid().color(0x883960).iconSet(MaterialIconSet.ROUGH));
+        FrostayaJuice = REGISTRATE.material("frostaya_juice", builder -> builder
+                .liquid().color(0x97B8FF).iconSet(MaterialIconSet.SHINY));
+        BombegranateJuice = REGISTRATE.material("bombegranate_juice", builder -> builder
+                .liquid().color(0xF05B27).iconSet(MaterialIconSet.BRIGHT));
+        ForestPunch = REGISTRATE.material("forest_punch", builder -> builder
+                .liquid().color(0x538B48).iconSet(MaterialIconSet.FLUID));
+        AuricSap = REGISTRATE.material("auric_sap", builder -> builder
+                .liquid().color(0xE8AB37).iconSet(MaterialIconSet.METALLIC));
+        SourceberrySyrup = REGISTRATE.material("sourceberry_syrup", builder -> builder
+                .liquid().color(0xA34CDA).iconSet(MaterialIconSet.RADIOACTIVE));
         WorldDew = REGISTRATE.material("world_dew", builder -> builder
                 .liquid().color(0x88E0D0).iconSet(MaterialIconSet.SHINY));
+        EarthenDew = REGISTRATE.material("earthen_dew", builder -> builder
+                .liquid().color(0x8F9C5A).iconSet(MaterialIconSet.DULL));
+        SapOfEnrichment = REGISTRATE.material("sap_of_enrichment", builder -> builder
+                .liquid().color(0xD4B94E).iconSet(MaterialIconSet.METALLIC));
 
         Somanone = REGISTRATE.material("somanone", builder -> builder
                 .formula("✧+")
