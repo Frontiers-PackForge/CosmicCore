@@ -4,7 +4,8 @@ CosmicCore has utilized AI assisted tooling from devs and contributors,
 but Agents remain an assistive tool rather than a replacement for human effort fully.
 
 This project did not officially adopt standards against or for AI until June of 2026.
-Prior to this date, this project was human made fully bar one incident of claude getting into the commit history 
+Prior to this date, this project was human made fully bar one incident of claude getting into the commit history due to an outside contributors PR.
+
 This however has since been fixed, as I spent the time needed to append the 1.20 history onto the 1.21 branch history rather than letting it all compact away in a single squash merge during version migration.
 
 As a student in Uni for Chemistry, I may not always have the time to work on my hobbies, so I treat these tools as time savers alongside my standard workflow.
