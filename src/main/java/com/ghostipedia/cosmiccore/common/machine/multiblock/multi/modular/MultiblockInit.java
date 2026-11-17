@@ -61,6 +61,7 @@ public class MultiblockInit {
         IndustrialFlotationPlant.init();
         DissolutionVat.init();
         AeroponicsTower.init();
+        MiniatureRitualCircle.init();
         PhaseSeparator.init();
         Desalter.init();
         SteamCrackingFurnace.init();
