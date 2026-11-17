@@ -5,7 +5,7 @@ but Agents remain an assistive tool rather than a replacement for human effort f
 
 This project did not officially adopt standards against or for AI until June of 2026.
 Prior to this date, this project was human made fully bar one incident of claude getting into the commit history 
-(this is also why claude is even there to begin with, it was co-authored on a contributors PR before I noticed.)
+This however has since been fixed, as I spent the time needed to append the 1.20 history onto the 1.21 branch history rather than letting it all compact away in a single squash merge during version migration.
 
 As a student in Uni for Chemistry, I may not always have the time to work on my hobbies, so I treat these tools as time savers alongside my standard workflow.
 If you are upset by this I apologize, but this is a personal project for myself and others who wish to play my work, 
